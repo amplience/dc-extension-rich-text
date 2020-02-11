@@ -1,0 +1,36 @@
+{
+  "name": "@dc-extension-rich-text/common",
+  "version": "0.1.0",
+  "description": "Common models and interfaces required to extend the rich text editor.",
+  "license": "Apache-2.0",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "dependencies": {
+    "@types/node": "12.7.2",
+    "@types/react": "16.9.2",
+    "@types/react-dom": "16.8.5",
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0",
+    "react-scripts": "3.1.1",
+    "typescript": "^3.6.2",
+    "@material-ui/core": "^4.5.1",
+    "@material-ui/icons": "^4.5.1",
+    "@material/react-material-icon": "^0.15.0",
+    "prosemirror-commands": "^1.0.8",
+    "prosemirror-example-setup": "^1.0.1",
+    "prosemirror-model": "^1.7.4",
+    "prosemirror-schema-basic": "^1.0.1",
+    "prosemirror-state": "^1.2.4",
+    "prosemirror-view": "^1.11.7",
+    "dc-extensions-sdk": "^1.0.1"
+  },
+  "scripts": {
+    "build": "run-s clean build-ts",
+    "build-ts": "tsc -p tsconfig.json",
+    "fix": "run-s fix:*",
+    "fix:prettier": "prettier \"src/**/*.ts\" --write",
+    "fix:tslint": "tslint --fix --project .",
+    "clean": "trash build test dist"
+  }
+}

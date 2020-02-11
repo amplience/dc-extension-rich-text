@@ -1,0 +1,16 @@
+{
+    "extends": ["tslint:latest", "tslint-config-prettier", "tslint-react"],
+    "rules": {
+        "interface-name": [true, "never-prefix"],
+        "object-literal-sort-keys": false,
+        "no-implicit-dependencies": [true, "dev"],
+        "jsx-no-multiline-js": false,
+
+        /* tslint-immutable rules */
+        // Recommended built-in rules
+        "no-var-keyword": true,
+        "typedef": [true, "call-signature"],
+        "max-classes-per-file": false,
+        "jsx-no-lambda": false
+    }
+}

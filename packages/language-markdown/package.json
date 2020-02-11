@@ -1,0 +1,31 @@
+{
+  "name": "@dc-extension-rich-text/language-markdown",
+  "version": "0.1.0",
+  "description": "Markdown language.",
+  "license": "Apache-2.0",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "dependencies": {
+    "@dc-extension-rich-text/common": "0.1.0",
+    "@types/markdown-it": "^0.0.9",
+    "markdown-it": "^10.0.0",
+    "prosemirror-markdown": "^1.3.1",
+    "prosemirror-model": "^1.7.4",
+    "typescript": "^3.6.2",
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0",
+    "react-scripts": "^3.2.0"
+  },
+  "devDependencies": {
+    "typescript": "^3.6.2"
+  },
+  "scripts": {
+    "build": "run-s clean build-ts",
+    "build-ts": "tsc -p tsconfig.json",
+    "fix": "run-s fix:*",
+    "fix:prettier": "prettier \"src/**/*.ts\" --write",
+    "fix:tslint": "tslint --fix --project .",
+    "clean": "trash build test dist"
+  }
+}
