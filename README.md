@@ -10,7 +10,7 @@ This extension is designed to replace the built in rich text editor with additio
 
 ## Features
 
-* Markdown uutput
+* Markdown output
   * Paragraphs
   * Headings
   * Bold text
@@ -23,7 +23,7 @@ This extension is designed to replace the built in rich text editor with additio
   * Code snippets
   * Horizontal rules
   * Experimental: Inline styles
-* JSON uutput
+* JSON output
   * Markdown Blocks
   * Content Blocks
   * Image Blocks
@@ -167,7 +167,7 @@ You can choose from "button", "dropdown" or "group" when creating your menu.
 
 ### Custom CSS
 
-You can modify the default text styles to match your 
+You can modify the default text styles to match your brand styles.
 
 Using inline styles:
 
@@ -335,14 +335,6 @@ This feature is blacklisted by default, you can enable it by passing in an empty
 }
 
 ```
-
-
-inline_styles: {
-                    classNames: [
-                      { className: "red", label: "Was Price" },
-                      { className: "green", label: "Promotion" }
-                    ]
-                  }
 
 ## License
 
