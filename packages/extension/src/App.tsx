@@ -1,7 +1,7 @@
 import React from "react";
 
 import { init, SDK } from "dc-extensions-sdk";
-import { SdkContext } from "unofficial-dynamic-content-ui";
+import { SdkContext, withTheme } from "unofficial-dynamic-content-ui";
 import EditorRichTextField from "./EditorRichTextField/EditorRichTextField";
 import { RichTextDialogsContainer } from "./RichTextDialogs";
 
@@ -52,11 +52,15 @@ export default class App extends React.Component<{}, AppState> {
       <div className="App">
         {connected && sdk ? (
           <div>
-            <SdkContext.Provider value={{ sdk }}>
-              <RichTextDialogsContainer>
-                <EditorRichTextField onChange={this.handleValueChange} value={value} schema={sdk.field.schema} />
-              </RichTextDialogsContainer>
-            </SdkContext.Provider>
+            {
+              withTheme(
+                <SdkContext.Provider value={{ sdk }}>
+                <RichTextDialogsContainer>
+                  <EditorRichTextField onChange={this.handleValueChange} value={value} schema={sdk.field.schema} />
+                </RichTextDialogsContainer>
+              </SdkContext.Provider>
+              )
+            }
           </div>
         ) : (
           <div>&nbsp;</div>
