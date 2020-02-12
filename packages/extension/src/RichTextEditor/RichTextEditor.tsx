@@ -104,7 +104,11 @@ const RichTextEditor: React.SFC<RichTextEditorProps> = (
       return undefined;
     }
 
-    return language.parse(valueProp);
+    try {
+      return language.parse(valueProp);
+      // tslint:disable-next-line
+    } catch (err) {
+    }
   });
 
   const handleRawValueChange = React.useCallback(

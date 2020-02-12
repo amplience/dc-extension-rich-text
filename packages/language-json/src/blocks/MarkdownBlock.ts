@@ -36,7 +36,7 @@ export default class MarkdownBlock implements BlockConverter {
   public parse(schema: any, blocks: Block[]): any[] {
     let result: any[] = [];
     blocks.forEach(block => {
-      const doc = markdown.defaultMarkdownParser.parse(block.data).toJSON();
+      const doc = markdown.defaultMarkdownParser.parse(block.data || '').toJSON();
       result = result.concat.apply(result, doc.content);
     });
     return result;
