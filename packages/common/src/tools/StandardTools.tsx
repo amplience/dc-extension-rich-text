@@ -7,6 +7,7 @@ import CalendarViewDay from "@material-ui/icons/CalendarViewDay";
 import Code from "@material-ui/icons/Code";
 import FormatBold from "@material-ui/icons/FormatBold";
 import FormatClearIcon from '@material-ui/icons/FormatClear';
+import FormatIndentDecrease from "@material-ui/icons/FormatIndentDecrease";
 import FormatItalic from "@material-ui/icons/FormatItalic";
 import FormatListBulleted from "@material-ui/icons/FormatListBulleted";
 import FormatListNumbered from "@material-ui/icons/FormatListNumbered";
@@ -24,7 +25,7 @@ import { isToolEnabled, StandardToolOptions } from "./StandardToolOptions";
 // tslint:disable-next-line
 const { undo: undoFn, redo: redoFn } = require("prosemirror-history");
 // tslint:disable-next-line
-const { toggleMark, setBlockType } = require("prosemirror-commands");
+const { toggleMark, setBlockType, lift } = require("prosemirror-commands");
 // tslint:disable-next-line
 const { wrapInList } = require("prosemirror-schema-list");
 
@@ -161,11 +162,22 @@ export function image(
   };
 }
 
+export function lift_tool(schema: any): ProseMirrorTool {
+  return {
+    name: "lift",
+    label: "Decrease Indentation",
+    displayIcon: <FormatIndentDecrease />,
+    isVisible: (state: any) => lift(state),
+    apply: lift
+  };
+}
+
 export function bullet_list(schema: any): ProseMirrorTool {
   return {
     name: "bullet_list",
     label: "Bullet List",
     displayIcon: <FormatListBulleted />,
+    isEnabled: (state: any) => wrapInList(schema.nodes.bullet_list, {})(state),
     apply: wrapInList(schema.nodes.bullet_list, {})
   };
 }
@@ -175,6 +187,7 @@ export function ordered_list(schema: any): ProseMirrorTool {
     name: "ordered_list",
     label: "Ordered List",
     displayIcon: <FormatListNumbered />,
+    isEnabled: (state: any) => wrapInList(schema.nodes.ordered_list, {})(state),
     apply: wrapInList(schema.nodes.ordered_list, {})
   };
 }
@@ -184,6 +197,7 @@ export function blockquote(schema: any): ProseMirrorTool {
     name: "blockquote",
     label: "Quote",
     displayIcon: <FormatQuote />,
+    isEnabled: (state: any) => wrapInList(schema.nodes.blockquote, {})(state),
     apply: wrapInList(schema.nodes.blockquote, {})
   };
 }
@@ -286,6 +300,10 @@ export function createStandardTools(
 
   if (isToolEnabled('link', options) && schema.marks.link) {
     tools.push(link(schema, options.dialogs ? options.dialogs.getHyperlink : undefined));
+  }
+  
+  if (isToolEnabled('lift', options)) {
+    tools.push(lift_tool(schema));
   }
 
   if (isToolEnabled('bullet_list', options) && schema.nodes.bullet_list) {
