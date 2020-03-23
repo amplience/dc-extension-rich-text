@@ -82,10 +82,11 @@ const ProseMirrorToolbarDropdown: React.SFC<ProseMirrorToolbarButtonProps> = (
       onChange={handleChange}
       renderValue={renderValue}
       displayEmpty={true}
+      onMouseDown={(e) => e.preventDefault()}
     >
       {toolStates.map(toolState => {
         return (
-          <MenuItem value={toolState.name} key={toolState.name}>
+          <MenuItem value={toolState.name} key={toolState.name} onMouseDown={(e) => e.preventDefault()}>
             {toolState.displayLabel ? (
               toolState.displayLabel
             ) : (

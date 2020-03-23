@@ -4,7 +4,10 @@ import React, { PropsWithChildren } from "react";
 import clsx from "clsx";
 
 const styles = {
-  root: {},
+  root: {
+    display: "flex",
+    alignItems: "center"
+  },
   divider: {
     verticalAlign: "top",
     display: "inline-flex",

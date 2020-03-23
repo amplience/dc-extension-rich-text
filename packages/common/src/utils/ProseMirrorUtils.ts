@@ -1,3 +1,8 @@
+export function inBlock(state: any) {
+  const { $from } = state.selection;
+  return $from.depth > 1;
+}
+
 export function isMarkActive(state: any, type: any): boolean {
   const { from, $from, to, empty } = state.selection;
   if (empty) {

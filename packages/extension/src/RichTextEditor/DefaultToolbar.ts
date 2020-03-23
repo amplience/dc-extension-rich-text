@@ -36,6 +36,7 @@ export default [
   {
     type: "group",
     children: [
+      { type: "button", toolName: "lift" },
       { type: "button", toolName: "bullet_list" },
       { type: "button", toolName: "ordered_list" }
     ]

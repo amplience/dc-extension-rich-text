@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { isToolEnabled, ProseMirrorTool } from '@dc-extension-rich-text/common';
+import { isToolEnabled, ProseMirrorTool, inBlock } from '@dc-extension-rich-text/common';
 import { ContentItemLink, MediaImageLink } from 'dc-extensions-sdk';
 import { DynamicContentToolOptions } from './DynamicContentToolOptions';
 
@@ -16,6 +16,7 @@ export function dcImageLink(schema: any, dialog?: (value?: MediaImageLink) => Pr
         name: 'dc-image-link',
         label: 'Insert Image',
         displayIcon: <ImageSearchIcon />,
+        isEnabled: (state: any) => !inBlock(state),
         apply: async (state: any, dispatch: any, view: any) => {
             if (!dialog) {
                 return;
@@ -41,6 +42,7 @@ export function dcContentLink(schema: any, contentTypes: string[], dialog?: (con
         name: 'dc-content-link',
         label: 'Insert Content',
         displayIcon: <AddCircleIcon />,
+        isEnabled: (state: any) => !inBlock(state),
         apply: async (state: any, dispatch: any, view: any) => {
             if (!dialog) {
                 return;
