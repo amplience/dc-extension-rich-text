@@ -9,6 +9,26 @@
       name="description"
       content="Web site created using create-react-app"
     />
+
+    <script>
+      function initialize() {
+        // Initialize the SDK before the bundle loads, so that DC knows we're an extension and doesn't time out.
+  
+        window.extensionsSdkInstance = new Promise((resolve, reject) => {
+          let script = document.createElement('script');
+          script.type = 'text/javascript';
+          script.onload = () => {
+            dcExtensionsSdk.init().then(result => resolve(result)).catch(error => reject(error));
+          }
+    
+          script.src = 'https://unpkg.com/dc-extensions-sdk@1.0.3/dist/dc-extensions-sdk.umd.js';
+          document.head.appendChild(script);
+        });
+      }
+  
+      initialize();
+    </script>
+
     <link rel="apple-touch-icon" href="logo192.png" />
     <!--
       manifest.json provides metadata used when your web app is installed on a

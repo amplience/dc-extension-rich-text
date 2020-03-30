@@ -1,6 +1,6 @@
 import React from "react";
 
-import { init, SDK } from "dc-extensions-sdk";
+import { SDK } from "dc-extensions-sdk";
 import { SdkContext, withTheme } from "unofficial-dynamic-content-ui";
 import EditorRichTextField from "./EditorRichTextField/EditorRichTextField";
 import { RichTextDialogsContainer } from "./RichTextDialogs";
@@ -24,7 +24,10 @@ export default class App extends React.Component<{}, AppState> {
   }
 
   public async handleConnect(): Promise<void> {
-    const sdk: SDK = await init();
+    // See index.html for sdk init. 
+    // Doing it there avoids DC timing us out for taking too long to respond, if this bundle takes too long to load.
+    // tslint:disable-next-line: no-string-literal
+    const sdk = await ((window as any).extensionsSdkInstance as Promise<SDK>);
     sdk.frame.startAutoResizer();
 
     const value: any = await sdk.field.getValue();
