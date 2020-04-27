@@ -1,6 +1,6 @@
+[![Amplience Dynamic Content](media/header.png)](https://amplience.com/dynamic-content)
 
 ![Amplience Dynamic Content Rich Text Extension](media/screenshot.png)
-
 
 # dc-extension-rich-text
 
@@ -115,7 +115,7 @@ You can set a whitelist of tools which the user can choose from:
 ```json
 {
     "tools": {
-        "whitelist": ["undo", "redo", "strong", "em", "code", "link", "bullet_list", "ordered_list", "image", "blockquote", "heading", "paragraph", "code_block", "horizontal_rule", "clear_formatting", "dc-image-link", "dc-content-link"]
+        "whitelist": ["undo", "redo", "strong", "em", "code", "link", "lift", "bullet_list", "ordered_list", "image", "blockquote", "heading", "paragraph", "code_block", "horizontal_rule", "clear_formatting", "dc-image-link", "dc-content-link"]
     }
 }
 ```
