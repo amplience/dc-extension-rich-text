@@ -47,7 +47,7 @@ Using markdown output:
 {
     "type": "string",
     "ui:extension": {
-        "url": "https://techiedarren.github.io/dc-extension-rich-text/index.html",
+        "url": "https://amplience.github.io/dc-extension-rich-text/index.html",
 
         "params": {
             "language": "markdown"
@@ -70,7 +70,7 @@ Using JSON output:
 {
     "type": "array",
     "ui:extension": {
-        "url": "https://techiedarren.github.io/dc-extension-rich-text/index.html",
+        "url": "https://amplience.github.io/dc-extension-rich-text/index.html",
 
         "params": {
             "language": "json"
