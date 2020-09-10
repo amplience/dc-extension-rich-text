@@ -18,6 +18,7 @@ interface OpenDialog {
   type: string;
   resolve: (value: any) => void;
   reject: () => void;
+  value: any;
 }
 
 const RichTextDialogsContainer: React.SFC<EditorDialogsProps> = (
@@ -45,12 +46,13 @@ const RichTextDialogsContainer: React.SFC<EditorDialogsProps> = (
   );
 
   const handleOpenDialog = React.useCallback(
-    (type: string) => {
+    (type: string, value?: any) => {
       return new Promise((resolve, reject) => {
         setOpenDialog({
           type,
           resolve,
-          reject
+          reject,
+          value
         });
       });
     },
@@ -61,7 +63,7 @@ const RichTextDialogsContainer: React.SFC<EditorDialogsProps> = (
 
   const dialogs: RichTextDialogs = {
     getHyperlink: (value?: Hyperlink): Promise<Hyperlink> => {
-      return handleOpenDialog("hyperlink") as Promise<Hyperlink>;
+      return handleOpenDialog("hyperlink", value) as Promise<Hyperlink>;
     },
     getImage: (value?: Image): Promise<Image> => {
       return handleOpenDialog("image") as Promise<Image>;
@@ -90,6 +92,7 @@ const RichTextDialogsContainer: React.SFC<EditorDialogsProps> = (
       {children}
 
       <HyperlinkDialog
+        value={openDialog != null ? openDialog.value : undefined}
         open={openDialog != null && openDialog.type === "hyperlink"}
         onClose={handleCloseDialog}
         onSubmit={handleSubmitDialog}

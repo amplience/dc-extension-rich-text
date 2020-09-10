@@ -17,6 +17,7 @@ interface HyperlinkDialogProps {
   open: boolean;
   onClose: () => void;
   onSubmit: (value: Hyperlink) => void;
+  value: any;
 }
 
 function validateUrl(value: string): boolean {
@@ -32,6 +33,13 @@ const HyperlinkDialog: React.SFC<HyperlinkDialogProps> = (
     href: "",
     title: ""
   });
+
+  const [lastValue, setLastValue] = React.useState<Hyperlink>();
+
+  if (props.value != null && lastValue !== props.value) {
+    setValue(props.value);
+    setLastValue(props.value);
+  }
 
   const [isValid, setIsValid] = React.useState(false);
 
@@ -105,7 +113,7 @@ const HyperlinkDialog: React.SFC<HyperlinkDialogProps> = (
       </DialogContent>
       <DialogActions>
         <Button onClick={handleCancel} color="primary">
-          Cancel
+          Clear
         </Button>
         <Button disabled={!isValid} onClick={handleSubmit} color="primary">
           Confirm
