@@ -62,3 +62,82 @@
 .ProseMirror sub {
     line-height: 0;
 }
+
+.ProseMirror span[data-shy] {
+    opacity: 0.5;
+}
+
+.ProseMirror a[name]:before {
+    content: "⚓ "
+}
+
+.ProseMirror a[name] {
+    background: rgba(128, 128, 128, 0.3);
+    padding: 2px;
+    border-radius: 6px;
+    margin: 0px 3px;
+    font-size: 12px;
+    width: 14px;
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+    height: 14px;
+    vertical-align: middle;
+    line-height: 14px;
+    transition: width 0.3s, background-color 0.3s;
+    user-select: none;
+}
+
+.ProseMirror a[name]:hover {
+    width: auto;
+    background: rgba(128, 128, 128, 0.15);
+}
+
+.ProseMirror a[name].ProseMirror-selectednode {
+    background: rgba(128, 192, 255, 0.3);
+}
+
+.ProseMirror table {
+    margin: 15px 0;
+    padding: 0;
+    border-spacing: 0;
+}
+
+.ProseMirror table tr {
+    border-top: 1px solid #cccccc;
+    background-color: white;
+    margin: 0;
+    padding: 0;
+}
+  
+.ProseMirror table tr:nth-child(2n) {
+    background-color: #f8f8f8;
+}
+  
+.ProseMirror table tr th {
+    font-weight: bold;
+    border: 1px solid #cccccc;
+    text-align: left;
+    margin: 0;
+    padding: 6px 13px;
+}
+  
+.ProseMirror table tr td {
+    border: 1px solid #cccccc;
+    text-align: left;
+    margin: 0;
+    padding: 6px 13px;
+}
+
+.ProseMirror table tr p {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+  
+.ProseMirror table tr th :first-child, table tr td :first-child {
+    margin-top: 0;
+}
+  
+.ProseMirror table tr th :last-child, table tr td :last-child {
+    margin-bottom: 0;
+}

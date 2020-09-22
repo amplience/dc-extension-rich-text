@@ -50,6 +50,8 @@ export default [
       { type: "button", toolName: "dc-content-link" },
       { type: "button", toolName: "blockquote" },
       { type: "button", toolName: "code_block" },
+      { type: "button", toolName: "anchor" },
+      { type: "button", toolName: "soft_hyphen" },
       { type: "button", toolName: "horizontal_rule" }
     ]
   },

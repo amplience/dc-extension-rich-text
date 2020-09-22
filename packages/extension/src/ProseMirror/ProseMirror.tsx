@@ -11,6 +11,10 @@ const EditorView = require("prosemirror-view").EditorView;
 // tslint:disable-next-line
 const exampleSetup = require("prosemirror-example-setup").exampleSetup;
 
+const {tableEditing, columnResizing, tableNodes, fixTables} = require("prosemirror-tables");
+
+//import  from "prosemirror-tables";
+
 const styles = {
   root: {
     width: "100%",
@@ -43,10 +47,16 @@ class ProseMirror extends React.Component<ProseMirrorProps, ProseMirrorState> {
   public createEditorState(): any {
     const { schema, doc } = this.props;
 
+    const withTablePlugins = schema.nodes.table != null;
+    const tablePlugins = withTablePlugins ? [ columnResizing(), tableEditing() ] : [];
+
     return EditorState.create({
       schema,
       doc,
-      plugins: exampleSetup({ schema, menuBar: false })
+      plugins: [
+        ...tablePlugins,
+        ...exampleSetup({ schema, menuBar: false })
+      ]
     });
   }
 

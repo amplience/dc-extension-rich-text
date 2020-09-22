@@ -1,6 +1,6 @@
 import React from "react";
 
-import { canInsert, clearAllMarks, isMarkActive } from "../utils";
+import { canInsert, clearAllMarks, isMarkActive, getSelectionMarks } from "../utils";
 
 // tslint:disable:no-submodule-imports
 import CalendarViewDay from "@material-ui/icons/CalendarViewDay";
@@ -28,6 +28,8 @@ const { undo: undoFn, redo: redoFn } = require("prosemirror-history");
 const { toggleMark, setBlockType, lift } = require("prosemirror-commands");
 // tslint:disable-next-line
 const { wrapInList } = require("prosemirror-schema-list");
+// tslint:disable-next-line
+const { NodeSelection } = require("prosemirror-state");
 
 export function createMarkToggleTool(
   name: string,
@@ -91,21 +93,33 @@ export function editLink(
   dialog?: (value?: Hyperlink) => Promise<Hyperlink>
 ): (state: any, dispatch: any, view: any) => Promise<void> {
   return async (state: any, dispatch: any, view: any): Promise<void> => {
-    if (isMarkActive(state, type)) {
-      toggleMark(type)(state, dispatch, view);
-      return;
-    }
+    const marks = getSelectionMarks(state).filter(mark => mark.type === type);
+    const attrs: Hyperlink | undefined = marks.length === 1 ? marks[0].attrs : undefined;
 
     if (dialog) {
       try {
-        const linkValue = await dialog();
+        const linkValue = await dialog(attrs);
 
-        toggleMark(type, {
+        const newAttrs = {
           href: linkValue.href,
           title: linkValue.title === "" ? undefined : linkValue.title
-        })(state, dispatch, view);
+        };
+
+        if (marks.length > 0 && newAttrs.href !== "") {
+          const { tr, selection } = state;
+          dispatch(tr.addMark(selection.from, selection.to, type.create(newAttrs)));
+        } else {
+          toggleMark(type, newAttrs)(state, dispatch, view);
+        }
+
+        return;
         // tslint:disable-next-line
-      } catch (err) { }
+      } catch (err) { /* Clear the link instead */ }
+    }
+
+    if (isMarkActive(state, type)) {
+      toggleMark(type)(state, dispatch, view);
+      return;
     }
   };
 }

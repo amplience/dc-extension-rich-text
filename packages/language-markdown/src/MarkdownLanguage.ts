@@ -3,12 +3,32 @@ import {
   isToolEnabled,
   ProseMirrorTool,
   RichLanguage,
-  StandardToolOptions
+  StandardToolOptions,
 } from "@dc-extension-rich-text/common";
+import { AnchorTool } from "./anchor";
 import { createInlineStylesTools } from "./inline_styles";
 import { createMarkdownParser } from "./markdown/MarkdownParser";
 import { createMarkdownSerializer } from "./markdown/MarkdownSerializer";
 import { createSchema } from "./schema/createSchema";
+import { SoftHyphenTool } from "./soft_hyphen";
+
+export function createMarkdownTools(schema: any, options: StandardToolOptions): ProseMirrorTool[] {
+  let tools: ProseMirrorTool[] = [];
+
+  if (isToolEnabled("inline_styles", options)) {
+    tools = tools.concat(tools, createInlineStylesTools(schema, options));
+  }
+
+  if (isToolEnabled("anchor", options) && schema.nodes.anchor) {
+    tools.push(AnchorTool(schema, options.dialogs ? options.dialogs.getAnchor : undefined));
+  }
+
+  if (isToolEnabled("soft_hyphen", options) && schema.nodes.soft_hyphen) {
+    tools.push(SoftHyphenTool(schema));
+  }
+
+  return tools;
+}
 
 export default class MarkdownLanguage implements RichLanguage {
   public name: string = "markdown";
@@ -23,14 +43,13 @@ export default class MarkdownLanguage implements RichLanguage {
     const isInlineStylesEnabled = isToolEnabled("inline_styles", options);
 
     const schema = createSchema(isInlineStylesEnabled);
-    let tools = createStandardTools(schema, options);
+    const tools = [
+      ...createStandardTools(schema, options),
+      ...createMarkdownTools(schema, options)
+    ]
 
-    if (isInlineStylesEnabled) {
-      tools = tools.concat(tools, createInlineStylesTools(schema, options));
-    }
-
-    const serializer = createMarkdownSerializer(isInlineStylesEnabled);
-    const parser = createMarkdownParser(schema, isInlineStylesEnabled);
+    const serializer = createMarkdownSerializer();
+    const parser = createMarkdownParser(schema);
 
     this.schema = schema;
     this.tools = tools;

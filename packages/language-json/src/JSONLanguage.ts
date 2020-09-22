@@ -7,6 +7,9 @@ import {
   createDynamicContentTools,
   DynamicContentToolOptions
 } from "@dc-extension-rich-text/prosemirror-dynamic-content";
+import {
+  createMarkdownTools
+} from "@dc-extension-rich-text/language-markdown";
 import { Block, BlockConverter } from "./blocks/Block";
 import DcContentLinkBlock from "./blocks/DcContentLinkBlock";
 import DcImageLinkBlock from "./blocks/DcImageLinkBlock";
@@ -34,7 +37,8 @@ export default class JSONLanguage implements RichLanguage {
 
     const tools = [
       ...createStandardTools(schema, options),
-      ...createDynamicContentTools(schema, options)
+      ...createDynamicContentTools(schema, options),
+      ...createMarkdownTools(schema, options)
     ];
 
     this.schema = schema;
