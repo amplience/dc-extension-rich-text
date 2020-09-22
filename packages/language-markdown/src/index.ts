@@ -1,4 +1,4 @@
-import MarkdownLanguage from "./MarkdownLanguage";
+import MarkdownLanguage, { createMarkdownTools } from "./MarkdownLanguage";
 import MarkdownLanguageConfiguration from "./MarkdownLanguageConfiguration";
 
 import {
@@ -17,3 +17,4 @@ export default function(
 }
 
 export * from "./schema/createSchema";
+export { createMarkdownTools } from "./MarkdownLanguage";

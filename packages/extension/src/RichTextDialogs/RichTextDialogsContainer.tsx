@@ -1,11 +1,13 @@
 import React, { PropsWithChildren } from "react";
 
 import {
+  Anchor,
   Hyperlink,
   Image,
   RichTextDialogs
 } from "@dc-extension-rich-text/common";
 import { ContentItemLink, MediaImageLink } from "dc-extensions-sdk";
+import AnchorDialog from "../AnchorDialog/AnchorDialog";
 import HyperlinkDialog from "../HyperlinkDialog/HyperlinkDialog";
 import ImageDialog from "../ImageDialog/ImageDialog";
 import RichTextDialogsContext from "./RichTextDialogsContext";
@@ -62,6 +64,9 @@ const RichTextDialogsContainer: React.SFC<EditorDialogsProps> = (
   const { sdk } = React.useContext(SdkContext);
 
   const dialogs: RichTextDialogs = {
+    getAnchor: (value?: Anchor): Promise<Anchor> => {
+      return handleOpenDialog("anchor", value) as Promise<Anchor>;
+    },
     getHyperlink: (value?: Hyperlink): Promise<Hyperlink> => {
       return handleOpenDialog("hyperlink", value) as Promise<Hyperlink>;
     },
@@ -91,6 +96,12 @@ const RichTextDialogsContainer: React.SFC<EditorDialogsProps> = (
     <RichTextDialogsContext.Provider value={{ dialogs }}>
       {children}
 
+      <AnchorDialog
+        value={openDialog != null ? openDialog.value : undefined}
+        open={openDialog != null && openDialog.type === "anchor"}
+        onClose={handleCloseDialog}
+        onSubmit={handleSubmitDialog}
+      />
       <HyperlinkDialog
         value={openDialog != null ? openDialog.value : undefined}
         open={openDialog != null && openDialog.type === "hyperlink"}
