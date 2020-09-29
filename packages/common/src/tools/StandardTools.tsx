@@ -1,6 +1,6 @@
 import React from "react";
 
-import { canInsert, clearAllMarks, isMarkActive, getSelectionMarks } from "../utils";
+import { canInsert, clearAllMarks, getSelectionMarks, isMarkActive } from "../utils";
 
 // tslint:disable:no-submodule-imports
 import CalendarViewDay from "@material-ui/icons/CalendarViewDay";

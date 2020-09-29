@@ -1,3 +1,4 @@
+import { AlignedHeaderToMarkdown, AlignedParagraphToMarkdown } from "../alignment/AlignmentPlugin";
 import { AnchorToMarkdown } from "../anchor";
 import { InlineStylesToMarkdown } from "../inline_styles";
 import { SoftHyphenToMarkdown } from "../soft_hyphen";
@@ -13,6 +14,8 @@ export function createMarkdownSerializer(): any {
           ...SoftHyphenToMarkdown,
           ...AnchorToMarkdown,
           ...TableToMarkdown,
+          ...AlignedParagraphToMarkdown,
+          ...AlignedHeaderToMarkdown
         },
         {
           ...markdown.defaultMarkdownSerializer.marks,

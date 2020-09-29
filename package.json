@@ -5,7 +5,11 @@
     "packages/*"
   ],
   "scripts": {
+<<<<<<< HEAD
     "build": "lerna run build"
+=======
+    "publish": "gh-pages -m \"[ci skip] Updates\" -d packages/extension/build -o rs-amp"
+>>>>>>> Implement alignment, fix some issues with tables.
   },
   "devDependencies": {
     "@babel/core": "^7.5.5",
