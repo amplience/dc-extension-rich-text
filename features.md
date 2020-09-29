@@ -14,7 +14,7 @@
 ]
 ```
 
-2. Headings 1-5
+2. Headings 1-6
 
 ![Normal Text](media/headings.png)
 ```json
