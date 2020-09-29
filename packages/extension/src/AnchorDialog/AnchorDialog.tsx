@@ -20,8 +20,10 @@ interface AnchorDialogProps {
   value: any;
 }
 
-function validateName(value: string): boolean {
-  return value != null && value.length > 0;
+const htmlIdRegex = /^[a-zA-Z][\w:.\-]*$/;
+
+function validateId(value: string): boolean {
+  return value != null && value.length > 0 && htmlIdRegex.test(value);
 }
 
 const AnchorDialog: React.SFC<AnchorDialogProps> = (
@@ -50,7 +52,7 @@ const AnchorDialog: React.SFC<AnchorDialogProps> = (
       };
 
       setValue(newValue);
-      setIsValid(validateName(newValue.value));
+      setIsValid(validateId(newValue.value));
     },
     [value, setValue, setIsValid]
   );
@@ -85,7 +87,7 @@ const AnchorDialog: React.SFC<AnchorDialogProps> = (
           <TextField
             autoFocus={true}
             id="value"
-            label="Anchor Name"
+            label="Anchor ID"
             type="input"
             required={true}
             fullWidth={true}
@@ -99,7 +101,7 @@ const AnchorDialog: React.SFC<AnchorDialogProps> = (
       </DialogContent>
       <DialogActions>
         <Button onClick={handleCancel} color="primary">
-          Clear
+          Cancel
         </Button>
         <Button disabled={!isValid} onClick={handleSubmit} color="primary">
           Confirm

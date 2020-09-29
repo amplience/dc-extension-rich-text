@@ -67,11 +67,11 @@
     opacity: 0.5;
 }
 
-.ProseMirror a[name]:before {
+.ProseMirror a[id]:before {
     content: "⚓ "
 }
 
-.ProseMirror a[name] {
+.ProseMirror a[id] {
     background: rgba(128, 128, 128, 0.3);
     padding: 2px;
     border-radius: 6px;
@@ -88,12 +88,12 @@
     user-select: none;
 }
 
-.ProseMirror a[name]:hover {
+.ProseMirror a[id]:hover {
     width: auto;
     background: rgba(128, 128, 128, 0.15);
 }
 
-.ProseMirror a[name].ProseMirror-selectednode {
+.ProseMirror a[id].ProseMirror-selectednode {
     background: rgba(128, 192, 255, 0.3);
 }
 
@@ -129,15 +129,19 @@
     padding: 6px 13px;
 }
 
+.ProseMirror table tr th p, .ProseMirror table tr td p {
+    min-height: 1em;
+}
+
 .ProseMirror table tr p {
     margin-top: 0;
     margin-bottom: 0;
 }
   
-.ProseMirror table tr th :first-child, table tr td :first-child {
+.ProseMirror table tr th :first-child, .ProseMirror table tr td :first-child {
     margin-top: 0;
 }
   
-.ProseMirror table tr th :last-child, table tr td :last-child {
+.ProseMirror table tr th :last-child, .ProseMirror table tr td :last-child {
     margin-bottom: 0;
 }

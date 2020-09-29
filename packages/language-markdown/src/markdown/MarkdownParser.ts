@@ -1,3 +1,4 @@
+import { html_block } from "../alignment";
 import { soft_hyphen_from } from "../soft_hyphen";
 
 // tslint:disable-next-line
@@ -14,6 +15,7 @@ export function createMarkdownParser(
   md.use(markdownItTable);
 
   md.inline.ruler.before("text", "soft_hyphen", soft_hyphen_from);
+  md.block.ruler.before("html_block", "html_block", html_block);
 
   // Patch parser to detect <span></span> tags and convert into inline_styles marks
   // Warning... this might be a little brittle
@@ -37,7 +39,7 @@ export function createMarkdownParser(
       getAttrs: (tok: any) => ({
         style: tok.attrGet("style"),
       }),
-    },
+    }
   });
 
   parser.tokenHandlers.html_inline = (state: any, token: any) => {
@@ -74,16 +76,45 @@ export function createMarkdownParser(
       }
 
       if (tag.nodeName.toLowerCase() === "a") {
-        const name = (tag as Element).getAttribute("name");
+        const id = (tag as Element).getAttribute("id");
         state.addNode(schema.nodes.anchor, {
-          value: name,
+          value: id,
         });
       }
+    } else if (content === "<br>") {
+      state.addNode(schema.nodes.hard_break);
     }
   };
 
+  const alignedParagraphTypes = new Map<string, string>([
+    ["P", "paragraph"],
+    ["H1", "heading"],
+    ["H2", "heading"],
+    ["H3", "heading"],
+    ["H4", "heading"],
+    ["H5", "heading"],
+    ["H6", "heading"],
+  ])
+
   // tslint:disable-next-line
-  parser.tokenHandlers.html_block = () => {};
+  parser.tokenHandlers.html_block_open = (state: any, token: any) => {
+    if (!alignedParagraphTypes.has(token.meta.tag)) {
+      return;
+    }
+
+    const alignAttr = token.meta.attrs.find((x: any) => x.name === "align");
+    const nodeType = alignedParagraphTypes.get(token.meta.tag) as string;
+
+    const level = (nodeType === 'heading') ? Number(token.meta.tag[1]) : undefined;    
+    state.openNode(schema.nodes[nodeType], { align: alignAttr ? alignAttr.value : 'left', level });
+  };
+
+  // tslint:disable-next-line
+  parser.tokenHandlers.html_block_close = (state: any, token: any) => {
+    if (alignedParagraphTypes.has(token.meta.tag)) {
+      state.closeNode();
+    }
+  };
 
   return parser;
 }

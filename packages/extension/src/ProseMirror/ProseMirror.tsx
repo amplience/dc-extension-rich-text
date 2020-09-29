@@ -11,9 +11,7 @@ const EditorView = require("prosemirror-view").EditorView;
 // tslint:disable-next-line
 const exampleSetup = require("prosemirror-example-setup").exampleSetup;
 
-const {tableEditing, columnResizing, tableNodes, fixTables} = require("prosemirror-tables");
-
-//import  from "prosemirror-tables";
+const { tableEditing, columnResizing } = require("prosemirror-tables");
 
 const styles = {
   root: {

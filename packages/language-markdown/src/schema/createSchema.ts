@@ -1,8 +1,9 @@
-import { inline_styles } from "../inline_styles";
-import { soft_hyphen } from "../soft_hyphen";
+import { heading_align, paragraph_align } from "../alignment/AlignmentPlugin";
 import { anchor } from "../anchor";
-import { createMarkdownSerializer } from "../markdown/MarkdownSerializer";
+import { inline_styles } from "../inline_styles";
 import { createMarkdownParser } from "../markdown/MarkdownParser";
+import { createMarkdownSerializer } from "../markdown/MarkdownSerializer";
+import { soft_hyphen } from "../soft_hyphen";
 
 // tslint:disable-next-line
 const { tableNodes } = require("prosemirror-tables");
@@ -21,7 +22,7 @@ export function createSchema(isInlineStylesEnabled: boolean = false): any {
 
   const nodes = schema.spec.nodes.append(tableNodes({
     tableGroup: "block",
-    cellContent: "block+",
+    cellContent: "block",
     cellAttributes: {
       background: {
         default: null,
@@ -32,7 +33,9 @@ export function createSchema(isInlineStylesEnabled: boolean = false): any {
       }
     }
   })).addToEnd("soft_hyphen", soft_hyphen)
-     .addToEnd("anchor", anchor);
+     .addToEnd("anchor", anchor)
+     .update("paragraph", paragraph_align)
+     .update("heading", heading_align);
 
   return new Schema({
     nodes,

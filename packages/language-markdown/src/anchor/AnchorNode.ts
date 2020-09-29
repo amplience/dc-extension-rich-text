@@ -11,9 +11,9 @@ export const anchor = {
   },
   parseDOM: [
     {
-      tag: "a[name]",
+      tag: "a[id]",
       getAttrs(dom: any): any {
-        const value = JSON.parse(dom.getAttribute("name"));
+        const value = JSON.parse(dom.getAttribute("id"));
         return {
           value
         };
@@ -24,7 +24,7 @@ export const anchor = {
     const { value } = node.attrs;
     return [
       "a",
-      { "name": JSON.stringify(value) },
+      { "id": JSON.stringify(value) },
       value
     ];
   }

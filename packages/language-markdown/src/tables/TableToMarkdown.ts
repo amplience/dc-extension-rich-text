@@ -1,7 +1,7 @@
 const defaultRowWidth = 8;
 
 function tableRemoveNewlines(input: string): string {
-  return input.trimEnd().replace(/\n/g, '\\<br>').padEnd(defaultRowWidth, ' ');
+  return input.trimEnd().replace(/\\?\n/g, '<br>').padEnd(defaultRowWidth, ' ');
 }
 
 function withTableEscapes(state: any, action: () => void): void {
