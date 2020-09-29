@@ -244,7 +244,7 @@
 ]
 
 ```
-20. Create Table (on clicling Create Table icon, additional icons are appeared):
+20. Create Table (on clicking Create Table icon, additional icons are appeared):
     - Add Row
     - Delete Row
     - Add Column
