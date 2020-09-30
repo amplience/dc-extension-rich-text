@@ -85,6 +85,7 @@ const AnchorDialog: React.SFC<AnchorDialogProps> = (
       <DialogContent>
         <FormControl fullWidth={true}>
           <TextField
+            error={!isValid}
             autoFocus={true}
             id="value"
             label="Anchor ID"
