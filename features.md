@@ -4,19 +4,26 @@
 1. Normal Text
 
 ![Normal Text](media/normalText.png)
-
+JSON output:
 ```json
 [
    {
       "type": "markdown",
-      "data": "Normal Text"
+      "data": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
    }
 ]
 ```
 
+Markdown output:
+
+```
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+```
+
 2. Headings 1-6
 
-![Normal Text](media/headings.png)
+![Headings](media/headings.png)
+JSON output:
 ```json
 [
    {
@@ -25,34 +32,75 @@
    }
 ]
 ```
+Markdown output:
+
+```
+# Heading 1
+
+## Heading 2
+
+### Heading 3
+
+#### Heading 4
+
+##### Heading 5
+
+###### Heading 6
+```
 
 3. Code Block 
 
 ![CodeBlock](media/codeBlock.png)
+
+JSON output:
+
 ```json
 [
    {
       "type": "markdown",
-      "data": "```\n[\n   {\n      \"type\": \"markdown\",\n      \"data\": \"# Heading 1\"\n   }\n]\n```"
+      "data": "```\n<h1 style=\"color:blue;\">A Blue Heading</h1>\n```"
    }
 ]
 ```
 
-4. Bold Text 
+Markdown output:
 
-![CodeBlock](media/boldText.png)
+```
+   ```<h1 style="color:blue;">A Blue Heading</h1>```
+```
+4. Custom Styles
+
+![markdown Custom Styles](media/customStyle.png)
+JSON output: TBC
+
+Markdown output:
+```
+<span class="red">Lorem Ipsum</span>\
+<span class="green">Lorem Ipsum</span>
+```
+5. Bold Text 
+
+![Bold Text](media/boldText.png)
+JSON output:
 ```json
 [
    {
       "type": "markdown",
-      "data": "**Lorem ipsum** dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+      "data": "**Lorem ipsum**"
    }
 ]
+```
+Markdown output:
 
 ```
-5. Italic Text
+**Lorem ipsum**
+```
+6. Italic Text
 
-![CodeBlock](media/italicText.png)
+![Italic Text](media/italicText.png)
+
+JSON output:
+
 ```json
 [
    {
@@ -60,11 +108,18 @@
       "data": "*Lorem ipsum* "
    }
 ]
+```
+Markdown output:
 
 ```
-6. Soft Hyphen
+*Lorem ipsum*
+```
+7. Soft Hyphen
 
-![CodeBlock](media/softHyphen.png)
+![Soft Hyphen](media/softHyphen.png)
+
+JSON output:
+
 ```json
 [
    {
@@ -72,11 +127,16 @@
       "data": "Lorem&shy;ipsum "
    }
 ]
+```
+Markdown output:
 
 ```
-7. Links
+Lorem&shy;ipsum
+```
+8. Links
 
-![CodeBlock](media/links.png)
+![Links](media/links.png)
+JSON output:
 ```json
 [
    {
@@ -84,23 +144,32 @@
       "data": "[Go to http://amplience.com](https://amplience.com/ \"Amplience\")"
    }
 ]
+```
+Markdown output:
 
 ```
-8. Anchors
+[go to http://amplience.com](https://amplience.com "Amplience")
+```
+9. Anchors
 
-![CodeBlock](media/anchors.png)
+![Anchors](media/anchors.png)
+JSON output:
 ```json
 [
    {
       "type": "markdown",
-      "data": "<a id=\"paragraph-1\"></a>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+      "data": "<a id=\"paragraph-1\"></a>Lorem ipsum dolor sit amet, consectetur adipiscing elit. "
    }
 ]
-
 ```
-9. Align Left
+Markdown output:
+```
+<a id="paragraph-1"></a>Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+```
+10. Align Left
 
-![CodeBlock](media/alignLeft.png)
+![Align Left](media/alignLeft.png)
+JSON output:
 ```json
 [
    {
@@ -108,35 +177,69 @@
       "data": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
    }
 ]
-
 ```
-10. Align Center
+Markdown output:
+```
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+```
+11. Align Center
 
-![CodeBlock](media/alignCenter.png)
+![Align Center](media/alignCenter.png)
+
+JSON output:
 ```json
 [
    {
       "type": "markdown",
-      "data": "<p align=\"center\">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>"
+      "data": "<p align=\"center\">Lorem ipsum dolor sit amet, consectetur adipiscing elit. </p>"
    }
 ]
-
 ```
-11. Align Right
+Markdown output:
+```
+<p align="center">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+```
 
-![CodeBlock](media/alignRight.png)
+12. Align Right
+
+![Align Right](media/alignRight.png)
+JSON output:
 ```json
 [
    {
       "type": "markdown",
-      "data": "<p align=\"right\">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>"
+      "data": "<p align=\"right\">Lorem ipsum dolor sit amet, consectetur adipiscing elit. </p>"
    }
 ]
+```
+Markdown output:
 
 ```
-12. Bullet List
+<p align="right">Lorem ipsum dolor sit amet, consectetur adipiscing elit. </p>
+```
 
-![CodeBlock](media/bulletList.png)
+13. Align Justify
+
+![Align Justify](media/alignJustify.png)
+JSON output:
+```json
+[
+   {
+      "type": "markdown",
+      "data": "<p align=\"justify\">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. </p>"
+   }
+]
+```
+Markdown output:
+
+```
+<p align="justify">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+```
+
+14. Bullet List
+
+![Bullet List](media/bulletList.png)
+JSON output:
 ```json
 [
    {
@@ -144,11 +247,21 @@
       "data": "* Lorem ipsum dolor sit amet\n\n* Lorem ipsum dolor sit amet\n\n* Lorem ipsum dolor sit amet\n\n* Lorem ipsum dolor sit amet"
    }
 ]
+```
+Markdown output:
 
 ```
-13. Decrease Indentation (appears only after applied bullet/ordered list)
+* Lorem ipsum dolor sit amet
 
-![CodeBlock](media/decreaseIndentation.png)
+* Lorem ipsum dolor sit amet
+
+* Lorem ipsum dolor sit amet
+```
+
+15. Decrease Indentation (appears only after applied bullet/ordered list)
+
+![Decrease Indentation](media/decreaseIndentation.png)
+JSON output:
 ```json
 [
    {
@@ -156,11 +269,22 @@
       "data": "Lorem ipsum dolor sit amet\n\n* Lorem ipsum dolor sit amet\n\n* Lorem ipsum dolor sit amet\n\n* Lorem ipsum dolor sit amet"
    }
 ]
+```
+Markdown output:
 
 ```
-14. Ordered List
+Lorem ipsum dolor sit amet
 
-![CodeBlock](media/orderedList.png)
+* Lorem ipsum dolor sit amet
+
+* Lorem ipsum dolor sit amet
+
+```
+
+16. Ordered List
+
+![Ordered List](media/orderedList.png)
+JSON output:
 ```json
 [
    {
@@ -168,31 +292,22 @@
       "data": "1. Lorem ipsum dolor sit amet\n\n2. Lorem ipsum dolor sit amet\n\n3. Lorem ipsum dolor sit amet\n\n4. Lorem ipsum dolor sit amet"
    }
 ]
+```
+
+Markdown output:
 
 ```
-15. Insert Image
+1. Lorem ipsum dolor sit amet
 
-![CodeBlock](media/insertImage.png)
-```json
-[
-   {
-      "type": "dc-image-link",
-      "data": {
-         "_meta": {
-            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/image-link"
-         },
-         "id": "47384164-dfa0-4164-8220-afbcbbc5d608",
-         "name": "yellowbricks",
-         "endpoint": "csdemo",
-         "defaultHost": "i1.adis.ws"
-      }
-   }
-]
+2. Lorem ipsum dolor sit amet
 
-``` 
-16. Insert Image from URL
+3. Lorem ipsum dolor sit amet
+```
 
-![CodeBlock](media/insertImageURL.png)
+17. Insert Image from URL
+
+![Insert Image from URL](media/insertImageURL.png)
+JSON output:
 ```json
 [
    {
@@ -200,50 +315,45 @@
       "data": "![dynamic media image](http://dev-solutions.s3.amazonaws.com/anastasia/di-docs/images/Dynamic_Media.png \"Dynamic Media\")"
    }
 ]
-
 ```
-17. Insert Content
-
-![CodeBlock](media/insertContent.png)
-```json
-[
-   {
-      "type": "dc-content-link",
-      "data": {
-         "id": "3043683c-480b-453d-9cb5-5dece54508fc",
-         "contentType": "https://dev-solutions.s3.amazonaws.com/DynamicContentTypes/Accelerators/banner.json",
-         "_meta": {
-            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
-         }
-      }
-   }
-]
-
+Markdown output:
 ```
+![](http://dev-solutions.s3.amazonaws.com/anastasia/di-docs/images/Dynamic_Media.png "Dynamic Media")
+```
+
 18. Quote
 
-![CodeBlock](media/quote.png)
+![Quote](media/quote.png)
+JSON output:
 ```json
 [
    {
       "type": "markdown",
-      "data": "> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. "
+      "data": "> Lorem ipsum dolor sit amet, consectetur adipiscing elit. "
    }
 ]
-
+```
+Markdown output:
+```
+> Lorem ipsum dolor sit amet, consectetur adipiscing elit
 ```
 19. Horizontal Rule
 
-![CodeBlock](media/rule.png)
+![Horizontal Rule](media/rule.png)
+JSON output:
 ```json
 [
    {
       "type": "markdown",
-      "data": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. \n\n---"
+      "data": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. \n\n---"
    }
 ]
-
 ```
+Markdown output:
+```
+---
+```
+
 20. Create Table (on clicking Create Table icon, additional icons are appeared):
     - Add Row
     - Delete Row
@@ -251,7 +361,8 @@
     - Delete Column
     - Delete Table
 
-![CodeBlock](media/table.png)
+![Create Table](media/table.png)
+JSON output:
 ```json
 [
    {
@@ -259,17 +370,11 @@
       "data": "| id       | name     | email    |\n|----------|----------|----------|\n| 1        | Ivan     | ivan@amplience.com |\n| 2        | Ian      | ian@amplience.com |"
    }
 ]
-
 ```
-21. Clear Formatting 
-
-![CodeBlock](media/clearFormatting.png)
-```json
-[
-   {
-      "type": "markdown",
-      "data": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-   }
-]
-
+Markdown output:
+```
+| id       | name     | email    |
+|----------|----------|----------|
+| 1        | Ivan     | ivan@amplience.com |
+| 2        | Ian      | ian@amplience.com |
 ```
