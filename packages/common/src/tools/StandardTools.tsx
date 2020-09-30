@@ -30,6 +30,8 @@ const { toggleMark, setBlockType, lift } = require("prosemirror-commands");
 const { wrapInList } = require("prosemirror-schema-list");
 // tslint:disable-next-line
 const { NodeSelection } = require("prosemirror-state");
+// tslint:disable-next-line
+const { findParentNode } = require("prosemirror-utils");
 
 export function createMarkToggleTool(
   name: string,
@@ -216,8 +218,26 @@ export function blockquote(schema: any): ProseMirrorTool {
   };
 }
 
+function getCurrentAlignment(state: any): object {
+  if (state == null) {
+    return {};
+  }
+
+  // Locate the block we're contained in.
+  const parent = findParentNode((x: any): boolean => x.attrs.align)(state.selection);
+
+  if (parent != null) {
+    return { align: parent.node.attrs.align };
+  } else {
+    return {};
+  }
+}
+
+function blockTypeCommand(state: any, type: any, attrs?: any): any {
+  return setBlockType(type, { ...attrs, ...getCurrentAlignment(state) });
+}
+
 export function heading(schema: any, level: number): ProseMirrorTool {
-  const command = setBlockType(schema.nodes.heading, { level });
   return {
     name: "heading_" + level,
     label: "Heading " + level,
@@ -226,9 +246,9 @@ export function heading(schema: any, level: number): ProseMirrorTool {
       { style: { margin: 0 } },
       `Heading ${level}`
     ),
-    apply: command,
-    isEnabled: (state: any) => command(state),
-    isActive: (state: any, view: any) => !command(state, null, view)
+    apply: (state: any, dispatch: any, view: any) => blockTypeCommand(state, schema.nodes.heading, { level })(state, dispatch, view),
+    isEnabled: (state: any) => blockTypeCommand(state, schema.nodes.heading, { level })(state),
+    isActive: (state: any, view: any) => !blockTypeCommand(state, schema.nodes.heading, { level })(state, null, view)
   };
 }
 
@@ -240,9 +260,9 @@ export function paragraph(schema: any): ProseMirrorTool {
     displayLabel: (
       <p style={{ margin: 0, padding: 0, display: "inline" }}>Normal text</p>
     ),
-    apply: command,
-    isEnabled: (state: any) => command(state),
-    isActive: (state: any, view: any) => !command(state, null, view)
+    apply: (state: any, dispatch: any, view: any) => blockTypeCommand(state, schema.nodes.paragraph)(state, dispatch, view),
+    isEnabled: (state: any) => blockTypeCommand(state, schema.nodes.paragraph)(state),
+    isActive: (state: any, view: any) => !blockTypeCommand(state, schema.nodes.paragraph)(state, null, view)
   };
 }
 

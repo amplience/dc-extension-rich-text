@@ -60,11 +60,19 @@ const ProseMirrorToolbar: React.SFC<ProseMirrorToolbarProps> = (
           />
         );
       case "group":
-        return (
+        const toolVisible = (tool: ToolbarButton): boolean => {
+          const state = toolbarState == null ? null : toolbarState.toolStates[tool.toolName];
+          return state == null ? true : state.visible;
+        }
+
+        const anyVisible = element.children.findIndex(child =>
+          child.type !== 'button' || toolVisible(child)
+        ) !== -1;
+        return anyVisible ? (
           <ProseMirrorToolbarGroup>
             {element.children.map(child => renderToolbarElement(child))}
           </ProseMirrorToolbarGroup>
-        );
+        ) : null;
       default:
         return null;
     }
