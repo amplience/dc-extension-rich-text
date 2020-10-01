@@ -17,8 +17,7 @@ import Link from "@material-ui/icons/Link";
 import Redo from "@material-ui/icons/Redo";
 import Undo from "@material-ui/icons/Undo";
 
-import { ContentItemLink, MediaImageLink } from "dc-extensions-sdk";
-import { Hyperlink, Image, RichTextDialogs } from "../dialogs";
+import { Hyperlink, Image } from "../dialogs";
 import { ProseMirrorTool } from "./ProseMirrorTool";
 import { isToolEnabled, StandardToolOptions } from "./StandardToolOptions";
 
@@ -28,8 +27,6 @@ const { undo: undoFn, redo: redoFn } = require("prosemirror-history");
 const { toggleMark, setBlockType, lift } = require("prosemirror-commands");
 // tslint:disable-next-line
 const { wrapInList } = require("prosemirror-schema-list");
-// tslint:disable-next-line
-const { NodeSelection } = require("prosemirror-state");
 // tslint:disable-next-line
 const { findParentNode } = require("prosemirror-utils");
 

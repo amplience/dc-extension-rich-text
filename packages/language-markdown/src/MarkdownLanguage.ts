@@ -3,7 +3,7 @@ import {
   isToolEnabled,
   ProseMirrorTool,
   RichLanguage,
-  StandardToolOptions,
+  StandardToolOptions
 } from "@dc-extension-rich-text/common";
 import { AlignCenterTool, AlignJustifyTool, AlignLeftTool, AlignRightTool } from "./alignment/AlignmentTools";
 import { AnchorTool } from "./anchor";
