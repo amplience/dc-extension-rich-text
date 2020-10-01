@@ -27,12 +27,10 @@ export const TableToMarkdown = {
       return;
     }
 
-    // TODO: Determine content width for each row. Alignment.
-
     // First row is the header row. Get column count, and draw it.
 
     state.render(rows[0]);
-    const columnCount = rows[0].childCount; // TODO: make sure they're TH?
+    const columnCount = rows[0].childCount; // Assumes first row is header.
     
     // Draw divider using the number of columns.
     state.write('\n');

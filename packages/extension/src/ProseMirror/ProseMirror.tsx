@@ -10,7 +10,7 @@ const EditorState = require("prosemirror-state").EditorState;
 const EditorView = require("prosemirror-view").EditorView;
 // tslint:disable-next-line
 const exampleSetup = require("prosemirror-example-setup").exampleSetup;
-
+// tslint:disable-next-line
 const { tableEditing, columnResizing } = require("prosemirror-tables");
 
 const styles = {

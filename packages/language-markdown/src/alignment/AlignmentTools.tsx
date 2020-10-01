@@ -1,7 +1,6 @@
 import { ProseMirrorTool } from "@dc-extension-rich-text/common";
 import { FormatAlignCenter, FormatAlignJustify, FormatAlignLeft, FormatAlignRight } from "@material-ui/icons";
 import React from "react";
-import { transform } from "typescript";
 
 import { ContentNodeWithPos, findParentNode } from 'prosemirror-utils';
 
