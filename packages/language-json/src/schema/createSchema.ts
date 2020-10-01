@@ -7,8 +7,8 @@ import {
 // tslint:disable-next-line
 const { Schema } = require("prosemirror-model");
 
-export function createSchema(): any {
-  const schema = createMarkdownSchema();
+export function createSchema(isInlineStylesEnabled: boolean): any {
+  const schema = createMarkdownSchema(isInlineStylesEnabled);
   return new Schema({
     nodes: schema.spec.nodes
       .addBefore("image", "dc-image-link", DcImageLinkNode())
