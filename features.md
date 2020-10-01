@@ -71,7 +71,15 @@ Markdown output:
 4. Custom Styles
 
 ![markdown Custom Styles](media/customStyle.png)
-JSON output: TBC
+JSON output: 
+```json
+[
+   {
+      "type": "markdown",
+      "data": "`<span class=\"red\">Lorem Ipsum</span>`\n\n`<span class=\"green\">Lorem Ipsum</span>`"
+   }
+]
+```
 
 Markdown output:
 ```
