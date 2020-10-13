@@ -39,7 +39,7 @@ const ProseMirrorToolbarDropdown: React.SFC<ProseMirrorToolbarButtonProps> = (
   let selected;
 
   if (selectedItems && selectedItems.length > 1 ){
-    selected = selectedItems.find(x => x.name !== "paragraph")
+    selected = selectedItems.find(x => /inline_styles/.test(x.name )) || selectedItems[0];
   } else {
     selected = selectedItems.find(x => x.active);
   }

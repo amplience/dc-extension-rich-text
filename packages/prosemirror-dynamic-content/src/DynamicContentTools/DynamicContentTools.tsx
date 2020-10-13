@@ -23,7 +23,6 @@ export function dcImageLink(schema: any, dialog?: (value?: MediaImageLink) => Pr
             }
 
             try {
-              debugger;
 
               const value = await dialog();
                 view.dispatch(view.state.tr.replaceSelectionWith(node.createAndFill({
@@ -51,8 +50,6 @@ export function dcContentLink(schema: any, contentTypes: string[], dialog?: (con
             }
 
             try {
-              debugger;
-
               const value = await dialog(contentTypes);
                 view.dispatch(view.state.tr.replaceSelectionWith(node.createAndFill({
                     value
