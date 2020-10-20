@@ -61,6 +61,7 @@ const HyperlinkDialog: React.SFC<HyperlinkDialogProps> = (
       href: "",
       title: ""
     });
+    setLastValue(undefined);
   };
 
   const handleCancel = React.useCallback(() => {

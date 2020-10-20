@@ -92,8 +92,8 @@ export function editLink(
   dialog?: (value?: Hyperlink) => Promise<Hyperlink>
 ): (state: any, dispatch: any, view: any) => Promise<void> {
   return async (state: any, dispatch: any, view: any): Promise<void> => {
-    const marks = getSelectionMarks(state).filter(mark => mark.type === type);
-    const attrs: Hyperlink | undefined = marks.length === 1 ? marks[0].attrs : undefined;
+    const marks = getSelectionMarks(state).filter(mark => mark.mark.type === type);
+    const attrs: Hyperlink | undefined = marks.length === 1 ? marks[0].mark.attrs : undefined;
 
     if (dialog) {
       try {
@@ -106,7 +106,11 @@ export function editLink(
 
         if (marks.length > 0 && newAttrs.href !== "") {
           const { tr, selection } = state;
-          dispatch(tr.addMark(selection.from, selection.to, type.create(newAttrs)));
+          if (selection.from === selection.to) {
+            dispatch(tr.addMark(marks[0].from, marks[0].to, type.create(newAttrs)));
+          } else {
+            dispatch(tr.addMark(selection.from, selection.to, type.create(newAttrs)));
+          }
         } else {
           toggleMark(type, newAttrs)(state, dispatch, view);
         }
@@ -133,7 +137,7 @@ export function link(
     displayIcon: <Link />,
     isActive: (state: any) => isMarkActive(state, schema.marks.link),
     isEnabled: (state: any) => {
-      return !state.selection.empty;
+      return !state.selection.empty || getSelectionMarks(state).filter(mark => mark.mark.type === schema.marks.link).length > 0;
     },
     apply: editLink(schema.marks.link, dialog)
   };
