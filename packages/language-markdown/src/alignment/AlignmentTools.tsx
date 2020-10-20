@@ -4,43 +4,59 @@ import React from "react";
 
 import { ContentNodeWithPos, findParentNode } from 'prosemirror-utils';
 
-function getContainingTextBlock(state: any): ContentNodeWithPos | undefined {
-  const result = findParentNode((node) => node.isTextblock)(state.selection);
+function getContainingTextBlocks(state: any): ContentNodeWithPos[] {
+  const resultNodes = new Set<any>();
+  const result: ContentNodeWithPos[] = [];
 
-  return result;
+  state.doc.nodesBetween(state.selection.from, state.selection.to, (node: any, pos: number, parent: any, index: number) => {
+    if (node.isTextblock && !resultNodes.has(node)) {
+      result.push({node, pos, start: 0, depth: 0});
+      resultNodes.add(node);
+    }
+  });
+
+  return Array.from(result);
 }
 
 function align(state: any, dispatch: ((tr: any) => void) | undefined, alignment: string): boolean {
   // Apply align attr to the text block.
-  const result = getContainingTextBlock(state);
+  const result = getContainingTextBlocks(state);
+  let tr = state.tr;
   
-  if (result != null) {
-    const { node, pos } = result;
+  result.forEach(item => {
+    const { node, pos } = item;
 
-    const tr = state.tr.setNodeMarkup(pos, node.type, { ...node.attrs, align: alignment });
+    tr = tr.setNodeMarkup(pos, node.type, { ...node.attrs, align: alignment });
+  });
 
-    if (dispatch) {
-      dispatch(tr);
-    }
+  if (dispatch) {
+    dispatch(tr);
   }
 
   return true;
 }
 
 function alignActive(state: any, view: any, alignment: string): boolean {
-    // Apply align attr to the text block.
-    const result = getContainingTextBlock(state);
-  
-    if (result != null) {
-      return (result.node.attrs.align || "left") === alignment;
-    }
+  // Apply align attr to the text block.
+  const result = getContainingTextBlocks(state);
+  let anyMismatch = false;
 
+  result.forEach(item => {
+    if ((result[0].node.attrs.align || "left") !== alignment) {
+      anyMismatch = true;
+    }
+  });
+
+  if (result.length === 0) {
     return false;
+  }
+
+  return !anyMismatch;
 }
 
 function alignable(state: any, view: any): boolean {
   // Any text block is alignable.
-  return getContainingTextBlock(state) != null;
+  return getContainingTextBlocks(state).length > 0;
 }
 
 export function AlignLeftTool(schema: any): ProseMirrorTool {
