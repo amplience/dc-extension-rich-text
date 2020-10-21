@@ -66,6 +66,15 @@ const HyperlinkDialog: React.SFC<HyperlinkDialogProps> = (
 
   const handleCancel = React.useCallback(() => {
     reset();
+    if (lastValue === undefined) {
+      onClose();
+    } else {
+      onSubmit({...lastValue, cancel: true});
+    }
+  }, [lastValue, setLastValue, onSubmit]);
+
+  const handleClear = React.useCallback(() => {
+    reset();
     onClose();
   }, [setValue, onClose]);
 
@@ -79,7 +88,7 @@ const HyperlinkDialog: React.SFC<HyperlinkDialogProps> = (
       maxWidth="md"
       fullWidth={true}
       open={open}
-      onClose={onClose}
+      onClose={handleCancel}
       aria-labelledby="form-dialog-title"
     >
       <DialogTitle id="form-dialog-title">Hyperlink</DialogTitle>
@@ -113,7 +122,7 @@ const HyperlinkDialog: React.SFC<HyperlinkDialogProps> = (
         </FormControl>
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleCancel} color="primary">
+        <Button onClick={handleClear} color="primary">
           Clear
         </Button>
         <Button disabled={!isValid} onClick={handleSubmit} color="primary">

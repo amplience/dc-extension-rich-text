@@ -145,3 +145,11 @@
 .ProseMirror table tr th :last-child, .ProseMirror table tr td :last-child {
     margin-bottom: 0;
 }
+
+.ProseMirror ol ol {
+    list-style: lower-alpha;
+}
+
+.ProseMirror ol ol ol {
+    list-style: lower-roman;
+}

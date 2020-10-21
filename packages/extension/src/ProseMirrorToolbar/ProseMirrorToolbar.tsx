@@ -39,7 +39,7 @@ export interface ToolbarGroup {
 export type ToolbarElement = ToolbarButton | ToolbarGroup | ToolbarDropDown;
 
 export interface ProseMirrorToolbarProps extends WithStyles<typeof styles> {
-  toolbarState?: ProseMirrorToolbarState;
+  toolbarState: ProseMirrorToolbarState | undefined;
   layout: ToolbarElement[];
 }
 

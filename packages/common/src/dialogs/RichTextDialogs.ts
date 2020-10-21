@@ -9,6 +9,7 @@ export interface Image {
 export interface Hyperlink {
   href: string;
   title: string;
+  cancel?: boolean;
 }
 
 export interface Anchor {

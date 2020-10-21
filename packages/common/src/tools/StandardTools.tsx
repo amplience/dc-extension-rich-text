@@ -99,17 +99,24 @@ export function editLink(
       try {
         const linkValue = await dialog(attrs);
 
+        if (linkValue.cancel) {
+          return;
+        }
+
         const newAttrs = {
           href: linkValue.href,
           title: linkValue.title === "" ? undefined : linkValue.title
         };
 
-        if (marks.length > 0 && newAttrs.href !== "") {
+        if (marks.length > 0) {
           const { tr, selection } = state;
-          if (selection.from === selection.to) {
-            dispatch(tr.addMark(marks[0].from, marks[0].to, type.create(newAttrs)));
-          } else {
-            dispatch(tr.addMark(selection.from, selection.to, type.create(newAttrs)));
+
+          if (newAttrs.href !== "") {
+            if (marks.length < 2 && !(selection.from < marks[0].from || selection.to > marks[0].to)) {
+              dispatch(tr.addMark(marks[0].from, marks[0].to, type.create(newAttrs)));
+            } else {
+              dispatch(tr.addMark(selection.from, selection.to, type.create(newAttrs)));
+            }
           }
         } else {
           toggleMark(type, newAttrs)(state, dispatch, view);
@@ -121,8 +128,7 @@ export function editLink(
     }
 
     if (isMarkActive(state, type)) {
-      toggleMark(type)(state, dispatch, view);
-      return;
+      dispatch(state.tr.removeMark(marks[0].from, marks[0].to, type));
     }
   };
 }
