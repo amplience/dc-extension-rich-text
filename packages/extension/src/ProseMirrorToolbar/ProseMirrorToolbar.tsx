@@ -95,11 +95,13 @@ const ProseMirrorToolbar: React.SFC<ProseMirrorToolbarProps> = (
           if (areInlineStyles && areInlineStyles.length) {
             const clearFormatting = toolbarState.tools.find(x => x.name === "clear_formatting");
 
-            clearFormatting && clearFormatting.apply(
-              toolbarState.editorView.state,
-              toolbarState.editorView.dispatch,
-              toolbarState.editorView
-            );
+            if (clearFormatting) {
+              clearFormatting.apply(
+                toolbarState.editorView.state,
+                toolbarState.editorView.dispatch,
+                toolbarState.editorView
+              );
+            }
           }
 
           tool.apply(
