@@ -15,9 +15,7 @@ const { tableEditing, columnResizing } = require("prosemirror-tables");
 // tslint:disable-next-line
 const keymap = require("prosemirror-keymap").keymap;
 // tslint:disable-next-line
-const { sinkListItem, liftListItem } = require("prosemirror-schema-list");
-// tslint:disable-next-line
-const { undoInputRule } = require("prosemirror-inputrules");
+const { sinkListItem } = require("prosemirror-schema-list");
 
 const styles = {
   root: {
