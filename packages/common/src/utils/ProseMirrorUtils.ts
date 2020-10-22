@@ -1,4 +1,4 @@
-export function inBlock(state: any) {
+export function inBlock(state: any): boolean {
   const { $from } = state.selection;
   return $from.depth > 1;
 }
