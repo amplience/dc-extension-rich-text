@@ -41,51 +41,9 @@ interface ProseMirrorState {
   editorView?: any;
 }
 
-let view: any;
-
-function inNestedListNoContent(schema: any, state: any): boolean {
-  const { from, to, $cursor } = state.selection;
-  
-  if (from !== to) {
-    return false;
-  }
-
-  let listCount = 0;
-  let textBlock: any = null;
-  state.doc.nodesBetween(from, to, (node: any) => {
-    if (node.type === schema.nodes.list_item) {
-      listCount++;
-    }
-    if (node.isTextblock) {
-      textBlock = node; // Important to note - this sets in order.
-    }
-  });
-
-  if (listCount < 2 || textBlock === null) {
-    return false;
-  }
-
-  return textBlock.childCount === 0;
-}
-
 function getKeys(schema: any): any {
   return {
-    Tab: sinkListItem(schema.nodes.list_item),
-    Backspace: (state: any, dispatch: any, range: any): boolean => {
-      let lifted = false;
-
-      // Is the line empty and we're in a list?
-      // If so exit the list entirely. (all nested levels)
-      if (inNestedListNoContent(schema, state)) {
-        while (liftListItem(schema.nodes.list_item)(state, dispatch, range)) {
-          state = view.state;
-          dispatch = view.dispatch;
-          lifted = true;
-        }
-      }
-
-      return lifted ? true : undoInputRule(state, dispatch, range);
-    }
+    Tab: sinkListItem(schema.nodes.list_item)
   }
 }
 
@@ -151,7 +109,6 @@ class ProseMirror extends React.Component<ProseMirrorProps, ProseMirrorState> {
   public componentDidMount(): void {
     if (this.state.ref && !this.state.editorView) {
       const editorView = this.createEditorView(this.state.ref.current);
-      view = editorView;
       this.setState({ editorView });
     }
   }
