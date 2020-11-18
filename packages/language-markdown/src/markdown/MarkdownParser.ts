@@ -102,11 +102,16 @@ export function createMarkdownParser(
       return;
     }
 
-    const alignAttr = token.meta.attrs.find((x: any) => x.name === "align");
+    const styleAttr = token.meta.attrs.find((attr: Attr) => attr.name === 'style') as Attr;
+    let alignAttr = 'left';
+    if (styleAttr) {
+      alignAttr = (styleAttr.ownerElement as HTMLElement).style.textAlign || alignAttr;
+    }
+
     const nodeType = alignedParagraphTypes.get(token.meta.tag) as string;
 
     const level = (nodeType === 'heading') ? Number(token.meta.tag[1]) : undefined;    
-    state.openNode(schema.nodes[nodeType], { align: alignAttr ? alignAttr.value : 'left', level });
+    state.openNode(schema.nodes[nodeType], { align: alignAttr ? alignAttr : 'left', level });
   };
 
   // tslint:disable-next-line
