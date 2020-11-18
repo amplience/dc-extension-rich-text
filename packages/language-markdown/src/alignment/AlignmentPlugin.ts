@@ -9,16 +9,16 @@ export const paragraph_align = {
     {
       tag: "p", 
       getAttrs(dom: any): object { 
-        return { align: dom.getAttribute("align") };
+        return { align: dom.style.textAlign };
       }
     }
   ],
-  toDOM(node: any): object { return ["p", { align: (node.attrs.align || "left") }, 0] }
+  toDOM(node: any): object { return ["p", { style: `text-align: ${(node.attrs.align || "left")};` }, 0] }
 };
 
 function getHeadingAttrs(level: number): (dom: any) => object {
   return function getAttrs(dom: any): object { 
-    return { align: dom.getAttribute("align"), level };
+    return { align: dom.style.textAlign, level };
   }
 }
 
@@ -37,7 +37,7 @@ export const heading_align = {
              {tag: "h4", getAttrs: getHeadingAttrs(4)},
              {tag: "h5", getAttrs: getHeadingAttrs(5)},
              {tag: "h6", getAttrs: getHeadingAttrs(6)}],
-  toDOM(node: any): object { return ["h" + node.attrs.level, { align: (node.attrs.align || "left") }, 0] }
+  toDOM(node: any): object { return ["h" + node.attrs.level, { style: `text-align: ${(node.attrs.align || "left")};` }, 0] }
 }
 
 export const AlignedParagraphToMarkdown = {
