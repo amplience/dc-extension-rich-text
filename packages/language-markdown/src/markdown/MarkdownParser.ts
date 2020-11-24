@@ -77,9 +77,12 @@ export function createMarkdownParser(
 
       if (tag.nodeName.toLowerCase() === "a") {
         const id = (tag as Element).getAttribute("id");
-        state.addNode(schema.nodes.anchor, {
-          value: id,
-        });
+
+        if (id != null) {
+          state.addNode(schema.nodes.anchor, {
+            value: id,
+          });
+        }
       }
     } else if (content === "<br>") {
       state.addNode(schema.nodes.hard_break);

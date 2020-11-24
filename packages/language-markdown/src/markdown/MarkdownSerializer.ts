@@ -7,6 +7,18 @@ import { TableToMarkdown } from "../tables/TableToMarkdown";
 // tslint:disable-next-line
 const markdown = require("prosemirror-markdown");
 
+function escape(text: string): string {
+  return text.replace(/&/g, "&amp;")
+             .replace(/</g, "&lt;")
+             .replace(/>/g, "&gt;");
+}
+
+const TextToMarkdown = {
+  text(state: any, node: any): void {
+    state.text(escape(node.text));
+  }
+}
+
 export function createMarkdownSerializer(): any {
   return new markdown.MarkdownSerializer(
         {
@@ -15,7 +27,8 @@ export function createMarkdownSerializer(): any {
           ...AnchorToMarkdown,
           ...TableToMarkdown,
           ...AlignedParagraphToMarkdown,
-          ...AlignedHeaderToMarkdown
+          ...AlignedHeaderToMarkdown,
+          ...TextToMarkdown
         },
         {
           ...markdown.defaultMarkdownSerializer.marks,
