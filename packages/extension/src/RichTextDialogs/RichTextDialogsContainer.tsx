@@ -64,8 +64,8 @@ const RichTextDialogsContainer: React.SFC<EditorDialogsProps> = (
   const { sdk } = React.useContext(SdkContext);
 
   const dialogs: RichTextDialogs = {
-    getAnchor: (value?: Anchor): Promise<Anchor> => {
-      return handleOpenDialog("anchor", value) as Promise<Anchor>;
+    getAnchor: (existing: Set<string>, value?: Anchor): Promise<Anchor> => {
+      return handleOpenDialog("anchor", { value, existing }) as Promise<Anchor>;
     },
     getHyperlink: (value?: Hyperlink): Promise<Hyperlink> => {
       return handleOpenDialog("hyperlink", value) as Promise<Hyperlink>;

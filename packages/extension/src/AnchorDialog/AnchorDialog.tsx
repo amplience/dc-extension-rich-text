@@ -17,13 +17,28 @@ interface AnchorDialogProps {
   open: boolean;
   onClose: () => void;
   onSubmit: (value: Anchor) => void;
-  value: any;
+  value: {
+    existing: Set<string>;
+    value: any;
+  };
 }
 
 const htmlIdRegex = /^[a-zA-Z][\w:.\-]*$/;
 
-function validateId(value: string): boolean {
-  return value != null && value.length > 0 && htmlIdRegex.test(value);
+function validateId(value: string, existing: Set<string>): string | undefined {
+  if (value == null || value.length === 0) {
+    return 'ID cannot be empty.';
+  }
+
+  if (!htmlIdRegex.test(value)) {
+    return 'Invalid ID.';
+  }
+
+  if (existing.has(value)) {
+    return 'ID is already in use.'
+  }
+
+  return undefined;
 }
 
 const AnchorDialog: React.SFC<AnchorDialogProps> = (
@@ -37,12 +52,15 @@ const AnchorDialog: React.SFC<AnchorDialogProps> = (
 
   const [lastValue, setLastValue] = React.useState<Anchor>();
 
-  if (props.value != null && lastValue !== props.value) {
-    setValue(props.value);
-    setLastValue(props.value);
+  if (props.value != null && props.value.value != null && lastValue !== props.value.value) {
+    setValue(props.value.value);
+    setLastValue(props.value.value);
   }
 
-  const [isValid, setIsValid] = React.useState(false);
+  const validate = (checkValue: string) => validateId(checkValue, props.value ? props.value.existing : new Set());
+  validate(value.value);
+
+  const [validError, setValidError] = React.useState<string | undefined>(undefined);
 
   const handleInputChanged = React.useCallback(
     (name: string, fieldValue: string) => {
@@ -52,9 +70,10 @@ const AnchorDialog: React.SFC<AnchorDialogProps> = (
       };
 
       setValue(newValue);
-      setIsValid(validateId(newValue.value));
+      const error = validate(newValue.value);
+      setValidError(error);
     },
-    [value, setValue, setIsValid]
+    [value, setValue, setValidError]
   );
 
   const reset = () => {
@@ -85,7 +104,7 @@ const AnchorDialog: React.SFC<AnchorDialogProps> = (
       <DialogContent>
         <FormControl fullWidth={true}>
           <TextField
-            error={!isValid}
+            error={validError !== undefined}
             autoFocus={true}
             id="value"
             label="Anchor ID"
@@ -94,6 +113,7 @@ const AnchorDialog: React.SFC<AnchorDialogProps> = (
             fullWidth={true}
             value={value.value}
             onChange={event => handleInputChanged("value", event.target.value)}
+            helperText={validError}
           />
           <FormHelperText>
             Example: paragraph-4
@@ -104,7 +124,7 @@ const AnchorDialog: React.SFC<AnchorDialogProps> = (
         <Button onClick={handleCancel} color="primary">
           Cancel
         </Button>
-        <Button disabled={!isValid} onClick={handleSubmit} color="primary">
+        <Button disabled={validError !== undefined} onClick={handleSubmit} color="primary">
           Confirm
         </Button>
       </DialogActions>
