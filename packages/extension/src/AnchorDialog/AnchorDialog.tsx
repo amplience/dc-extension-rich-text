@@ -45,6 +45,7 @@ const AnchorDialog: React.SFC<AnchorDialogProps> = (
   props: AnchorDialogProps
 ) => {
   const { open, onClose, onSubmit } = props;
+  const existing = props.value ? props.value.existing : new Set<string>();
 
   const [value, setValue] = React.useState<Anchor>({
     value: ""
@@ -57,10 +58,13 @@ const AnchorDialog: React.SFC<AnchorDialogProps> = (
     setLastValue(props.value.value);
   }
 
-  const validate = (checkValue: string) => validateId(checkValue, props.value ? props.value.existing : new Set());
-  validate(value.value);
+  const validate = (checkValue: string) => validateId(checkValue, existing);
 
-  const [validError, setValidError] = React.useState<string | undefined>(undefined);
+  const valid = validate(value.value);
+  const [validError, setValidError] = React.useState<string | undefined>(valid);
+  if (valid !== validError) {
+    setValidError(valid);
+  }
 
   const handleInputChanged = React.useCallback(
     (name: string, fieldValue: string) => {
