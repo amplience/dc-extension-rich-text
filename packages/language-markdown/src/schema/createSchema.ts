@@ -1,3 +1,4 @@
+import { StandardToolOptions } from "@dc-extension-rich-text/common";
 import { heading_align, paragraph_align } from "../alignment/AlignmentPlugin";
 import { anchor } from "../anchor";
 import { inline_styles } from "../inline_styles";
@@ -11,7 +12,7 @@ const { tableNodes } = require("prosemirror-tables");
 // tslint:disable-next-line
 const { Schema } = require("prosemirror-model");
 
-export function createSchema(isInlineStylesEnabled: boolean = false): any {
+export function createSchema(options: StandardToolOptions, isInlineStylesEnabled: boolean = false): any {
   const schema = require("prosemirror-markdown").schema;
 
   // TODO: don't register nodes and marks that are disabled in the options
@@ -48,8 +49,8 @@ let parser: any;
 
 export function getDefaultSerializerParser(schema: any): [any, any] {
   if (serializer == null) {
-    serializer = createMarkdownSerializer();
-    parser = createMarkdownParser(schema);
+    serializer = createMarkdownSerializer({});
+    parser = createMarkdownParser(schema, {});
   }
 
   return [serializer, parser];

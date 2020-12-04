@@ -27,6 +27,7 @@
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
     "react-scripts": "^3.2.0",
+    "typeface-roboto": "^1.1.13",
     "typescript": "3.5.3",
     "unofficial-dynamic-content-ui": "^0.2.3"
   },

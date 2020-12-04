@@ -1,3 +1,5 @@
+import { getCustomClass, StandardToolOptions } from "@dc-extension-rich-text/common";
+
 // tslint:disable-next-line
 export const paragraph_align = {
   content: "inline*",
@@ -40,13 +42,17 @@ export const heading_align = {
   toDOM(node: any): object { return ["h" + node.attrs.level, { style: `text-align: ${(node.attrs.align || "left")}` }, 0] }
 }
 
-export const AlignedParagraphToMarkdown = {
+export const AlignedParagraphToMarkdown = (options: StandardToolOptions) => ({
   paragraph(state: any, node: any): void {
-    if (node.attrs.align && node.attrs.align !== "left") {
+    if (node.attrs.align && node.attrs.align !== "left" && node.attrs.align !== "start") {
       // Aligned paragraph
       // Emit paragraph as HTML with the align attribute.
 
-      state.write(`<p style="text-align: ${node.attrs.align}">`);
+      if (options.useClasses) {
+        state.write(`<p class="${ getCustomClass(`amp-align-${node.attrs.align}`, options) }">`);
+      } else {
+        state.write(`<p style="text-align: ${node.attrs.align}">`);
+      }
       state.renderInline(node);
       state.write("</p>");
       state.closeBlock(node);
@@ -55,15 +61,19 @@ export const AlignedParagraphToMarkdown = {
       state.closeBlock(node);
     }
   },
-};
+});
 
-export const AlignedHeaderToMarkdown = {
+export const AlignedHeaderToMarkdown = (options: StandardToolOptions) => ({
   heading(state: any, node: any): void {
-    if (node.attrs.align && node.attrs.align !== "left") {
+    if (node.attrs.align && node.attrs.align !== "left" && node.attrs.align !== "start") {
       // Aligned header
       // Emit header as HTML with the align attribute.
 
-      state.write(`<h${node.attrs.level} style="text-align: ${node.attrs.align}">`);
+      if (options.useClasses) {
+        state.write(`<h${node.attrs.level} class="${ getCustomClass(`amp-align-${node.attrs.align}`, options) }">`);
+      } else {
+        state.write(`<h${node.attrs.level} style="text-align: ${node.attrs.align}">`);
+      }
       state.renderInline(node);
       state.write(`</h${node.attrs.level}>`);
       state.closeBlock(node);
@@ -73,4 +83,4 @@ export const AlignedHeaderToMarkdown = {
       state.closeBlock(node)
     }
   },
-};
+});
