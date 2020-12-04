@@ -35,12 +35,15 @@ export function isToolEnabled(
   return true;
 }
 
+const classNameRegex = /^-?[_a-zA-Z]+[_a-zA-Z0-9-]*$/;
+
 export function getCustomClass(
   defaultName: string,
   options: StandardToolOptions
 ): string {
-  if (options && options.classOverride && options.classOverride[defaultName]) {
-    return options.classOverride[defaultName];
+  if (options && options.classOverride) {
+    const name = options.classOverride[defaultName];
+    return (name && classNameRegex.test(name)) ? name : defaultName;
   }
 
   return defaultName;
