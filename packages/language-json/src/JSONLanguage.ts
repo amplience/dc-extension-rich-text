@@ -35,7 +35,7 @@ export default class JSONLanguage implements RichLanguage {
     ]
   ) {
     const isInlineStylesEnabled = isToolEnabled("inline_styles", options);
-    const schema = createSchema(isInlineStylesEnabled);
+    const schema = createSchema(options, isInlineStylesEnabled);
 
     const tools = [
       ...createStandardTools(schema, options),

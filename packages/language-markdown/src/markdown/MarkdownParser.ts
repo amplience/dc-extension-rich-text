@@ -1,3 +1,4 @@
+import { getDefaultClass, StandardToolOptions } from "@dc-extension-rich-text/common";
 import { html_block } from "../alignment";
 import { soft_hyphen_from } from "../soft_hyphen";
 
@@ -9,7 +10,8 @@ const markdownit = require("markdown-it");
 var { markdownItTable } = require('markdown-it-table');
 
 export function createMarkdownParser(
-  schema: any
+  schema: any,
+  options: StandardToolOptions
 ): any {
   const md = markdownit("commonmark", { html: true });
   md.use(markdownItTable);
@@ -99,6 +101,13 @@ export function createMarkdownParser(
     ["H6", "heading"],
   ])
 
+  const alignmentClasses = new Map<string, string>([
+    ["amp-align-left", "left"],
+    ["amp-align-center", "center"],
+    ["amp-align-right", "right"],
+    ["amp-align-justify", "justify"]
+  ])
+
   // tslint:disable-next-line
   parser.tokenHandlers.html_block_open = (state: any, token: any) => {
     if (!alignedParagraphTypes.has(token.meta.tag)) {
@@ -109,6 +118,16 @@ export function createMarkdownParser(
     let alignAttr = 'left';
     if (styleAttr) {
       alignAttr = (styleAttr.ownerElement as HTMLElement).style.textAlign || alignAttr;
+    }
+
+    const classAttr = token.meta.attrs.find((attr: Attr) => attr.name === 'class') as Attr;
+    if (classAttr) {
+      // Styles may be present in classes instead
+      (classAttr.ownerElement as HTMLElement).classList.forEach(value => {
+        const asDefault = getDefaultClass(value, options);
+        
+        alignAttr = alignmentClasses.get(asDefault) || 'left';
+      });
     }
 
     const nodeType = alignedParagraphTypes.get(token.meta.tag) as string;

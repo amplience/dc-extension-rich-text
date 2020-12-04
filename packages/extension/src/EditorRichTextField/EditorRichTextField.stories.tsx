@@ -72,6 +72,21 @@ storiesOf("EditorRichTextField", module)
       </SdkContext.Provider>
     );
   })
+  .add("Title", () => {
+    return withTheme(
+      <RichTextDialogsContainer>
+        <EditorRichTextField
+          schema={{
+            "ui:extension": {
+              params: {
+                title: "Rich Text Title"
+              }
+            }
+          }}
+        />
+      </RichTextDialogsContainer>
+    );
+  })
   .add("Content Links", () => {
     return withTheme(
       <SdkContext.Provider value={{ sdk: mockSdk }}>
@@ -303,6 +318,27 @@ storiesOf("EditorRichTextField", module)
               params: {
                 tools: {
                   whitelist: ["strong"]
+                }
+              }
+            }
+          }}
+        />
+      </RichTextDialogsContainer>
+    );
+  })
+  .add("Use Classes for Alignment", () => {
+    return withTheme(
+      <RichTextDialogsContainer>
+        <EditorRichTextField
+          schema={{
+            "ui:extension": {
+              params: {
+                useClasses: true,
+                classOverride: {
+                  "amp-align-left": "custom-align-left",
+                  "amp-align-justify": "custom-align-justify",
+                  "amp-align-right": "custom-align-right",
+                  "amp-align-center": "custom-align-center"
                 }
               }
             }

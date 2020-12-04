@@ -80,14 +80,14 @@ export default class MarkdownLanguage implements RichLanguage {
   constructor(options: StandardToolOptions = {}) {
     const isInlineStylesEnabled = isToolEnabled("inline_styles", options);
 
-    const schema = createSchema(isInlineStylesEnabled);
+    const schema = createSchema(options, isInlineStylesEnabled);
     const tools = [
       ...createStandardTools(schema, options),
       ...createMarkdownTools(schema, options)
     ]
 
-    const serializer = createMarkdownSerializer();
-    const parser = createMarkdownParser(schema);
+    const serializer = createMarkdownSerializer(options);
+    const parser = createMarkdownParser(schema, options);
 
     this.schema = schema;
     this.tools = tools;
