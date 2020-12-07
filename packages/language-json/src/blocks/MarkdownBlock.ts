@@ -1,5 +1,6 @@
 import { Block, BlockConverter } from "./Block";
 import { getDefaultSerializerParser } from '@dc-extension-rich-text/language-markdown';
+import { StandardToolOptions } from "@dc-extension-rich-text/common";
 
 // tslint:disable-next-line
 const markdown = require("prosemirror-markdown");
@@ -10,6 +11,10 @@ const Node = require("prosemirror-model").Node;
 export default class MarkdownBlock implements BlockConverter {
   private serializer: any;
   private parser: any;
+
+  constructor(private options: StandardToolOptions) {
+
+  }
 
   public canSerialize(schema: any, node: any): boolean {
     this.ensureInit(schema);
@@ -50,6 +55,6 @@ export default class MarkdownBlock implements BlockConverter {
   }
 
   private ensureInit(schema: any): void {
-    [this.serializer, this.parser] = getDefaultSerializerParser(schema);
+    [this.serializer, this.parser] = getDefaultSerializerParser(schema, this.options);
   }
 }

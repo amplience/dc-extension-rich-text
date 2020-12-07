@@ -333,6 +333,7 @@ storiesOf("EditorRichTextField", module)
           schema={{
             "ui:extension": {
               params: {
+                language: "json",
                 useClasses: true,
                 classOverride: {
                   "amp-align-left": "custom-align-left",
