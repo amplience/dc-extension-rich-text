@@ -29,7 +29,7 @@ export default class JSONLanguage implements RichLanguage {
   constructor(
     options: DynamicContentToolOptions = {},
     private blockTypes: BlockConverter[] = [
-      new MarkdownBlock(),
+      new MarkdownBlock(options),
       new DcImageLinkBlock(),
       new DcContentLinkBlock()
     ]

@@ -47,10 +47,10 @@ export function createSchema(options: StandardToolOptions, isInlineStylesEnabled
 let serializer: any;
 let parser: any;
 
-export function getDefaultSerializerParser(schema: any): [any, any] {
+export function getDefaultSerializerParser(schema: any, options: StandardToolOptions): [any, any] {
   if (serializer == null) {
-    serializer = createMarkdownSerializer({});
-    parser = createMarkdownParser(schema, {});
+    serializer = createMarkdownSerializer(options);
+    parser = createMarkdownParser(schema, options);
   }
 
   return [serializer, parser];
