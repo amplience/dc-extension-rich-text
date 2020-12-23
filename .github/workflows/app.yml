@@ -38,4 +38,4 @@ jobs:
         if: |
           steps.yarn-cache.outputs.cache-hit != 'true'
         env:
-          CI: true
+          CI: false
