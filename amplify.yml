@@ -1,0 +1,16 @@
+version: 1
+frontend:
+  phases:
+    preBuild:
+      commands:
+        - nvm install 14
+        - nvm use 14
+        - yarn install
+        # - yarn test
+    build:
+      commands:
+        - yarn lerna run build
+  artifacts:
+    baseDirectory: packages/extension/build
+    files:
+      - '**/*'
