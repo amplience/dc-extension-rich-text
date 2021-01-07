@@ -5,7 +5,7 @@
     "packages/*"
   ],
   "scripts": {
-    "publish": "gh-pages -m \"[ci skip] Updates\" -d packages/extension/build"
+    "build": "lerna run build"
   },
   "devDependencies": {
     "@babel/core": "^7.5.5",

@@ -33,7 +33,7 @@ jobs:
       - name: yarn install, build, and test
         run: |
           yarn install
-          yarn lerna run build
+          yarn build
           # npm test
         if: |
           steps.yarn-cache.outputs.cache-hit != 'true'

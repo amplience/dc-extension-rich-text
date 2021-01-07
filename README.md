@@ -37,9 +37,54 @@ This extension is designed to replace the built in rich text editor with additio
   * Change toolbar layout
   * Custom styles
 
-## Getting Started
+## How to install
+
+### Register Extension
+
+This extension needs to be [registered](https://amplience.com/docs/development/registeringextensions.html) against a Hub with in the Dynamic Content application (Developer -> Extensions), for it to load within that Hub.
+
+![Setup](media/setup.png)
+
+* Category: Content Field
+* Label: Rich Text
+* Name: dc-extension-rich-text _(needs to be unique with the Hub)_
+* URL: [https://dc-extension-rich-text.amplience.net](https://dc-extension-rich-text.amplience.net)
+* Description: Rich text editor _(can be left blank, if you wish)_
+* Initial height: 500
+
+Note:
+You can use our deployed version of this extension (builds from the "production" branch) -
+
+[https://dc-extension-rich-text.amplience.net](https://dc-extension-rich-text.amplience.net)
+
+_As this is an open source project you're welcome to host your own "fork" of this project. You can use any standard static hosting service (Netlify, Amplify, Vercel, etc.) if you wish._
+
+#### Permissions
+
+![Permissions](media/permissions.png)
+
+Sandbox permissions:
+- Allow same origin
+
+### Assign the extension to schema
 
 To use the rich text editor, you simply need to add a field to your content type schema that is configured to use the rich text editor extension.
+
+```json
+{
+    "type": "string",
+    "ui:extension": {
+        "url": "https://dc-extension-rich-text.amplience.net",
+
+        "params": {
+            "language": "markdown"
+        }
+    }
+}
+```
+
+
+## Installation Params
 
 Using markdown output:
 
@@ -47,7 +92,7 @@ Using markdown output:
 {
     "type": "string",
     "ui:extension": {
-        "url": "https://amplience.github.io/dc-extension-rich-text/index.html",
+        "url": "https://dc-extension-rich-text.amplience.net",
 
         "params": {
             "language": "markdown"
@@ -70,7 +115,7 @@ Using JSON output:
 {
     "type": "array",
     "ui:extension": {
-        "url": "https://amplience.github.io/dc-extension-rich-text/index.html",
+        "url": "https://dc-extension-rich-text.amplience.net",
 
         "params": {
             "language": "json"
@@ -91,7 +136,7 @@ This will output an array of "blocks". Each block has a type and associated data
       "type": "dc-content-link",
       "data": {
          "id": "e9248f05-ec46-4558-8a18-b6b881597695",
-         "contentType": "http://qa-patrick.s3-website-eu-west-1.amazonaws.com/willow/content-types/banner.json",
+         "contentType": "https://github.com/amplience/dc-accelerators-content-types/blob/master/banner.json",
          "_meta": {
             "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
          }
@@ -336,16 +381,10 @@ This feature is blacklisted by default, you can enable it by passing in an empty
 
 ```
 
-## License
+## How to run locally
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+- `yarn install`
+- `yarn build`
+- `cd packages/extension`
+- `yarn start`
+- Head to `http://localhost:3000` for the locally running extension

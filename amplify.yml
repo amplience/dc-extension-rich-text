@@ -9,7 +9,7 @@ frontend:
         # - yarn test
     build:
       commands:
-        - yarn lerna run build
+        - yarn build
   artifacts:
     baseDirectory: packages/extension/build
     files:
