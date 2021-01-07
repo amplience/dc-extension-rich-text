@@ -4,6 +4,7 @@
 1. Normal Text
 
 ![Normal Text](media/normalText.png)
+
 JSON output:
 ```json
 [
@@ -15,7 +16,6 @@ JSON output:
 ```
 
 Markdown output:
-
 ```
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
 ```
@@ -23,6 +23,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 2. Headings 1-6
 
 ![Headings](media/headings.png)
+
 JSON output:
 ```json
 [
@@ -32,8 +33,8 @@ JSON output:
    }
 ]
 ```
-Markdown output:
 
+Markdown output:
 ```
 # Heading 1
 
@@ -53,7 +54,6 @@ Markdown output:
 ![CodeBlock](media/codeBlock.png)
 
 JSON output:
-
 ```json
 [
    {
@@ -64,14 +64,15 @@ JSON output:
 ```
 
 Markdown output:
-
 ```
    ```<h1 style="color:blue;">A Blue Heading</h1>```
 ```
+
 4. Custom Styles
 
 ![markdown Custom Styles](media/customStyle.png)
-JSON output: 
+
+JSON output:
 ```json
 [
    {
@@ -86,9 +87,11 @@ Markdown output:
 <span class="red">Lorem Ipsum</span>\
 <span class="green">Lorem Ipsum</span>
 ```
+
 5. Bold Text 
 
 ![Bold Text](media/boldText.png)
+
 JSON output:
 ```json
 [
@@ -98,11 +101,12 @@ JSON output:
    }
 ]
 ```
-Markdown output:
 
+Markdown output:
 ```
 **Lorem ipsum**
 ```
+
 6. Italic Text
 
 ![Italic Text](media/italicText.png)
@@ -122,12 +126,12 @@ Markdown output:
 ```
 *Lorem ipsum*
 ```
+
 7. Soft Hyphen
 
 ![Soft Hyphen](media/softHyphen.png)
 
 JSON output:
-
 ```json
 [
    {
@@ -136,14 +140,16 @@ JSON output:
    }
 ]
 ```
-Markdown output:
 
+Markdown output:
 ```
 Lorem&shy;ipsum
 ```
+
 8. Links
 
 ![Links](media/links.png)
+
 JSON output:
 ```json
 [
@@ -153,14 +159,16 @@ JSON output:
    }
 ]
 ```
-Markdown output:
 
+Markdown output:
 ```
 [go to http://amplience.com](https://amplience.com "Amplience")
 ```
+
 9. Anchors
 
 ![Anchors](media/anchors.png)
+
 JSON output:
 ```json
 [
@@ -170,13 +178,16 @@ JSON output:
    }
 ]
 ```
+
 Markdown output:
 ```
 <a id="paragraph-1"></a>Lorem ipsum dolor sit amet, consectetur adipiscing elit.
 ```
+
 10. Align Left
 
 ![Align Left](media/alignLeft.png)
+
 JSON output:
 ```json
 [
@@ -186,10 +197,12 @@ JSON output:
    }
 ]
 ```
+
 Markdown output:
 ```
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 ```
+
 11. Align Center
 
 ![Align Center](media/alignCenter.png)
@@ -199,54 +212,73 @@ JSON output:
 [
    {
       "type": "markdown",
-      "data": "<p align=\"center\">Lorem ipsum dolor sit amet, consectetur adipiscing elit. </p>"
+      "data": "<p style=\"text-align: center\">Lorem ipsum dolor sit amet, consectetur adipiscing elit. </p>"
    }
 ]
 ```
+
 Markdown output:
 ```
-<p align="center">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+<p style="text-align: center">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+```
+
+Markdown output (`useClasses` set):
+```
+<p class="amp-align-center">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
 ```
 
 12. Align Right
 
 ![Align Right](media/alignRight.png)
+
 JSON output:
 ```json
 [
    {
       "type": "markdown",
-      "data": "<p align=\"right\">Lorem ipsum dolor sit amet, consectetur adipiscing elit. </p>"
+      "data": "<p style=\"text-align: right\">Lorem ipsum dolor sit amet, consectetur adipiscing elit. </p>"
    }
 ]
 ```
-Markdown output:
 
+Markdown output:
 ```
-<p align="right">Lorem ipsum dolor sit amet, consectetur adipiscing elit. </p>
+<p style="text-align: right">Lorem ipsum dolor sit amet, consectetur adipiscing elit. </p>
+```
+
+Markdown output (`useClasses` set):
+```
+<p class="amp-align-right">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
 ```
 
 13. Align Justify
 
 ![Align Justify](media/alignJustify.png)
+
 JSON output:
 ```json
 [
    {
       "type": "markdown",
-      "data": "<p align=\"justify\">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. </p>"
+      "data": "<p style=\"text-align: justify\">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. </p>"
    }
 ]
 ```
-Markdown output:
 
+Markdown output:
 ```
-<p align="justify">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+<p style="text-align: justify">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+```
+
+Markdown output (`useClasses` set):
+```
+<p class="amp-align-justify">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
 ```
 
 14. Bullet List
 
 ![Bullet List](media/bulletList.png)
+
 JSON output:
 ```json
 [
@@ -256,8 +288,8 @@ JSON output:
    }
 ]
 ```
-Markdown output:
 
+Markdown output:
 ```
 * Lorem ipsum dolor sit amet
 
@@ -269,6 +301,7 @@ Markdown output:
 15. Decrease Indentation (appears only after applied bullet/ordered list)
 
 ![Decrease Indentation](media/decreaseIndentation.png)
+
 JSON output:
 ```json
 [
@@ -278,8 +311,8 @@ JSON output:
    }
 ]
 ```
-Markdown output:
 
+Markdown output:
 ```
 Lorem ipsum dolor sit amet
 
@@ -292,6 +325,7 @@ Lorem ipsum dolor sit amet
 16. Ordered List
 
 ![Ordered List](media/orderedList.png)
+
 JSON output:
 ```json
 [
@@ -303,7 +337,6 @@ JSON output:
 ```
 
 Markdown output:
-
 ```
 1. Lorem ipsum dolor sit amet
 
@@ -315,6 +348,7 @@ Markdown output:
 17. Insert Image from URL
 
 ![Insert Image from URL](media/insertImageURL.png)
+
 JSON output:
 ```json
 [
@@ -324,6 +358,7 @@ JSON output:
    }
 ]
 ```
+
 Markdown output:
 ```
 ![](http://dev-solutions.s3.amazonaws.com/anastasia/di-docs/images/Dynamic_Media.png "Dynamic Media")
@@ -332,6 +367,7 @@ Markdown output:
 18. Quote
 
 ![Quote](media/quote.png)
+
 JSON output:
 ```json
 [
@@ -341,13 +377,16 @@ JSON output:
    }
 ]
 ```
+
 Markdown output:
 ```
 > Lorem ipsum dolor sit amet, consectetur adipiscing elit
 ```
+
 19. Horizontal Rule
 
 ![Horizontal Rule](media/rule.png)
+
 JSON output:
 ```json
 [
@@ -357,6 +396,7 @@ JSON output:
    }
 ]
 ```
+
 Markdown output:
 ```
 ---
@@ -370,6 +410,7 @@ Markdown output:
     - Delete Table
 
 ![Create Table](media/table.png)
+
 JSON output:
 ```json
 [
@@ -379,6 +420,7 @@ JSON output:
    }
 ]
 ```
+
 Markdown output:
 ```
 | id       | name     | email    |
