@@ -1,4 +1,4 @@
-import MarkdownLanguage, { createMarkdownTools } from "./MarkdownLanguage";
+import MarkdownLanguage from "./MarkdownLanguage";
 import MarkdownLanguageConfiguration from "./MarkdownLanguageConfiguration";
 
 import {

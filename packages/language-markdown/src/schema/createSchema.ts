@@ -18,7 +18,7 @@ export function createSchema(options: StandardToolOptions, isInlineStylesEnabled
   // TODO: don't register nodes and marks that are disabled in the options
   let marks = schema.spec.marks;
   if (isInlineStylesEnabled) {
-    marks = marks.addToEnd("inline_styles", inline_styles)
+    marks = marks.addToEnd("inline_styles", inline_styles);
   }
 
   const nodes = schema.spec.nodes.append(tableNodes({

@@ -63,7 +63,7 @@ export function createMarkdownParser(
         const className = (tag as Element).getAttribute("class");
         state.openMark(
           schema.marks.inline_styles.create({
-            class: className,
+            class: className
           })
         );
       }
@@ -82,7 +82,7 @@ export function createMarkdownParser(
 
         if (id != null) {
           state.addNode(schema.nodes.anchor, {
-            value: id,
+            value: id
           });
         }
       }

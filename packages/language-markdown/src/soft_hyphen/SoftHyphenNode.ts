@@ -1,7 +1,3 @@
-/**
- * Non-standard tool for applying a css class name to a region of the document
- */
-
 // tslint:disable-next-line
 export const soft_hyphen = {
   group: "inline",
