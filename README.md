@@ -48,14 +48,14 @@ This extension needs to be [registered](https://amplience.com/docs/development/r
 * Category: Content Field
 * Label: Rich Text
 * Name: dc-extension-rich-text _(needs to be unique with the Hub)_
-* URL: [https://dc-extension-rich-text.amplience.net](https://dc-extension-rich-text.amplience.net)
+* URL: [https://rich-text.extensions.content.amplience.net](https://rich-text.extensions.content.amplience.net)
 * Description: Rich text editor _(can be left blank, if you wish)_
 * Initial height: 500
 
 Note:
 You can use our deployed version of this extension (builds from the "production" branch) -
 
-[https://dc-extension-rich-text.amplience.net](https://dc-extension-rich-text.amplience.net)
+[https://rich-text.extensions.content.amplience.net](https://rich-text.extensions.content.amplience.net)
 
 _As this is an open source project you're welcome to host your own "fork" of this project. You can use any standard static hosting service (Netlify, Amplify, Vercel, etc.) if you wish._
 
@@ -74,7 +74,7 @@ To use the rich text editor, you simply need to add a field to your content type
 {
     "type": "string",
     "ui:extension": {
-        "url": "https://dc-extension-rich-text.amplience.net",
+        "url": "https://rich-text.extensions.content.amplience.net",
 
         "params": {
             "language": "markdown"
@@ -92,7 +92,7 @@ Using markdown output:
 {
     "type": "string",
     "ui:extension": {
-        "url": "https://dc-extension-rich-text.amplience.net",
+        "url": "https://rich-text.extensions.content.amplience.net",
 
         "params": {
             "language": "markdown"
@@ -115,7 +115,7 @@ Using JSON output:
 {
     "type": "array",
     "ui:extension": {
-        "url": "https://dc-extension-rich-text.amplience.net",
+        "url": "https://rich-text.extensions.content.amplience.net",
 
         "params": {
             "language": "json"
