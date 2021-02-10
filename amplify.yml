@@ -9,7 +9,7 @@ frontend:
         # - yarn test
     build:
       commands:
-        - yarn build
+        - CI=false yarn build
   artifacts:
     baseDirectory: packages/extension/build
     files:
