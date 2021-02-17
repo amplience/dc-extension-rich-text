@@ -1,11 +1,12 @@
 # Hosting the Rich Text Extension
 
-As mentioned in the readme, the lastest released version of the Rich Text Extension is hosted at [](https://amplience.github.io/dc-extension-rich-text/index.html), hosted using GitHub Pages from the `gh-pages` branch. While our hosted version is useful for testing the extension, we don't recommend using this URL for using the extension in the long term for the following reasons:
+As mentioned in the readme, the lastest released version of the Rich Text Extension is hosted at [](https://rich-text.extensions.content.amplience.net), hosted using Amplify from the `production` branch. While our hosted version is good for using the extension verbatim, you might want to host the extension yourself for the following reasons:
 
-- The extension can be updated to a newer version without warning. This could suddenly change the user experience or break your configuration.
+- Changes to the extension code to better fit your use case, or featureset.
+- Our hosted version of the extension can be updated to a newer version without warning. While all changes aim to be backwards compatible, this could suddenly change the user experience.
 - Only the latest release is available; unmerged PRs and custom modifications will require hosting elsewhere.
 
-If you're alright with the extension being hosted on GitHub Pages, but you want full control over your target version and features, you can easily fork this repository and host your own version of the Rich Text Extension with a few simple commands.
+This document describes a straightforward method of forking and hosting the extension yourself using GitHub Pages. This is useful if you want full control over your target version and features - you can easily fork this repository and host your own version of the Rich Text Extension with a few simple commands. Of course, the extension can be hosted on any static hosting service (e.g. Netlify, Amplify), this guide simply describes a simple way of doing this.
 
 ## Forking the repository
 
@@ -23,11 +24,11 @@ You'll need to initialize the project first. `lerna run bootstrap` should set up
 
 After you've built your version of the rich text extension, you can publish it with the following command:
 
-`yarn run publish`
+`npx gh-pages -d packages/extension/build`
 
 Note: if you're on a remote, you'll want to publish with this command:
 
-`yarn run publish -o remote-name`
+`npx gh-pages -d packages/extension/build -o remote-name`
 
 This will create or update the `gh-pages` branch on your repository for you. You may be asked for GitHub authentication, depending on how you configured Git in the first place.
 
