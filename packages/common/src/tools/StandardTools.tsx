@@ -143,7 +143,7 @@ export function editCode(
       try {
         const val = await dialog(params.params || "");
 
-        return blockTypeCommand(state, type, { params: val })(state, dispatch, view);
+        return setBlockType(type, { params: val })(state, dispatch, view);
         // tslint:disable-next-line
       } catch (err) {
       }
@@ -267,9 +267,9 @@ function getCurrentParams(state: any, type: any): Language {
   const parent = findParentNode((x: any): boolean => x.attrs.params)(state.selection);
 
   if (parent != null) {
-    return { params: parent.node.attrs.params };
+    return { params: parent.node.attrs.params || '' };
   } else {
-    return {};
+    return { params: ''};
   }
 }
 
