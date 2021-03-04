@@ -32,7 +32,7 @@ storiesOf("DcImageLinkNode", module).add("Editor", () => {
             id: "2bfd10cd-d3df-4d57-b6ae-40609a357033",
             name: "How-To-Pack-Your-Suitcase",
             endpoint: "willow",
-            defaultHost: "i1.adis.ws",
+            defaultHost: "cdn.media.amplience.net",
             "@id":
               "http://image.cms.amplience.com/2bfd10cd-d3df-4d57-b6ae-40609a357033",
             mediaType: "image"
@@ -73,7 +73,7 @@ storiesOf("DcImageLinkNode", module).add("Editor", () => {
           "dc-image-link": (node: any, view: any, getPos: any) =>
             new DcImageLinkView(node, view, getPos, {
               dynamicContent: {
-                stagingEnvironment: "i1.adis.ws"
+                stagingEnvironment: "cdn.media.amplience.net"
               }
             })
         }

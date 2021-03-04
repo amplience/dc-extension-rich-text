@@ -16,8 +16,13 @@ export interface Anchor {
   value: string;
 }
 
+export interface Code {
+  params?: string;
+}
+
 export interface RichTextDialogs {
   getAnchor(existing: Set<string>, value?: Anchor): Promise<Anchor>;
+  getCode(value?: string): Promise<string>;
   getHyperlink(value?: Hyperlink): Promise<Hyperlink>;
   getImage(value?: Image): Promise<Image>;
   getDcImageLink(value?: MediaImageLink): Promise<MediaImageLink>;

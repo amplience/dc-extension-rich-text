@@ -29,6 +29,11 @@ export function createMarkdownParser(
         value: tok.attrGet("value"),
       }),
     },
+    fence: {
+      block: "code_block",
+      getAttrs: (tok: any) => ({ params: tok.info || "" }),
+      noCloseToken: true
+    },
     soft_hyphen: { node: "soft_hyphen" },
     table: { block: "table" },
     th: { block: "table_header",

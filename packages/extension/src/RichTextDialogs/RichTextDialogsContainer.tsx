@@ -8,6 +8,7 @@ import {
 } from "@dc-extension-rich-text/common";
 import { ContentItemLink, MediaImageLink } from "dc-extensions-sdk";
 import AnchorDialog from "../AnchorDialog/AnchorDialog";
+import CodeDialog from "../CodeDialog/CodeDialog";
 import HyperlinkDialog from "../HyperlinkDialog/HyperlinkDialog";
 import ImageDialog from "../ImageDialog/ImageDialog";
 import RichTextDialogsContext from "./RichTextDialogsContext";
@@ -67,6 +68,9 @@ const RichTextDialogsContainer: React.SFC<EditorDialogsProps> = (
     getAnchor: (existing: Set<string>, value?: Anchor): Promise<Anchor> => {
       return handleOpenDialog("anchor", { value, existing }) as Promise<Anchor>;
     },
+    getCode: (value?: string): Promise<string> => {
+      return handleOpenDialog("code", value) as Promise<string>;
+    },
     getHyperlink: (value?: Hyperlink): Promise<Hyperlink> => {
       return handleOpenDialog("hyperlink", value) as Promise<Hyperlink>;
     },
@@ -99,6 +103,12 @@ const RichTextDialogsContainer: React.SFC<EditorDialogsProps> = (
       <AnchorDialog
         value={openDialog != null ? openDialog.value : undefined}
         open={openDialog != null && openDialog.type === "anchor"}
+        onClose={handleCloseDialog}
+        onSubmit={handleSubmitDialog}
+      />
+      <CodeDialog
+        value={openDialog != null ? openDialog.value : undefined}
+        open={openDialog != null && openDialog.type === "code"}
         onClose={handleCloseDialog}
         onSubmit={handleSubmitDialog}
       />

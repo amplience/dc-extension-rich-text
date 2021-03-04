@@ -17,7 +17,7 @@ import Link from "@material-ui/icons/Link";
 import Redo from "@material-ui/icons/Redo";
 import Undo from "@material-ui/icons/Undo";
 
-import { Hyperlink, Image } from "../dialogs";
+import { Code as Language, Hyperlink, Image } from "../dialogs";
 import { ProseMirrorTool } from "./ProseMirrorTool";
 import { isToolEnabled, StandardToolOptions } from "./StandardToolOptions";
 
@@ -133,6 +133,24 @@ export function editLink(
   };
 }
 
+export function editCode(
+  type: any,
+  dialog?: (value?: string) => Promise<string>
+): (state: any, dispatch: any, view: any) => Promise<void> {
+  return async (state: any, dispatch: any, view: any): Promise<void> => {
+    const params: Language | undefined = getCurrentParams(state, type);
+    if (dialog) {
+      try {
+        const val = await dialog(params.params || "");
+
+        return blockTypeCommand(state, type, { params: val })(state, dispatch, view);
+        // tslint:disable-next-line
+      } catch (err) {
+      }
+    }
+  };
+}
+
 export function link(
   schema: any,
   dialog?: (value?: Hyperlink) => Promise<Hyperlink>
@@ -240,6 +258,21 @@ function getCurrentAlignment(state: any): object {
   }
 }
 
+function getCurrentParams(state: any, type: any): Language {
+  if (state == null || type.name !== "code_block") {
+    return {};
+  }
+
+  // Locate the block we're contained in.
+  const parent = findParentNode((x: any): boolean => x.attrs.params)(state.selection);
+
+  if (parent != null) {
+    return { params: parent.node.attrs.params };
+  } else {
+    return {};
+  }
+}
+
 function blockTypeCommand(state: any, type: any, attrs?: any): any {
   return setBlockType(type, { ...attrs, ...getCurrentAlignment(state) });
 }
@@ -273,16 +306,18 @@ export function paragraph(schema: any): ProseMirrorTool {
   };
 }
 
-export function code_block(schema: any): ProseMirrorTool {
-  const command = setBlockType(schema.nodes.code_block);
+export function code_block(schema: any, dialog?: (value?: string) => Promise<string>
+): ProseMirrorTool {
   return {
     name: "code_block",
     label: "Code Block",
     displayLabel: <code>Code Block</code>,
     displayIcon: <Code />,
-    apply: command,
-    isEnabled: (state: any) => command(state),
-    isActive: (state: any, view: any) => !command(state, null, view)
+    apply: editCode(schema.nodes.code_block, dialog),
+    isActive: (state: any, view: any) => {
+      const params: Language | undefined = getCurrentParams(state, schema.nodes.code_block);
+      return !setBlockType(schema.nodes.code_block, { ...params})(state, null, view)
+    }
   };
 }
 
@@ -374,7 +409,7 @@ export function createStandardTools(
   }
 
   if (isToolEnabled('code_block', options) && schema.nodes.code_block) {
-    tools.push(code_block(schema));
+    tools.push(code_block(schema, options.dialogs ? options.dialogs.getCode : undefined));
   }
 
   if (isToolEnabled('horizontal_rule', options) && schema.nodes.horizontal_rule) {
