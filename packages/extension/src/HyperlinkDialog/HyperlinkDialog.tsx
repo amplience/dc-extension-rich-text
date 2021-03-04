@@ -17,6 +17,7 @@ interface HyperlinkDialogProps {
   open: boolean;
   onClose: () => void;
   onSubmit: (value: Hyperlink) => void;
+  value: any;
 }
 
 function validateUrl(value: string): boolean {
@@ -32,6 +33,13 @@ const HyperlinkDialog: React.SFC<HyperlinkDialogProps> = (
     href: "",
     title: ""
   });
+
+  const [lastValue, setLastValue] = React.useState<Hyperlink>();
+
+  if (props.value != null && lastValue !== props.value) {
+    setValue(props.value);
+    setLastValue(props.value);
+  }
 
   const [isValid, setIsValid] = React.useState(false);
 
@@ -53,9 +61,19 @@ const HyperlinkDialog: React.SFC<HyperlinkDialogProps> = (
       href: "",
       title: ""
     });
+    setLastValue(undefined);
   };
 
   const handleCancel = React.useCallback(() => {
+    reset();
+    if (lastValue === undefined) {
+      onClose();
+    } else {
+      onSubmit({...lastValue, cancel: true});
+    }
+  }, [lastValue, setLastValue, onSubmit]);
+
+  const handleClear = React.useCallback(() => {
     reset();
     onClose();
   }, [setValue, onClose]);
@@ -70,7 +88,7 @@ const HyperlinkDialog: React.SFC<HyperlinkDialogProps> = (
       maxWidth="md"
       fullWidth={true}
       open={open}
-      onClose={onClose}
+      onClose={handleCancel}
       aria-labelledby="form-dialog-title"
     >
       <DialogTitle id="form-dialog-title">Hyperlink</DialogTitle>
@@ -104,8 +122,8 @@ const HyperlinkDialog: React.SFC<HyperlinkDialogProps> = (
         </FormControl>
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleCancel} color="primary">
-          Cancel
+        <Button onClick={handleClear} color="primary">
+          Clear
         </Button>
         <Button disabled={!isValid} onClick={handleSubmit} color="primary">
           Confirm

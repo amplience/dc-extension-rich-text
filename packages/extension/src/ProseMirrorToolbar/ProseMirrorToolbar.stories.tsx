@@ -9,7 +9,7 @@ import ProseMirrorToolbar, { ToolbarElement } from "./ProseMirrorToolbar";
 import { ProseMirrorTool } from "@dc-extension-rich-text/common";
 // tslint:disable-next-line
 import FormatBold from "@material-ui/icons/FormatBold";
-import { computeToolbarState } from "./ProseMirrorToolbarState";
+import { computeToolbarState, ProseMirrorToolbarState } from "./ProseMirrorToolbarState";
 
 // tslint:disable-next-line
 const schema = require("prosemirror-schema-basic").schema;
@@ -53,7 +53,7 @@ const layout: ToolbarElement[] = [
 ];
 
 const Editor: React.SFC<{}> = (props: any) => {
-  const [toolbarState, setToolbarState] = React.useState();
+  const [toolbarState, setToolbarState] = React.useState<ProseMirrorToolbarState>();
 
   const handleUpdateState = React.useCallback(
     (state: any, view: any) => {

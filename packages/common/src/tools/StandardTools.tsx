@@ -1,6 +1,6 @@
 import React from "react";
 
-import { canInsert, clearAllMarks, isMarkActive } from "../utils";
+import { canInsert, clearAllMarks, getSelectionMarks, isMarkActive } from "../utils";
 
 // tslint:disable:no-submodule-imports
 import CalendarViewDay from "@material-ui/icons/CalendarViewDay";
@@ -17,8 +17,7 @@ import Link from "@material-ui/icons/Link";
 import Redo from "@material-ui/icons/Redo";
 import Undo from "@material-ui/icons/Undo";
 
-import { ContentItemLink, MediaImageLink } from "dc-extensions-sdk";
-import { Hyperlink, Image, RichTextDialogs } from "../dialogs";
+import { Hyperlink, Image } from "../dialogs";
 import { ProseMirrorTool } from "./ProseMirrorTool";
 import { isToolEnabled, StandardToolOptions } from "./StandardToolOptions";
 
@@ -28,6 +27,8 @@ const { undo: undoFn, redo: redoFn } = require("prosemirror-history");
 const { toggleMark, setBlockType, lift } = require("prosemirror-commands");
 // tslint:disable-next-line
 const { wrapInList } = require("prosemirror-schema-list");
+// tslint:disable-next-line
+const { findParentNode } = require("prosemirror-utils");
 
 export function createMarkToggleTool(
   name: string,
@@ -91,21 +92,43 @@ export function editLink(
   dialog?: (value?: Hyperlink) => Promise<Hyperlink>
 ): (state: any, dispatch: any, view: any) => Promise<void> {
   return async (state: any, dispatch: any, view: any): Promise<void> => {
-    if (isMarkActive(state, type)) {
-      toggleMark(type)(state, dispatch, view);
-      return;
-    }
+    const marks = getSelectionMarks(state).filter(mark => mark.mark.type === type);
+    const attrs: Hyperlink | undefined = marks.length === 1 ? marks[0].mark.attrs : undefined;
 
     if (dialog) {
       try {
-        const linkValue = await dialog();
+        const linkValue = await dialog(attrs);
 
-        toggleMark(type, {
+        if (linkValue.cancel) {
+          return;
+        }
+
+        const newAttrs = {
           href: linkValue.href,
           title: linkValue.title === "" ? undefined : linkValue.title
-        })(state, dispatch, view);
+        };
+
+        if (marks.length > 0) {
+          const { tr, selection } = state;
+
+          if (newAttrs.href !== "") {
+            if (marks.length < 2 && !(selection.from < marks[0].from || selection.to > marks[0].to)) {
+              dispatch(tr.addMark(marks[0].from, marks[0].to, type.create(newAttrs)));
+            } else {
+              dispatch(tr.addMark(selection.from, selection.to, type.create(newAttrs)));
+            }
+          }
+        } else {
+          toggleMark(type, newAttrs)(state, dispatch, view);
+        }
+
+        return;
         // tslint:disable-next-line
-      } catch (err) { }
+      } catch (err) { /* Clear the link instead */ }
+    }
+
+    if (isMarkActive(state, type)) {
+      dispatch(state.tr.removeMark(marks[0].from, marks[0].to, type));
     }
   };
 }
@@ -120,7 +143,7 @@ export function link(
     displayIcon: <Link />,
     isActive: (state: any) => isMarkActive(state, schema.marks.link),
     isEnabled: (state: any) => {
-      return !state.selection.empty;
+      return !state.selection.empty || getSelectionMarks(state).filter(mark => mark.mark.type === schema.marks.link).length > 0;
     },
     apply: editLink(schema.marks.link, dialog)
   };
@@ -202,8 +225,26 @@ export function blockquote(schema: any): ProseMirrorTool {
   };
 }
 
+function getCurrentAlignment(state: any): object {
+  if (state == null) {
+    return {};
+  }
+
+  // Locate the block we're contained in.
+  const parent = findParentNode((x: any): boolean => x.attrs.align)(state.selection);
+
+  if (parent != null) {
+    return { align: parent.node.attrs.align };
+  } else {
+    return {};
+  }
+}
+
+function blockTypeCommand(state: any, type: any, attrs?: any): any {
+  return setBlockType(type, { ...attrs, ...getCurrentAlignment(state) });
+}
+
 export function heading(schema: any, level: number): ProseMirrorTool {
-  const command = setBlockType(schema.nodes.heading, { level });
   return {
     name: "heading_" + level,
     label: "Heading " + level,
@@ -212,9 +253,9 @@ export function heading(schema: any, level: number): ProseMirrorTool {
       { style: { margin: 0 } },
       `Heading ${level}`
     ),
-    apply: command,
-    isEnabled: (state: any) => command(state),
-    isActive: (state: any, view: any) => !command(state, null, view)
+    apply: (state: any, dispatch: any, view: any) => blockTypeCommand(state, schema.nodes.heading, { level })(state, dispatch, view),
+    isEnabled: (state: any) => blockTypeCommand(state, schema.nodes.heading, { level })(state),
+    isActive: (state: any, view: any) => !blockTypeCommand(state, schema.nodes.heading, { level })(state, null, view)
   };
 }
 
@@ -226,9 +267,9 @@ export function paragraph(schema: any): ProseMirrorTool {
     displayLabel: (
       <p style={{ margin: 0, padding: 0, display: "inline" }}>Normal text</p>
     ),
-    apply: command,
-    isEnabled: (state: any) => command(state),
-    isActive: (state: any, view: any) => !command(state, null, view)
+    apply: (state: any, dispatch: any, view: any) => blockTypeCommand(state, schema.nodes.paragraph)(state, dispatch, view),
+    isEnabled: (state: any) => blockTypeCommand(state, schema.nodes.paragraph)(state),
+    isActive: (state: any, view: any) => !blockTypeCommand(state, schema.nodes.paragraph)(state, null, view)
   };
 }
 

@@ -9,9 +9,15 @@ export interface Image {
 export interface Hyperlink {
   href: string;
   title: string;
+  cancel?: boolean;
+}
+
+export interface Anchor {
+  value: string;
 }
 
 export interface RichTextDialogs {
+  getAnchor(existing: Set<string>, value?: Anchor): Promise<Anchor>;
   getHyperlink(value?: Hyperlink): Promise<Hyperlink>;
   getImage(value?: Image): Promise<Image>;
   getDcImageLink(value?: MediaImageLink): Promise<MediaImageLink>;
