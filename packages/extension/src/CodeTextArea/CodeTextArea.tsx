@@ -15,7 +15,7 @@ const styles = {
     backgroundColor: "#f0f0f0",
     border: "1px solid rgba(157,162,162,.3)",
     padding: "10px 8px 0",
-    fontFamily: "roboto,sans-serif!important",
+    fontFamily: "roboto,monospace!important",
     fontSize: 13
   }
 };

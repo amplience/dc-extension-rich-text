@@ -17,3 +17,4 @@ export default function(
 }
 
 export * from "./schema/createSchema";
+export { createMarkdownTools } from "./MarkdownLanguage";

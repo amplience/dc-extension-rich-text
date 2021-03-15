@@ -35,7 +35,15 @@ const ProseMirrorToolbarDropdown: React.SFC<ProseMirrorToolbarButtonProps> = (
     })
     .filter(x => x != null) as ProseMirrorToolState[];
 
-  const selected = toolStates.find(x => x.active);
+  let selectedItems: ProseMirrorToolState[] = toolStates.filter(x => x.active);
+  let selected;
+
+  if (selectedItems && selectedItems.length > 1 ){
+    selected = selectedItems.find(x => /inline_styles/.test(x.name)) || selectedItems[0];
+  } else {
+    selected = selectedItems.find(x => x.active);
+  }
+
   const value = selected ? selected.name : "";
 
   const handleChange = React.useCallback(

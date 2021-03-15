@@ -1,8 +1,12 @@
 import {
   createStandardTools,
+  isToolEnabled,
   ProseMirrorTool,
   RichLanguage
 } from "@dc-extension-rich-text/common";
+import {
+  createMarkdownTools
+} from "@dc-extension-rich-text/language-markdown";
 import {
   createDynamicContentTools,
   DynamicContentToolOptions
@@ -25,16 +29,18 @@ export default class JSONLanguage implements RichLanguage {
   constructor(
     options: DynamicContentToolOptions = {},
     private blockTypes: BlockConverter[] = [
-      new MarkdownBlock(),
+      new MarkdownBlock(options),
       new DcImageLinkBlock(),
       new DcContentLinkBlock()
     ]
   ) {
-    const schema = createSchema();
+    const isInlineStylesEnabled = isToolEnabled("inline_styles", options);
+    const schema = createSchema(options, isInlineStylesEnabled);
 
     const tools = [
       ...createStandardTools(schema, options),
-      ...createDynamicContentTools(schema, options)
+      ...createDynamicContentTools(schema, options),
+      ...createMarkdownTools(schema, options)
     ];
 
     this.schema = schema;

@@ -12,7 +12,7 @@ const imageValue = {
   id: "c2f2bed1-4ba7-4457-ae4d-85930e333b3a",
   name: "sap_cx_live_munich_home_1920x550_munich",
   endpoint: "willow",
-  defaultHost: "i1.adis.ws"
+  defaultHost: "cdn.media.amplience.net"
 };
 
 const mockSdk = new SDK();
@@ -70,6 +70,21 @@ storiesOf("EditorRichTextField", module)
           />
         </RichTextDialogsContainer>
       </SdkContext.Provider>
+    );
+  })
+  .add("Title", () => {
+    return withTheme(
+      <RichTextDialogsContainer>
+        <EditorRichTextField
+          schema={{
+            "ui:extension": {
+              params: {
+                title: "Rich Text Title"
+              }
+            }
+          }}
+        />
+      </RichTextDialogsContainer>
     );
   })
   .add("Content Links", () => {
@@ -303,6 +318,28 @@ storiesOf("EditorRichTextField", module)
               params: {
                 tools: {
                   whitelist: ["strong"]
+                }
+              }
+            }
+          }}
+        />
+      </RichTextDialogsContainer>
+    );
+  })
+  .add("Use Classes for Alignment", () => {
+    return withTheme(
+      <RichTextDialogsContainer>
+        <EditorRichTextField
+          schema={{
+            "ui:extension": {
+              params: {
+                language: "json",
+                useClasses: true,
+                classOverride: {
+                  "amp-align-left": "custom-align-left",
+                  "amp-align-justify": "custom-align-justify",
+                  "amp-align-right": "custom-align-right",
+                  "amp-align-center": "custom-align-center"
                 }
               }
             }

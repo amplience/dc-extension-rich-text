@@ -10,6 +10,12 @@ const EditorState = require("prosemirror-state").EditorState;
 const EditorView = require("prosemirror-view").EditorView;
 // tslint:disable-next-line
 const exampleSetup = require("prosemirror-example-setup").exampleSetup;
+// tslint:disable-next-line
+const { tableEditing, columnResizing } = require("prosemirror-tables");
+// tslint:disable-next-line
+const keymap = require("prosemirror-keymap").keymap;
+// tslint:disable-next-line
+const { sinkListItem } = require("prosemirror-schema-list");
 
 const styles = {
   root: {
@@ -33,6 +39,12 @@ interface ProseMirrorState {
   editorView?: any;
 }
 
+function getKeys(schema: any): any {
+  return {
+    Tab: sinkListItem(schema.nodes.list_item)
+  }
+}
+
 class ProseMirror extends React.Component<ProseMirrorProps, ProseMirrorState> {
   constructor(props: ProseMirrorProps) {
     super(props);
@@ -43,10 +55,17 @@ class ProseMirror extends React.Component<ProseMirrorProps, ProseMirrorState> {
   public createEditorState(): any {
     const { schema, doc } = this.props;
 
+    const withTablePlugins = schema.nodes.table != null;
+    const tablePlugins = withTablePlugins ? [ columnResizing(), tableEditing() ] : [];
+
     return EditorState.create({
       schema,
       doc,
-      plugins: exampleSetup({ schema, menuBar: false })
+      plugins: [
+        ...tablePlugins,
+        keymap(getKeys(schema)),
+        ...exampleSetup({ schema, menuBar: false }), // can pass mapkeys to suppress some bindings
+      ]
     });
   }
 

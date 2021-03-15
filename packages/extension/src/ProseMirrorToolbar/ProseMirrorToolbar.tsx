@@ -39,7 +39,7 @@ export interface ToolbarGroup {
 export type ToolbarElement = ToolbarButton | ToolbarGroup | ToolbarDropDown;
 
 export interface ProseMirrorToolbarProps extends WithStyles<typeof styles> {
-  toolbarState?: ProseMirrorToolbarState;
+  toolbarState: ProseMirrorToolbarState | undefined;
   layout: ToolbarElement[];
 }
 
@@ -51,7 +51,7 @@ const ProseMirrorToolbar: React.SFC<ProseMirrorToolbarProps> = (
   const renderToolbarElement = (element: ToolbarElement) => {
     switch (element.type) {
       case "button":
-        return <ProseMirrorToolbarIconButton toolName={element.toolName} />;
+        return <ProseMirrorToolbarIconButton toolName={element.toolName}/>;
       case "dropdown":
         return (
           <ProseMirrorToolbarDropdown
@@ -60,11 +60,19 @@ const ProseMirrorToolbar: React.SFC<ProseMirrorToolbarProps> = (
           />
         );
       case "group":
-        return (
+        const toolVisible = (tool: ToolbarButton): boolean => {
+          const state = toolbarState == null ? null : toolbarState.toolStates[tool.toolName];
+          return state == null ? true : state.visible;
+        };
+
+        const anyVisible = element.children.findIndex(child =>
+          child.type !== "button" || toolVisible(child)
+        ) !== -1;
+        return anyVisible ? (
           <ProseMirrorToolbarGroup>
             {element.children.map(child => renderToolbarElement(child))}
           </ProseMirrorToolbarGroup>
-        );
+        ) : null;
       default:
         return null;
     }
@@ -79,8 +87,21 @@ const ProseMirrorToolbar: React.SFC<ProseMirrorToolbarProps> = (
           }
 
           const tool = toolbarState.tools.find(x => x.name === toolName);
+          const areInlineStyles = Object.keys(toolbarState.toolStates).filter((x: any) => (/inline_styles/.test(x) && toolbarState.toolStates[x].active));
           if (!tool) {
             return;
+          }
+
+          if (areInlineStyles && areInlineStyles.length) {
+            const clearFormatting = toolbarState.tools.find(x => x.name === "clear_formatting");
+
+            if (clearFormatting) {
+              clearFormatting.apply(
+                toolbarState.editorView.state,
+                toolbarState.editorView.dispatch,
+                toolbarState.editorView
+              );
+            }
           }
 
           tool.apply(

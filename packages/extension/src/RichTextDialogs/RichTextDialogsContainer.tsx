@@ -1,11 +1,14 @@
 import React, { PropsWithChildren } from "react";
 
 import {
+  Anchor,
   Hyperlink,
   Image,
   RichTextDialogs
 } from "@dc-extension-rich-text/common";
 import { ContentItemLink, MediaImageLink } from "dc-extensions-sdk";
+import AnchorDialog from "../AnchorDialog/AnchorDialog";
+import CodeDialog from "../CodeDialog/CodeDialog";
 import HyperlinkDialog from "../HyperlinkDialog/HyperlinkDialog";
 import ImageDialog from "../ImageDialog/ImageDialog";
 import RichTextDialogsContext from "./RichTextDialogsContext";
@@ -18,6 +21,7 @@ interface OpenDialog {
   type: string;
   resolve: (value: any) => void;
   reject: () => void;
+  value: any;
 }
 
 const RichTextDialogsContainer: React.SFC<EditorDialogsProps> = (
@@ -45,12 +49,13 @@ const RichTextDialogsContainer: React.SFC<EditorDialogsProps> = (
   );
 
   const handleOpenDialog = React.useCallback(
-    (type: string) => {
+    (type: string, value?: any) => {
       return new Promise((resolve, reject) => {
         setOpenDialog({
           type,
           resolve,
-          reject
+          reject,
+          value
         });
       });
     },
@@ -60,8 +65,14 @@ const RichTextDialogsContainer: React.SFC<EditorDialogsProps> = (
   const { sdk } = React.useContext(SdkContext);
 
   const dialogs: RichTextDialogs = {
+    getAnchor: (existing: Set<string>, value?: Anchor): Promise<Anchor> => {
+      return handleOpenDialog("anchor", { value, existing }) as Promise<Anchor>;
+    },
+    getCode: (value?: string): Promise<string> => {
+      return handleOpenDialog("code", value) as Promise<string>;
+    },
     getHyperlink: (value?: Hyperlink): Promise<Hyperlink> => {
-      return handleOpenDialog("hyperlink") as Promise<Hyperlink>;
+      return handleOpenDialog("hyperlink", value) as Promise<Hyperlink>;
     },
     getImage: (value?: Image): Promise<Image> => {
       return handleOpenDialog("image") as Promise<Image>;
@@ -89,7 +100,20 @@ const RichTextDialogsContainer: React.SFC<EditorDialogsProps> = (
     <RichTextDialogsContext.Provider value={{ dialogs }}>
       {children}
 
+      <AnchorDialog
+        value={openDialog != null ? openDialog.value : undefined}
+        open={openDialog != null && openDialog.type === "anchor"}
+        onClose={handleCloseDialog}
+        onSubmit={handleSubmitDialog}
+      />
+      <CodeDialog
+        value={openDialog != null ? openDialog.value : undefined}
+        open={openDialog != null && openDialog.type === "code"}
+        onClose={handleCloseDialog}
+        onSubmit={handleSubmitDialog}
+      />
       <HyperlinkDialog
+        value={openDialog != null ? openDialog.value : undefined}
         open={openDialog != null && openDialog.type === "hyperlink"}
         onClose={handleCloseDialog}
         onSubmit={handleSubmitDialog}

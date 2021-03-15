@@ -29,7 +29,19 @@ export default [
     children: [
       { type: "button", toolName: "strong" },
       { type: "button", toolName: "em" },
-      { type: "button", toolName: "link" }
+      { type: "button", toolName: "soft_hyphen" },
+      { type: "button", toolName: "link" },
+      { type: "button", toolName: "anchor" },
+    ]
+  },
+
+  {
+    type: "group",
+    children: [
+      { type: "button", toolName: "align_left" },
+      { type: "button", toolName: "align_center" },
+      { type: "button", toolName: "align_right" },
+      { type: "button", toolName: "align_justify" }
     ]
   },
 
@@ -50,12 +62,20 @@ export default [
       { type: "button", toolName: "dc-content-link" },
       { type: "button", toolName: "blockquote" },
       { type: "button", toolName: "code_block" },
-      { type: "button", toolName: "horizontal_rule" }
+      { type: "button", toolName: "horizontal_rule" },
+      { type: "button", toolName: "table_create" }
     ]
   },
 
   {
     type: "group",
-    children: [{ type: "button", toolName: "clear_formatting" }]
+    children: [
+      { type: "button", toolName: "table_row_add" },
+      { type: "button", toolName: "table_row_delete" },
+      { type: "button", toolName: "table_col_add" },
+      { type: "button", toolName: "table_col_delete" },
+      { type: "button", toolName: "table_delete" },
+      { type: "button", toolName: "clear_formatting" }
+    ]
   }
 ] as ToolbarElement[];

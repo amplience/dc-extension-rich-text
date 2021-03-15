@@ -15,7 +15,7 @@ import ProseMirrorToolbar, {
 } from "../ProseMirrorToolbar/ProseMirrorToolbar";
 import DefaultToolbar from "./DefaultToolbar";
 
-import { computeToolbarState } from "../ProseMirrorToolbar/ProseMirrorToolbarState";
+import { computeToolbarState, ProseMirrorToolbarState } from "../ProseMirrorToolbar/ProseMirrorToolbarState";
 import { RichTextDialogsContext } from "../RichTextDialogs";
 
 const styles = {
@@ -157,7 +157,7 @@ const RichTextEditor: React.SFC<RichTextEditorProps> = (
     [languageConfiguration, setProseMirrorDocument, setRawValue]
   );
 
-  const [toolbarState, setToolbarState] = React.useState();
+  const [toolbarState, setToolbarState] = React.useState<ProseMirrorToolbarState>();
   const toolbarLayout = toolbarLayoutProp || DefaultToolbar;
 
   const handleEditorUpdateState = React.useCallback(
