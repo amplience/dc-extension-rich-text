@@ -62,7 +62,7 @@ You can use our deployed version of this extension (builds from the "production"
 
 [https://rich-text.extensions.content.amplience.net](https://rich-text.extensions.content.amplience.net)
 
-_As this is an open source project you're welcome to host your own "fork" of this project. You can use any standard static hosting service (Netlify, Amplify, Vercel, etc.) if you wish. Further information can be found on the [Hosting](HOSTING.md) page_
+_As this is an open source project you're welcome to host your own "fork" of this project. You can use any standard static hosting service (Netlify, Amplify, Vercel, etc.) if you wish. Further information can be found on the [Hosting](HOSTING.md) page._
 
 #### Permissions
 
