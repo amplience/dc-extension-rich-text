@@ -15,7 +15,10 @@ This extension is designed to replace the built in rich text editor with additio
   * Headings
   * Bold text
   * Italic text
+  * Soft hyphens
   * Hyperlinks
+  * Anchors
+  * Text alignment
   * Bullet lists
   * Numeric lists
   * External images
@@ -31,11 +34,13 @@ This extension is designed to replace the built in rich text editor with additio
   * Cut/copy/paste content
   * Formatting when copying content from other tools
   * Keyboard shortcuts
-  * Undo / Redo
+  * Undo/Redo
 * Customizability
-  * Enable / disable tools
+  * Enable/disable tools
   * Change toolbar layout
   * Custom styles
+
+More details on the available features can be found on the [Features](FEATURES.md) page, whilst further information on how to configure and customise these features can be found in the [Configuration](#configuration) section.
 
 ## How to install
 
@@ -57,7 +62,7 @@ You can use our deployed version of this extension (builds from the "production"
 
 [https://rich-text.extensions.content.amplience.net](https://rich-text.extensions.content.amplience.net)
 
-_As this is an open source project you're welcome to host your own "fork" of this project. You can use any standard static hosting service (Netlify, Amplify, Vercel, etc.) if you wish._
+_As this is an open source project you're welcome to host your own "fork" of this project. You can use any standard static hosting service (Netlify, Amplify, Vercel, etc.) if you wish. Further information can be found on the [Hosting](HOSTING.md) page._
 
 #### Permissions
 
@@ -83,6 +88,7 @@ To use the rich text editor, you simply need to add a field to your content type
 }
 ```
 
+Examples with the Rich Text extension included can also be found within the Extensions section of our [example schemas](https://amplience.com/docs/development/schema-examples/readme.html) in Dynamic Content.
 
 ## Installation Params
 
@@ -290,7 +296,7 @@ By default, an icon will be displayed for embedded content items. You can provid
 }
 ```
 
-"*" can be used in place of the schema id to apply the icon to all content types.
+"\*" can be used in place of the schema id to apply the icon to all content types.
 
 If you wish to display a card / visualization, provide a templated URL in the params:
 
