@@ -102,13 +102,12 @@ storiesOf("EditorRichTextField", module)
                       contentTypes: [
                         "https://raw.githubusercontent.com/neilmistryamplience/dc-example-website/willow/content-types/card.json"
                       ],
-                      contentTypeSettings: {
-                        cards: {
-                          "https://raw.githubusercontent.com/neilmistryamplience/dc-example-website/willow/content-types/card.json":
-                            "https://d3rcavkmxce5gq.cloudfront.net/preview/card?vse={{vse.domain}}&content={{content.sys.id}}"
-                        },
-                        icons: {}
-                      }
+                      contentTypeSettings: [
+                        {
+                          id: "https://raw.githubusercontent.com/neilmistryamplience/dc-example-website/willow/content-types/card.json",
+                          card: "https://d3rcavkmxce5gq.cloudfront.net/preview/card?vse={{vse.domain}}&content={{content.sys.id}}"
+                        }
+                      ]
                     }
                   }
                 }

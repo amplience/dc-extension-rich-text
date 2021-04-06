@@ -286,11 +286,12 @@ By default, an icon will be displayed for embedded content items. You can provid
     "tools": {
         "dc-content-link": {
             "contentTypes": ["<schema-id>"],
-            "contentTypeSettings": {
-                "icons": {
-                    "<schema-id>": "<icon-url>"
+            "contentTypeSettings": [
+                {
+                    "id": "<schema-id>",
+                    "icon":  "<icon-url>"
                 }
-            }
+            ]
         }
     }
 }
@@ -302,11 +303,12 @@ If you wish to display a card / visualization, provide a templated URL in the pa
 
 ```json
 {
-    "contentTypeSettings": {
-        "cards": {
-            "<schema-id>": "http://myapp.com/visualization?vse={{vse.domain}}&content={{content.sys.id}}"
+    "contentTypeSettings": [
+        {
+            "id": "<schema-id>",
+            "card": "http://myapp.com/visualization?vse={{vse.domain}}&content={{content.sys.id}}"
         }
-    }
+    ]
 }
 ```
 
@@ -316,11 +318,27 @@ Finally, you can also provide a custom aspect ratio for each content type.
 
 ```json
 {
-    "contentTypeSettings": {
-        "aspectRatios": {
-            "<schema-id>": "3:1"
+    "contentTypeSettings": [
+        {
+            "id": "<schema-id>",
+            "aspectRatio": "3:1"
         }
-    }
+    ]
+}
+```
+
+When using multiple of these properties, use them on the same object:
+
+```json
+{
+    "contentTypeSettings": [
+        {
+            "id": "<schema-id>",
+            "icon":  "<icon-url>",
+            "card": "http://myapp.com/visualization?vse={{vse.domain}}&content={{content.sys.id}}",
+            "aspectRatio": "3:1"
+        }
+    ]
 }
 ```
 

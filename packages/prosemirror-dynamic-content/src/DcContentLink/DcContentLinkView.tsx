@@ -7,6 +7,7 @@ import { WithStyles, withStyles } from '@material-ui/core';
 import clsx from 'clsx';
 
 import { DynamicContentToolOptions } from '../DynamicContentTools/DynamicContentToolOptions';
+import { ContentTypeExtensionSettings, OldContentTypeExtensionSettings } from '../ContentTypeExtensionSettings';
 
 const styles = {
     root: {
@@ -47,6 +48,36 @@ interface Props extends WithStyles<typeof styles> {
     onDelete: () => void;
 }
 
+const convertSettings = (settings: ContentTypeExtensionSettings[] | OldContentTypeExtensionSettings | undefined) : OldContentTypeExtensionSettings | undefined => {
+  if (settings === undefined) {
+    return undefined;
+  } else if (Array.isArray(settings)) {
+    const result: OldContentTypeExtensionSettings = {
+      cards: {},
+      icons: {},
+      aspectRatios: {}
+    }
+
+    settings.forEach(setting => {
+      if (setting.card) {
+        result.cards[setting.id] = setting.card;
+      }
+
+      if (setting.icon) {
+        result.icons[setting.id] = setting.icon;
+      }
+
+      if (setting.aspectRatio && result.aspectRatios) {
+        result.aspectRatios[setting.id] = setting.aspectRatio;
+      }
+    });
+
+    return result;
+  } else {
+    return settings;
+  }
+}
+
 const ViewComponent = withStyles(styles)((props: Props) => {
     const {
         node,
@@ -60,9 +91,11 @@ const ViewComponent = withStyles(styles)((props: Props) => {
 
     const contentLinkOptions = options.tools && options.tools["dc-content-link"] ? options.tools["dc-content-link"] : undefined;
 
-    const customIcon: string | undefined = contentLinkOptions && contentLinkOptions.contentTypeSettings && hasValidValue ? getContentTypeIcon(contentLinkOptions.contentTypeSettings, value.contentType) : undefined;
-    const cardTemplateUrl: string | undefined = contentLinkOptions && contentLinkOptions.contentTypeSettings && hasValidValue ? getContentTypeCard(contentLinkOptions.contentTypeSettings, value.contentType) : undefined;
-    const aspectRatio = contentLinkOptions && contentLinkOptions.contentTypeSettings && contentLinkOptions.contentTypeSettings.aspectRatios && hasValidValue ? getContentTypeAspectRatio(contentLinkOptions.contentTypeSettings.aspectRatios, value.contentType) : undefined;
+    const settings = contentLinkOptions ? convertSettings(contentLinkOptions.contentTypeSettings) : undefined;
+
+    const customIcon: string | undefined = settings && hasValidValue ? getContentTypeIcon(settings, value.contentType) : undefined;
+    const cardTemplateUrl: string | undefined = settings && hasValidValue ? getContentTypeCard(settings, value.contentType) : undefined;
+    const aspectRatio = settings && settings.aspectRatios && hasValidValue ? getContentTypeAspectRatio(settings.aspectRatios, value.contentType) : undefined;
 
     //Workaround for ts-jest
     const Fab: any = StyledFab as any;
