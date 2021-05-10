@@ -7,7 +7,7 @@ import { RichTextEditor } from "../RichTextEditor";
 
 import JSONLanguage from "@dc-extension-rich-text/language-json";
 import MarkdownLanguage from "@dc-extension-rich-text/language-markdown";
-import { ContentTypeSettings, SdkContext } from "unofficial-dynamic-content-ui";
+import { SdkContext } from "unofficial-dynamic-content-ui";
 
 import {
   RichLanguage,
@@ -16,7 +16,9 @@ import {
 import {
   DcContentLinkView,
   DcImageLinkView,
-  DynamicContentToolOptions
+  DynamicContentToolOptions,
+  ContentTypeExtensionSettings,
+  OldContentTypeExtensionSettings
 } from "@dc-extension-rich-text/prosemirror-dynamic-content";
 import { RichTextDialogsContext } from "../RichTextDialogs";
 
@@ -32,7 +34,7 @@ export const styles = {
     boxSizing: "border-box" as "border-box",
     "-webkit-font-smoothing": "auto",
     fontFamily: "roboto,sans-serif!important"
-  }
+  },
 };
 
 export interface EditorRichTextFieldProps extends WithStyles<typeof styles> {
@@ -69,9 +71,9 @@ export interface EditorRichTextFieldParams {
 
     "dc-content-link"?: {
       contentTypes?: string[];
-      contentTypeSettings?: ContentTypeSettings & {
-        aspectRatios?: { [schemaId: string]: string };
-      };
+      contentTypeSettings?:
+        | ContentTypeExtensionSettings[]
+        | OldContentTypeExtensionSettings;
     };
   };
 }
@@ -127,7 +129,7 @@ const EditorRichTextField: React.SFC<EditorRichTextFieldProps> = (
           new DcImageLinkView(node, view, getPos, toolOptions),
         "dc-content-link": (node: any, view: any, getPos: any) =>
           new DcContentLinkView(node, view, getPos, toolOptions)
-      }
+      },
     };
   }, [sdk, toolOptions]);
 
