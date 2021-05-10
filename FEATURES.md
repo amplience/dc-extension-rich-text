@@ -1,11 +1,38 @@
-
 # Rich Text Editor features:
 
-1. Normal Text
+- [Normal Text](#normal-text)
+- [Headings 1-6](#headings-1-6)
+- [Code Block](#code-block)
+- [Custom Styles](#custom-styles)
+- [Bold Text](#bold-text)
+- [Italic Text](#italic-text)
+- [Soft Hyphen](#soft-hyphen)
+- [Links](#links)
+- [Anchors](#anchors)
+- [Align Left](#align-left)
+- [Align Center](#align-center)
+- [Align Right](#align-right)
+- [Align Justify](#align-justify)
+- [Bullet List](#bullet-list)
+- [Decrease Indentation](#decrease-indentation)
+- [Ordered List](#ordered-list)
+- [Insert Image from URL](#insert-image-from-url)
+- [Quote](#quote)
+- [Horizontal Rule](#horizontal-rule)
+- [Create Table](#create-table)
+
+Each of these features can be [customized](README.md#configuration) to show or hide, or to reorder the features on the Rich Text Editor's toolbar. The **toolbar item name** should be used for such custom configurations.
+
+Features listed on this page are shown on the default toolbar, unless otherwise specified.
+
+##  Normal Text
 
 ![Normal Text](media/normalText.png)
 
-JSON output:
+### Toolbar item name:
+* paragraph
+
+### JSON output:
 ```json
 [
    {
@@ -15,16 +42,24 @@ JSON output:
 ]
 ```
 
-Markdown output:
+### Markdown output:
 ```
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
 ```
 
-2. Headings 1-6
+## Headings 1-6
 
 ![Headings](media/headings.png)
 
-JSON output:
+### Toolbar item names:
+* heading\_1
+* heading\_2
+* heading\_3
+* heading\_4
+* heading\_5
+* heading\_6
+
+### JSON output:
 ```json
 [
    {
@@ -34,7 +69,7 @@ JSON output:
 ]
 ```
 
-Markdown output:
+### Markdown output:
 ```
 # Heading 1
 
@@ -49,11 +84,14 @@ Markdown output:
 ###### Heading 6
 ```
 
-3. Code Block 
+## Code Block 
 
 ![CodeBlock](media/codeBlock.png)
 
-JSON output:
+### Toolbar item name:
+* code\_block
+
+### JSON output:
 ```json
 [
    {
@@ -63,16 +101,16 @@ JSON output:
 ]
 ```
 
-Markdown output:
+### Markdown output:
 ```
    ```<h1 style="color:blue;">A Blue Heading</h1>```
 ```
 
-4. Custom Styles
+## Custom Styles
 
 ![markdown Custom Styles](media/customStyle.png)
 
-JSON output:
+### JSON output:
 ```json
 [
    {
@@ -82,17 +120,20 @@ JSON output:
 ]
 ```
 
-Markdown output:
+### Markdown output:
 ```
 <span class="red">Lorem Ipsum</span>\
 <span class="green">Lorem Ipsum</span>
 ```
 
-5. Bold Text 
+## Bold Text
 
 ![Bold Text](media/boldText.png)
 
-JSON output:
+### Toolbar item name:
+* strong
+
+### JSON output:
 ```json
 [
    {
@@ -107,11 +148,14 @@ Markdown output:
 **Lorem ipsum**
 ```
 
-6. Italic Text
+## Italic Text
 
 ![Italic Text](media/italicText.png)
 
-JSON output:
+### Toolbar item name:
+* em
+
+### JSON output:
 
 ```json
 [
@@ -121,17 +165,20 @@ JSON output:
    }
 ]
 ```
-Markdown output:
+### Markdown output:
 
 ```
 *Lorem ipsum*
 ```
 
-7. Soft Hyphen
+## Soft Hyphen
 
 ![Soft Hyphen](media/softHyphen.png)
 
-JSON output:
+### Toolbar item name:
+* soft\_hyphen
+
+### JSON output:
 ```json
 [
    {
@@ -141,16 +188,19 @@ JSON output:
 ]
 ```
 
-Markdown output:
+### Markdown output:
 ```
 Lorem&shy;ipsum
 ```
 
-8. Links
+## Links
 
 ![Links](media/links.png)
 
-JSON output:
+### Toolbar item name:
+* link
+
+### JSON output:
 ```json
 [
    {
@@ -160,16 +210,19 @@ JSON output:
 ]
 ```
 
-Markdown output:
+### Markdown output:
 ```
 [go to http://amplience.com](https://amplience.com "Amplience")
 ```
 
-9. Anchors
+## Anchors
 
 ![Anchors](media/anchors.png)
 
-JSON output:
+### Toolbar item name:
+* anchor
+
+### JSON output:
 ```json
 [
    {
@@ -179,16 +232,19 @@ JSON output:
 ]
 ```
 
-Markdown output:
+### Markdown output:
 ```
 <a id="paragraph-1"></a>Lorem ipsum dolor sit amet, consectetur adipiscing elit.
 ```
 
-10. Align Left
+## Align Left
 
 ![Align Left](media/alignLeft.png)
 
-JSON output:
+### Toolbar item name:
+* align\_left
+
+### JSON output:
 ```json
 [
    {
@@ -198,16 +254,19 @@ JSON output:
 ]
 ```
 
-Markdown output:
+### Markdown output:
 ```
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 ```
 
-11. Align Center
+## Align Center
 
 ![Align Center](media/alignCenter.png)
 
-JSON output:
+### Toolbar item name:
+* align\_center
+
+### JSON output:
 ```json
 [
    {
@@ -217,21 +276,24 @@ JSON output:
 ]
 ```
 
-Markdown output:
+### Markdown output:
 ```
 <p style="text-align: center">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
 ```
 
-Markdown output (`useClasses` set):
+### Markdown output (`useClasses` set):
 ```
 <p class="amp-align-center">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
 ```
 
-12. Align Right
+## Align Right
 
 ![Align Right](media/alignRight.png)
 
-JSON output:
+### Toolbar item name:
+* align\_right
+
+### JSON output:
 ```json
 [
    {
@@ -241,7 +303,7 @@ JSON output:
 ]
 ```
 
-Markdown output:
+### Markdown output:
 ```
 <p style="text-align: right">Lorem ipsum dolor sit amet, consectetur adipiscing elit. </p>
 ```
@@ -251,11 +313,14 @@ Markdown output (`useClasses` set):
 <p class="amp-align-right">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
 ```
 
-13. Align Justify
+## Align Justify
 
 ![Align Justify](media/alignJustify.png)
 
-JSON output:
+### Toolbar item name:
+* align\_justify
+
+### JSON output:
 ```json
 [
    {
@@ -265,21 +330,24 @@ JSON output:
 ]
 ```
 
-Markdown output:
+### Markdown output:
 ```
 <p style="text-align: justify">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
 ```
 
-Markdown output (`useClasses` set):
+### Markdown output (`useClasses` set):
 ```
 <p class="amp-align-justify">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
 ```
 
-14. Bullet List
+## Bullet List
 
 ![Bullet List](media/bulletList.png)
 
-JSON output:
+### Toolbar item name:
+* bullet\_list
+
+### JSON output:
 ```json
 [
    {
@@ -289,7 +357,7 @@ JSON output:
 ]
 ```
 
-Markdown output:
+### Markdown output:
 ```
 * Lorem ipsum dolor sit amet
 
@@ -298,11 +366,15 @@ Markdown output:
 * Lorem ipsum dolor sit amet
 ```
 
-15. Decrease Indentation (appears only after applied bullet/ordered list)
+## Decrease Indentation
+* (Displayed only after applying bullet/ordered list)
 
 ![Decrease Indentation](media/decreaseIndentation.png)
 
-JSON output:
+### Toolbar item name:
+* lift
+
+### JSON output:
 ```json
 [
    {
@@ -312,7 +384,7 @@ JSON output:
 ]
 ```
 
-Markdown output:
+### Markdown output:
 ```
 Lorem ipsum dolor sit amet
 
@@ -322,11 +394,14 @@ Lorem ipsum dolor sit amet
 
 ```
 
-16. Ordered List
+## Ordered List
 
 ![Ordered List](media/orderedList.png)
 
-JSON output:
+### Toolbar item name:
+* ordered\_list
+
+### JSON output:
 ```json
 [
    {
@@ -336,7 +411,7 @@ JSON output:
 ]
 ```
 
-Markdown output:
+### Markdown output:
 ```
 1. Lorem ipsum dolor sit amet
 
@@ -345,11 +420,11 @@ Markdown output:
 3. Lorem ipsum dolor sit amet
 ```
 
-17. Insert Image from URL
+## Insert Image from URL
 
 ![Insert Image from URL](media/insertImageURL.png)
 
-JSON output:
+### JSON output:
 ```json
 [
    {
@@ -359,16 +434,19 @@ JSON output:
 ]
 ```
 
-Markdown output:
+### Markdown output:
 ```
 ![](http://dev-solutions.s3.amazonaws.com/anastasia/di-docs/images/Dynamic_Media.png "Dynamic Media")
 ```
 
-18. Quote
+## Quote
 
 ![Quote](media/quote.png)
 
-JSON output:
+### Toolbar item name:
+* blockquote
+
+### JSON output:
 ```json
 [
    {
@@ -378,16 +456,19 @@ JSON output:
 ]
 ```
 
-Markdown output:
+### Markdown output:
 ```
 > Lorem ipsum dolor sit amet, consectetur adipiscing elit
 ```
 
-19. Horizontal Rule
+## Horizontal Rule
 
 ![Horizontal Rule](media/rule.png)
 
-JSON output:
+### Toolbar item name:
+* horizontal\_rule
+
+### JSON output:
 ```json
 [
    {
@@ -397,12 +478,13 @@ JSON output:
 ]
 ```
 
-Markdown output:
+### Markdown output:
 ```
 ---
 ```
 
-20. Create Table (on clicking Create Table icon, additional icons are appeared):
+## Create Table
+* (on clicking Create Table icon, additional icons are displayed):
     - Add Row
     - Delete Row
     - Add Column
@@ -411,7 +493,15 @@ Markdown output:
 
 ![Create Table](media/table.png)
 
-JSON output:
+### Toolbar item names:
+* table\_create
+* table\_row\_add
+* table\_row\_delete
+* table\_col\_add
+* table\_col\_delete
+* table\_delete
+
+### JSON output:
 ```json
 [
    {
@@ -421,7 +511,7 @@ JSON output:
 ]
 ```
 
-Markdown output:
+### Markdown output:
 ```
 | id       | name     | email    |
 |----------|----------|----------|

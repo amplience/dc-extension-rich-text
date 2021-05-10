@@ -1,5 +1,5 @@
 import { StandardToolOptions } from "@dc-extension-rich-text/common";
-import { ContentTypeSettings } from "unofficial-dynamic-content-ui";
+import { ContentTypeExtensionSettings, OldContentTypeExtensionSettings } from "../ContentTypeExtensionSettings";
 
 export type DynamicContentToolOptions = StandardToolOptions & {
   dynamicContent?: {
@@ -8,9 +8,7 @@ export type DynamicContentToolOptions = StandardToolOptions & {
   tools?: {
     "dc-content-link"?: {
       contentTypes?: string[];
-      contentTypeSettings?: ContentTypeSettings & {
-        aspectRatios?: { [schemaId: string]: string };
-      };
+      contentTypeSettings?: ContentTypeExtensionSettings[] | OldContentTypeExtensionSettings
     };
   };
 };
