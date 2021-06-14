@@ -25,7 +25,7 @@ This extension is designed to replace the built in rich text editor with additio
   * Block quotes
   * Code snippets
   * Horizontal rules
-  * Experimental: Inline styles
+  * Inline styles
 * JSON output
   * Markdown Blocks
   * Content Blocks
@@ -342,17 +342,23 @@ When using multiple of these properties, use them on the same object:
 }
 ```
 
-### Experimental: Inline Styles
+### Inline Styles
 
-Inline styles is an experimental feature which lets you provide a list of CSS class names that users can apply to text.
+Inline styles is a feature which lets you provide a list of CSS class names that users can apply to text.
 
 ![Content Block](media/inline-styles.png)
 
 To enable this feature:
 
-1. Remove the feature from the blacklist.
+1. Create CSS rules for your inline styles within `params`:
 
-This feature is blacklisted by default, you can enable it by passing in an empty blacklist.
+```json
+{
+    "styles": ".was-price { color: red; }"
+}
+```
+
+2. Within `params.tools`, remove the feature from the blacklist. This feature is blacklisted by default, you can enable it by passing in an empty blacklist.
 
 ```json
 {
@@ -362,27 +368,21 @@ This feature is blacklisted by default, you can enable it by passing in an empty
 }
 ```
 
-2. Provide custom CSS:
+3. Within `params.tools`, provide settings for each inline style you wish to use.
 
 ```json
 {
-    "styles": ".was-price { color: red; }"
-}
-```
-
-3. Provide settings for the tool
-
-```json
-{
-    "inline_styles": {
-        "classNames": [
-            { "className": "was-price", "label": "Was Price" }
-        ]
+    "tools": {
+        "inline_styles": {
+            "classNames": [
+                { "className": "was-price", "label": "Was Price" }
+            ]
+        }
     }
 }
 ```
 
-4. Add the classes to the toolbar
+4. Within `params`, add your inline styles to the toolbar.
 
 ```json
 {
@@ -402,7 +402,6 @@ This feature is blacklisted by default, you can enable it by passing in an empty
         ]
     }
 }
-
 ```
 
 ## How to run locally
