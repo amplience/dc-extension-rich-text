@@ -25,7 +25,7 @@ This extension is designed to replace the built in rich text editor with additio
   * Block quotes
   * Code snippets
   * Horizontal rules
-  * Experimental: Inline styles
+  * Inline styles
 * JSON output
   * Markdown Blocks
   * Content Blocks
@@ -342,27 +342,15 @@ When using multiple of these properties, use them on the same object:
 }
 ```
 
-### Experimental: Inline Styles
+### Inline Styles
 
-Inline styles is an experimental feature which lets you provide a list of CSS class names that users can apply to text.
+Inline styles is a feature which lets you provide a list of CSS class names that users can apply to text.
 
 ![Content Block](media/inline-styles.png)
 
 To enable this feature:
 
-1. Remove the feature from the blacklist.
-
-This feature is blacklisted by default, you can enable it by passing in an empty blacklist.
-
-```json
-{
-    "tools": {
-        "blacklist": []
-    }
-}
-```
-
-2. Provide custom CSS:
+1. Create CSS rules for your inline styles within `params`:
 
 ```json
 {
@@ -370,7 +358,15 @@ This feature is blacklisted by default, you can enable it by passing in an empty
 }
 ```
 
-3. Provide settings for the tool
+2. Within `params.tools`, remove the feature from the blacklist. This feature is blacklisted by default, you can enable it by passing in an empty blacklist.
+
+```json
+{
+    "blacklist": []
+}
+```
+
+3. Within `params.tools`, provide settings for each inline style you wish to use.
 
 ```json
 {
@@ -382,7 +378,7 @@ This feature is blacklisted by default, you can enable it by passing in an empty
 }
 ```
 
-4. Add the classes to the toolbar
+4. Within `params`, add your inline styles to the toolbar.
 
 ```json
 {
@@ -402,7 +398,6 @@ This feature is blacklisted by default, you can enable it by passing in an empty
         ]
     }
 }
-
 ```
 
 ## How to run locally
