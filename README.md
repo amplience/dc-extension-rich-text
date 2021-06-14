@@ -362,9 +362,7 @@ To enable this feature:
 
 ```json
 {
-    "tools": {
-        "blacklist": []
-    }
+    "blacklist": []
 }
 ```
 
@@ -372,12 +370,10 @@ To enable this feature:
 
 ```json
 {
-    "tools": {
-        "inline_styles": {
-            "classNames": [
-                { "className": "was-price", "label": "Was Price" }
-            ]
-        }
+    "inline_styles": {
+        "classNames": [
+            { "className": "was-price", "label": "Was Price" }
+        ]
     }
 }
 ```
