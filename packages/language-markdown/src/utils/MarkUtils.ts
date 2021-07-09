@@ -119,6 +119,17 @@ export function setMarkAttributes(
               markType.create(mergeAttrs(markAttrs, attrs))
             );
           } else {
+            if (attrs && attrs.class && /amp-text-colour/.test(attrs.class)) {
+              const nodeBefore = $from$1.nodeBefore;
+
+              if (nodeBefore && nodeBefore.marks && nodeBefore.marks.length) {
+                const parentClass = nodeBefore.marks.find((el: any) => el.type.name === "inline_styles" && !/amp-text-colour/.test(el.attrs.class));
+
+                if (parentClass) {
+                  attrs.class = parentClass.attrs.class + " " + attrs.class;
+                }
+              }
+            }
             tr.addMark($from$1.pos, $to$1.pos, markType.create(attrs));
           }
         }
