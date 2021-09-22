@@ -92,15 +92,17 @@ const EditorRichTextField: React.SFC<EditorRichTextFieldProps> = (
   const { dialogs } = React.useContext(RichTextDialogsContext);
 
   const toolOptions = React.useMemo<DynamicContentToolOptions>(() => {
+    const sdkParams = sdk ? { ...sdk.params.instance, ...sdk.params.installation } : params;
+
     const settings = {
-      useClasses: params.useClasses,
-      classOverride: params.classOverride,
+      useClasses: sdkParams.useClasses,
+      classOverride: sdkParams.classOverride,
 
       dialogs,
       dynamicContent: {
         stagingEnvironment: sdk ? sdk.stagingEnvironment : undefined
       },
-      tools: params.tools
+      tools: sdkParams.tools
     };
 
     if (settings.tools && !settings.tools.blacklist) {
