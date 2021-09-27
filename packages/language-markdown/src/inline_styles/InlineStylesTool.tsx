@@ -17,7 +17,7 @@ export function inlineStyleClassNameTool(schema: any, className: string, classLa
         displayLabel: <span className={className}>{classLabel}</span>,
         apply: setMarkAttributes(mark, { class: className }),
         isEnabled: (state: any) => true,
-        isActive: (state: any) => isFilteredMarkActive(state, mark, (m) => m.attrs.class.includes(className)),
+        isActive: (state: any) => isFilteredMarkActive(state, mark, (m) => m.attrs && m.attrs.class && m.attrs.class.includes(className)),
     };
 }
 
