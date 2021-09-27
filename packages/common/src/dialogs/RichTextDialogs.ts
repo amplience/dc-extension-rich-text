@@ -10,6 +10,7 @@ export interface Hyperlink {
   href: string;
   title: string;
   cancel?: boolean;
+  target?: string;
 }
 
 export interface Anchor {
