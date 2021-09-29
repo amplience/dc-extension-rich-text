@@ -2,6 +2,7 @@ import { StandardToolOptions } from "@dc-extension-rich-text/common";
 import { heading_align, paragraph_align } from "../alignment/AlignmentPlugin";
 import { anchor } from "../anchor";
 import { inline_styles } from "../inline_styles";
+import { link } from "../link/LinkPlugin";
 import { createMarkdownParser } from "../markdown/MarkdownParser";
 import { createMarkdownSerializer } from "../markdown/MarkdownSerializer";
 import { soft_hyphen } from "../soft_hyphen";
@@ -18,7 +19,8 @@ export function createSchema(options: StandardToolOptions, isInlineStylesEnabled
   // TODO: don't register nodes and marks that are disabled in the options
   let marks = schema.spec.marks;
   if (isInlineStylesEnabled) {
-    marks = marks.addToEnd("inline_styles", inline_styles);
+    marks = marks.addToEnd("inline_styles", inline_styles)
+                 .update("link", link);
   }
 
   const nodes = schema.spec.nodes.append(tableNodes({
