@@ -32,8 +32,8 @@ export function createMarkdownSerializer(options: StandardToolOptions): any {
           ...TextToMarkdown
         },
         {
-          ...markdown.defaultMarkdownSerializer.marks,
-          ...InlineStylesToMarkdown
+          ...InlineStylesToMarkdown,
+          ...markdown.defaultMarkdownSerializer.marks
         }
       );
 }
