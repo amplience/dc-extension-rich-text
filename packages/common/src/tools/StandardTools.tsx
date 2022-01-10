@@ -105,7 +105,8 @@ export function editLink(
 
         const newAttrs = {
           href: linkValue.href,
-          title: linkValue.title === "" ? undefined : linkValue.title
+          title: linkValue.title === "" ? undefined : linkValue.title,
+          target: linkValue.target
         };
 
         if (marks.length > 0) {

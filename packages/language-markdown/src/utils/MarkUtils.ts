@@ -67,6 +67,23 @@ function getStoredMark(state: any, markType: any): any | undefined {
 }
 
 function mergeAttrs(oldAttrs: any, newAttrs: any): any {
+  if (/amp-text-colour/.test(oldAttrs.class) && /amp-text-colour/.test(newAttrs.class)) {
+    const mainClass = oldAttrs.class.split(' ')[0];
+    return {
+      ...oldAttrs,
+      ...newAttrs,
+      "class": `${mainClass} ${newAttrs.class}`
+    };
+  }
+
+  if (/amp-text-colour/.test(newAttrs.class)) {
+    return {
+      ...oldAttrs,
+      ...newAttrs,
+      "class": `${oldAttrs.class} ${newAttrs.class}`
+    };
+  }
+
   return {
     ...oldAttrs,
     ...newAttrs
@@ -119,6 +136,21 @@ export function setMarkAttributes(
               markType.create(mergeAttrs(markAttrs, attrs))
             );
           } else {
+            let classesSplitted = attrs.class.split(" ");
+            classesSplitted = classesSplitted[classesSplitted.length - 1];
+            if (attrs && attrs.class && /amp-text-colour/.test(attrs.class)) {
+              const nodeBefore = $from$1.nodeBefore;
+
+              if (nodeBefore && nodeBefore.marks && nodeBefore.marks.length) {
+                const parentClass = nodeBefore.marks.find((el: any) => el.type.name === "inline_styles" && !/amp-text-colour/.test(el.attrs.class));
+
+                if (parentClass) {
+                  attrs.class = parentClass.attrs.class + " " + classesSplitted;
+                }
+              } else {
+                attrs.class = classesSplitted;
+              }
+            }
             tr.addMark($from$1.pos, $to$1.pos, markType.create(attrs));
           }
         }

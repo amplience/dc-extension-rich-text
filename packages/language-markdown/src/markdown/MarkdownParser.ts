@@ -56,43 +56,87 @@ export function createMarkdownParser(
 
     const content: string = (token.content || "").trim();
 
-    if (content.startsWith("<span") && content.endsWith(">")) {
-      const dom = new DOMParser().parseFromString(token.content, "text/html");
-      const tag = dom.body.firstChild;
+    const isTag = content.length > 2 && content[0] === '<' && content[content.length-1] === '>';
+    if (isTag) {
+      const isOpen = content[1] !== '/';
+      const nameStart = isOpen ? 1 : 2;
+      const interiorLength = content.length - (nameStart + 1);
+      const selfClosing = content[content.length-2] === '/';
+      let tagName = selfClosing ? content.substr(nameStart, interiorLength - 1) : content.substr(nameStart, interiorLength);
+      const spaceInd = tagName.indexOf(' ');
 
-      if (!tag) {
-        return;
+      if (spaceInd > -1) {
+        tagName = tagName.substr(0, spaceInd);
       }
 
-      if (tag.nodeName.toLowerCase() === "span") {
-        const className = (tag as Element).getAttribute("class");
-        state.openMark(
-          schema.marks.inline_styles.create({
-            class: className
-          })
-        );
-      }
-    } else if (content === "</span>") {
-      state.closeMark(schema.marks.inline_styles);
-    } else if (content.startsWith("<a") && content.endsWith(">")) {
-      const dom = new DOMParser().parseFromString(token.content, "text/html");
-      const tag = dom.body.firstChild;
+      if (isOpen) {
+        switch (tagName.toLowerCase()) {
+          case 'span':
+            {
+              const dom = new DOMParser().parseFromString(token.content, "text/html");
+              const tag = dom.body.firstChild;
+        
+              if (!tag) {
+                return;
+              }
+              
+              if (tag.nodeName.toLowerCase() === "span") {
+                const className = (tag as Element).getAttribute("class");
+                state.openMark(
+                  schema.marks.inline_styles.create({
+                    class: className
+                  })
+                );
+              }
+            }
+            break;
+          case 'a':
+            {
+              const dom = new DOMParser().parseFromString(token.content, "text/html");
+              const tag = dom.body.firstChild;
 
-      if (!tag) {
-        return;
-      }
+              if (!tag) {
+                return;
+              }
 
-      if (tag.nodeName.toLowerCase() === "a") {
-        const id = (tag as Element).getAttribute("id");
+              if (tag.nodeName.toLowerCase() === "a") {
+                const href = (tag as Element).getAttribute("href");
+                const target = (tag as Element).getAttribute("target");
+                const title = (tag as Element).getAttribute("title");
 
-        if (id != null) {
-          state.addNode(schema.nodes.anchor, {
-            value: id
-          });
+                const id = (tag as Element).getAttribute("id");
+                
+                if (id != null) {
+                  
+                  state.addNode(schema.nodes.anchor, {
+                    value: id
+                  });
+                } else {
+                  state.openMark(
+                    schema.marks.link.create({
+                      href: href,
+                      title: title,
+                      target: target
+                    })
+                  );
+                }
+              }
+            }
+            break;
+          case 'br':
+            state.addNode(schema.nodes.hard_break);
+            break;
+        }
+      } else {
+        switch (tagName.toLowerCase()) {
+          case 'span':
+            state.closeMark(schema.marks.inline_styles);
+            break;
+          case 'a':
+            state.closeMark(schema.marks.link);
+            break;
         }
       }
-    } else if (content === "<br>") {
-      state.addNode(schema.nodes.hard_break);
     }
   };
 
