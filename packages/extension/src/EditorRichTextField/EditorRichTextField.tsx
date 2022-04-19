@@ -91,7 +91,7 @@ const EditorRichTextField: React.SFC<EditorRichTextFieldProps> = (
   const { sdk } = React.useContext(SdkContext);
   const { dialogs } = React.useContext(RichTextDialogsContext);
 
-  params = sdk ? { ...sdk.params.instance, ...sdk.params.installation } : params;
+  params = sdk ? { ...sdk.params.installation, ...sdk.params.instance } : params;
 
   const toolOptions = React.useMemo<DynamicContentToolOptions>(() => {
     const settings = {
