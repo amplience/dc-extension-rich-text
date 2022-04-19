@@ -342,9 +342,9 @@ When using multiple of these properties, use them on the same object:
 }
 ```
 
-### Inline Styles
+### Experimental: Inline Styles
 
-Inline styles is a feature which lets you provide a list of CSS class names that users can apply to text.
+Inline styles is an experimental feature which lets you provide a list of CSS class names that users can apply to text.
 
 ![Content Block](media/inline-styles.png)
 
@@ -362,7 +362,7 @@ To enable this feature:
 
 ```json
 {
-    "blacklist": []
+  "blacklist": []
 }
 ```
 
@@ -370,33 +370,79 @@ To enable this feature:
 
 ```json
 {
-    "inline_styles": {
-        "classNames": [
-            { "className": "was-price", "label": "Was Price" }
-        ]
-    }
+  "inline_styles": {
+    "classNames": [
+      {
+        "className": "was-price",
+        "label": "Was Price"
+      }
+    ]
+  }
 }
 ```
 
-4. Within `params`, add your inline styles to the toolbar.
+4. Within `params`, add your inline styles to the toolbar. Each style must be defined in the `toolNames` array, prefixed with `inline_styles_classname_` and ending with each style's `className` property.
 
 ```json
 {
-    "toolbar": {
-        "layout": [
+  "toolbar": {
+    "layout": [
+      {
+        "type": "dropdown",
+        "label": "Styles",
+        "toolNames": [
+          "inline_styles_className_was-price"
+        ]
+      },
+      {
+        "type": "button",
+        "toolName": "clear_formatting"
+      }
+    ]
+  }
+}
+```
+
+#### Example
+
+An example of configured parameters for inline styles combining each the previous steps can be seen below:
+
+```json
+{
+  "rich-text": {
+    "type": "string",
+    "ui:extension": {
+      "url": "https://rich-text.extensions.content.amplience.net",
+      "params": {
+        "tools": {
+          "blacklist": [],
+          "inline_styles": {
+            "classNames": [
+              {
+                "className": "was-price",
+                "label": "Was Price"
+              }
+            ]
+          }
+        },
+        "toolbar": {
+          "layout": [
             {
-                "type": "dropdown",
-                "label": "Styles",
-                "toolNames": [
-                    "inline_styles_className_was-price"
-                ]
+              "type": "dropdown",
+              "label": "Styles",
+              "toolNames": [
+                "inline_styles_className_was-price"
+              ]
             },
             {
-                "type": "button",
-                "toolName": "clear_formatting"
+              "type": "button",
+              "toolName": "clear_formatting"
             }
-        ]
+          ]
+        }
+      }
     }
+  }
 }
 ```
 
