@@ -25,7 +25,7 @@ This extension is designed to replace the built in rich text editor with additio
   * Block quotes
   * Code snippets
   * Horizontal rules
-  * Experimental: Inline styles
+  * Inline styles
 * JSON output
   * Markdown Blocks
   * Content Blocks
@@ -350,19 +350,7 @@ Inline styles is an experimental feature which lets you provide a list of CSS cl
 
 To enable this feature:
 
-1. Remove the feature from the blacklist.
-
-This feature is blacklisted by default, you can enable it by passing in an empty blacklist.
-
-```json
-{
-    "tools": {
-        "blacklist": []
-    }
-}
-```
-
-2. Provide custom CSS:
+1. Create CSS rules for your inline styles within `params`:
 
 ```json
 {
@@ -370,39 +358,92 @@ This feature is blacklisted by default, you can enable it by passing in an empty
 }
 ```
 
-3. Provide settings for the tool
+2. Within `params.tools`, remove the feature from the blacklist. This feature is blacklisted by default, you can enable it by passing in an empty blacklist.
 
 ```json
 {
-    "inline_styles": {
-        "classNames": [
-            { "className": "was-price", "label": "Was Price" }
-        ]
-    }
+  "blacklist": []
 }
 ```
 
-4. Add the classes to the toolbar
+3. Within `params.tools`, provide settings for each inline style you wish to use.
 
 ```json
 {
-    "toolbar": {
-        "layout": [
+  "inline_styles": {
+    "classNames": [
+      {
+        "className": "was-price",
+        "label": "Was Price"
+      }
+    ]
+  }
+}
+```
+
+4. Within `params`, add your inline styles to the toolbar. Each style must be defined in the `toolNames` array, prefixed with `inline_styles_classname_` and ending with each style's `className` property.
+
+```json
+{
+  "toolbar": {
+    "layout": [
+      {
+        "type": "dropdown",
+        "label": "Styles",
+        "toolNames": [
+          "inline_styles_className_was-price"
+        ]
+      },
+      {
+        "type": "button",
+        "toolName": "clear_formatting"
+      }
+    ]
+  }
+}
+```
+
+#### Example
+
+An example of configured parameters for inline styles combining each the previous steps can be seen below:
+
+```json
+{
+  "rich-text": {
+    "type": "string",
+    "ui:extension": {
+      "url": "https://rich-text.extensions.content.amplience.net",
+      "params": {
+        "tools": {
+          "blacklist": [],
+          "inline_styles": {
+            "classNames": [
+              {
+                "className": "was-price",
+                "label": "Was Price"
+              }
+            ]
+          }
+        },
+        "toolbar": {
+          "layout": [
             {
-                "type": "dropdown",
-                "label": "Styles",
-                "toolNames": [
-                    "inline_styles_className_was-price"
-                ]
+              "type": "dropdown",
+              "label": "Styles",
+              "toolNames": [
+                "inline_styles_className_was-price"
+              ]
             },
             {
-                "type": "button",
-                "toolName": "clear_formatting"
+              "type": "button",
+              "toolName": "clear_formatting"
             }
-        ]
+          ]
+        }
+      }
     }
+  }
 }
-
 ```
 
 ## How to run locally
