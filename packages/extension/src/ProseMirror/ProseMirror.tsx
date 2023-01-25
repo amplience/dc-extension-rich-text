@@ -1,4 +1,4 @@
-import React, { RefObject } from "react";
+import React, { RefObject, useState } from "react";
 
 import "./ProseMirror.scss";
 
@@ -31,7 +31,7 @@ export interface ProseMirrorProps extends WithStyles<typeof styles> {
   doc?: any;
   editorViewOptions?: any;
   onUpdateState?: (state: any, editorView: any) => void;
-  onChange?: (doc: any) => void;
+  onChange?: (doc: any, types: any) => void;
 }
 
 interface ProseMirrorState {
@@ -52,6 +52,7 @@ class ProseMirror extends React.Component<ProseMirrorProps, ProseMirrorState> {
     this.state = { ref };
   }
 
+  
   public createEditorState(): any {
     const { schema, doc } = this.props;
 
@@ -81,6 +82,16 @@ class ProseMirror extends React.Component<ProseMirrorProps, ProseMirrorState> {
         const { state, transactions } = view.state.applyTransaction(
           transaction
         );
+        if (transaction.meta['content-type']) {
+          if (onUpdateState && onChange) {
+            const contentData = {...transaction.meta}
+            view.updateState(state);
+            onUpdateState(state, view);
+            onChange(state.doc, contentData);
+            this.forceUpdate();
+            return
+          }
+        }
         view.updateState(state);
 
         if (onUpdateState) {
@@ -89,7 +100,7 @@ class ProseMirror extends React.Component<ProseMirrorProps, ProseMirrorState> {
 
         if (transactions.some((tr: any) => tr.docChanged)) {
           if (onChange) {
-            onChange(state.doc);
+            onChange(state.doc, {});
           }
         }
 
@@ -113,7 +124,7 @@ class ProseMirror extends React.Component<ProseMirrorProps, ProseMirrorState> {
 
   public render(): React.ReactElement {
     const { classes } = this.props;
-    return <div className={classes.root} ref={this.state.ref} />;
+    return <div id='this' className={classes.root} ref={this.state.ref} />;
   }
 }
 
