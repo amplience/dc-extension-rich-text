@@ -25,7 +25,7 @@ This extension is designed to replace the built in rich text editor with additio
   * Block quotes
   * Code snippets
   * Horizontal rules
-  * Inline styles
+  * Experimental: Inline styles
 * JSON output
   * Markdown Blocks
   * Content Blocks
@@ -350,7 +350,19 @@ Inline styles is an experimental feature which lets you provide a list of CSS cl
 
 To enable this feature:
 
-1. Create CSS rules for your inline styles within `params`:
+1. Remove the feature from the blacklist.
+
+This feature is blacklisted by default, you can enable it by passing in an empty blacklist.
+
+```json
+{
+    "tools": {
+        "blacklist": []
+    }
+}
+```
+
+2. Provide custom CSS:
 
 ```json
 {
@@ -358,92 +370,39 @@ To enable this feature:
 }
 ```
 
-2. Within `params.tools`, remove the feature from the blacklist. This feature is blacklisted by default, you can enable it by passing in an empty blacklist.
+3. Provide settings for the tool
 
 ```json
 {
-  "blacklist": []
-}
-```
-
-3. Within `params.tools`, provide settings for each inline style you wish to use.
-
-```json
-{
-  "inline_styles": {
-    "classNames": [
-      {
-        "className": "was-price",
-        "label": "Was Price"
-      }
-    ]
-  }
-}
-```
-
-4. Within `params`, add your inline styles to the toolbar. Each style must be defined in the `toolNames` array, prefixed with `inline_styles_classname_` and ending with each style's `className` property.
-
-```json
-{
-  "toolbar": {
-    "layout": [
-      {
-        "type": "dropdown",
-        "label": "Styles",
-        "toolNames": [
-          "inline_styles_className_was-price"
+    "inline_styles": {
+        "classNames": [
+            { "className": "was-price", "label": "Was Price" }
         ]
-      },
-      {
-        "type": "button",
-        "toolName": "clear_formatting"
-      }
-    ]
-  }
+    }
 }
 ```
 
-#### Example
-
-An example of configured parameters for inline styles combining each the previous steps can be seen below:
+4. Add the classes to the toolbar
 
 ```json
 {
-  "rich-text": {
-    "type": "string",
-    "ui:extension": {
-      "url": "https://rich-text.extensions.content.amplience.net",
-      "params": {
-        "tools": {
-          "blacklist": [],
-          "inline_styles": {
-            "classNames": [
-              {
-                "className": "was-price",
-                "label": "Was Price"
-              }
-            ]
-          }
-        },
-        "toolbar": {
-          "layout": [
+    "toolbar": {
+        "layout": [
             {
-              "type": "dropdown",
-              "label": "Styles",
-              "toolNames": [
-                "inline_styles_className_was-price"
-              ]
+                "type": "dropdown",
+                "label": "Styles",
+                "toolNames": [
+                    "inline_styles_className_was-price"
+                ]
             },
             {
-              "type": "button",
-              "toolName": "clear_formatting"
+                "type": "button",
+                "toolName": "clear_formatting"
             }
-          ]
-        }
-      }
+        ]
     }
-  }
 }
+
 ```
 
 ## How to run locally
