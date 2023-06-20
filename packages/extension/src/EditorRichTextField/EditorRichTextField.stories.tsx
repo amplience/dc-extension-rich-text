@@ -48,7 +48,7 @@ storiesOf("EditorRichTextField", module)
           tools: {
             ai: {
               api: {
-                key: process.env.OPENAPI_KEY
+                key: process.env.OPENAI_KEY
               },
               edit_prompts: [
                 {
