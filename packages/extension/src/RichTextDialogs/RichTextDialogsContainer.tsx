@@ -4,7 +4,8 @@ import {
   Anchor,
   Hyperlink,
   Image,
-  RichTextDialogs
+  RichTextDialogs,
+  GeneratedContent
 } from "@dc-extension-rich-text/common";
 import { ContentItemLink, MediaImageLink } from "dc-extensions-sdk";
 import AnchorDialog from "../AnchorDialog/AnchorDialog";
@@ -14,8 +15,11 @@ import ImageDialog from "../ImageDialog/ImageDialog";
 import RichTextDialogsContext from "./RichTextDialogsContext";
 
 import { SdkContext } from "unofficial-dynamic-content-ui";
+import { GenerateContentDialog } from "../GenerateContentDialog";
 
-interface EditorDialogsProps extends PropsWithChildren<{}> {}
+interface EditorDialogsProps extends PropsWithChildren<{}> {
+  schema?: any
+}
 
 interface OpenDialog {
   type: string;
@@ -93,6 +97,9 @@ const RichTextDialogsContainer: React.SFC<EditorDialogsProps> = (
       } else {
         return sdk.contentLink.get(contentTypeIds);
       }
+    },
+    getGeneratedContent(): Promise<GeneratedContent> {
+      return handleOpenDialog("generate_content") as Promise<GeneratedContent>;
     }
   };
 
@@ -122,6 +129,13 @@ const RichTextDialogsContainer: React.SFC<EditorDialogsProps> = (
         open={openDialog != null && openDialog.type === "image"}
         onClose={handleCloseDialog}
         onSubmit={handleSubmitDialog}
+      />
+
+      <GenerateContentDialog
+        open={openDialog != null && openDialog.type === "generate_content"}
+        onClose={handleCloseDialog}
+        onSubmit={handleSubmitDialog}
+        params={props.schema && props.schema["ui:extension"] && props.schema["ui:extension"].params && props.schema["ui:extension"].params.tools && props.schema["ui:extension"].params.tools.ai}
       />
     </RichTextDialogsContext.Provider>
   );

@@ -77,5 +77,7 @@ export default [
       { type: "button", toolName: "table_delete" },
       { type: "button", toolName: "clear_formatting" }
     ]
-  }
+  },
+
+  { type: "button", toolName: "ai_generate" }
 ] as ToolbarElement[];

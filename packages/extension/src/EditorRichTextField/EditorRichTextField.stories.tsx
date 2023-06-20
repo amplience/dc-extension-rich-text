@@ -40,6 +40,40 @@ storiesOf("EditorRichTextField", module)
       </RichTextDialogsContainer>
     );
   })
+  .add("Generative AI", () => {
+    console.log(process.env.OPENAPI_KEY);
+    const schema = {
+      "ui:extension": {
+        params: {
+          tools: {
+            ai: {
+              api: {
+                key: process.env.OPENAPI_KEY
+              },
+              edit_prompts: [
+                {
+                  label: 'Improve this',
+                  prompt: 'Improve this {{text}}'
+                },
+                {
+                  label: 'Shorten this',
+                  prompt: 'Shorten this {{text}}'
+                }
+              ]
+            }
+          }
+        }
+      }
+    };
+
+    return withTheme(
+      <RichTextDialogsContainer schema={schema}>
+        <EditorRichTextField 
+          schema={schema}
+        />
+      </RichTextDialogsContainer>
+    );
+  })
   .add("Markdown", () => {
     return withTheme(
       <RichTextDialogsContainer>

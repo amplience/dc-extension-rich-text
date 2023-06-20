@@ -16,8 +16,11 @@ import ImageIcon from "@material-ui/icons/Image";
 import Link from "@material-ui/icons/Link";
 import Redo from "@material-ui/icons/Redo";
 import Undo from "@material-ui/icons/Undo";
+import { SvgIcon } from '@material-ui/core';
 
-import { Code as Language, Hyperlink, Image } from "../dialogs";
+import OpenAIMark from '../icons/OpenAIMark';
+
+import { Code as Language, GeneratedContent, Hyperlink, Image } from "../dialogs";
 import { ProseMirrorTool } from "./ProseMirrorTool";
 import { isToolEnabled, StandardToolOptions } from "./StandardToolOptions";
 
@@ -348,6 +351,24 @@ export function clear_formatting(): ProseMirrorTool {
   };
 }
 
+export function ai_generate(dialog?: () => Promise<GeneratedContent>): ProseMirrorTool {
+  return {
+    name: "ai_generate",
+    label: "Generate Content",
+    displayIcon: <SvgIcon>
+      <OpenAIMark />
+    </SvgIcon>,
+    apply: async () => {
+      if (dialog) {
+        const value = await dialog();
+      }
+    },
+    isEnabled: (state: any) => {
+      return true;
+    }
+  };
+}
+
 export function createStandardTools(
   schema: any,
   options: StandardToolOptions
@@ -418,6 +439,10 @@ export function createStandardTools(
 
   if (isToolEnabled('clear_formatting', options)) {
     tools.push(clear_formatting());
+  }
+
+  if (isToolEnabled('ai', options)) {
+    tools.push(ai_generate(options.dialogs ? options.dialogs.getGeneratedContent : undefined));
   }
 
   return tools;

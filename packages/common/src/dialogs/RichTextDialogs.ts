@@ -20,6 +20,10 @@ export interface Code {
   params?: string;
 }
 
+export interface GeneratedContent {
+  value: string;
+}
+
 export interface RichTextDialogs {
   getAnchor(existing: Set<string>, value?: Anchor): Promise<Anchor>;
   getCode(value?: string): Promise<string>;
@@ -30,4 +34,5 @@ export interface RichTextDialogs {
     contentTypeIds: string[],
     value?: ContentItemLink
   ): Promise<ContentItemLink>;
+  getGeneratedContent(): Promise<GeneratedContent>;
 }

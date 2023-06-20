@@ -55,7 +55,7 @@ export default class App extends React.Component<{}, AppState> {
             {
               withTheme(
                 <SdkContext.Provider value={{ sdk }}>
-                <RichTextDialogsContainer>
+                <RichTextDialogsContainer schema={sdk.field.schema}>
                   <EditorRichTextField onChange={this.handleValueChange} value={value} schema={sdk.field.schema} />
                 </RichTextDialogsContainer>
               </SdkContext.Provider>
