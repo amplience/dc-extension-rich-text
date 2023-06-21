@@ -24,6 +24,10 @@ export interface GenerateContentPrompt {
   prompt: string;
 }
 
+export interface CustomAiRewrite {
+  prompt: string;
+}
+
 export interface RichTextDialogs {
   getAnchor(existing: Set<string>, value?: Anchor): Promise<Anchor>;
   getCode(value?: string): Promise<string>;
@@ -35,4 +39,5 @@ export interface RichTextDialogs {
     value?: ContentItemLink
   ): Promise<ContentItemLink>;
   getGenerateContentPrompt(): Promise<GenerateContentPrompt>;
+  customAiRewrite(): Promise<CustomAiRewrite>;
 }

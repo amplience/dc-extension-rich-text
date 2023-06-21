@@ -5,7 +5,8 @@ import {
   Hyperlink,
   Image,
   RichTextDialogs,
-  GenerateContentPrompt
+  GenerateContentPrompt,
+  CustomAiRewrite
 } from "@dc-extension-rich-text/common";
 import { ContentItemLink, MediaImageLink } from "dc-extensions-sdk";
 import AnchorDialog from "../AnchorDialog/AnchorDialog";
@@ -16,6 +17,7 @@ import RichTextDialogsContext from "./RichTextDialogsContext";
 
 import { SdkContext } from "unofficial-dynamic-content-ui";
 import { GenerateContentDialog } from "../GenerateContentDialog";
+import { CustomAiRewriteDialog } from "../CustomAiRewrite";
 
 interface EditorDialogsProps extends PropsWithChildren<{}> {
   schema?: any
@@ -100,6 +102,9 @@ const RichTextDialogsContainer: React.SFC<EditorDialogsProps> = (
     },
     getGenerateContentPrompt(): Promise<GenerateContentPrompt> {
       return handleOpenDialog("generate_content") as Promise<GenerateContentPrompt>;
+    },
+    customAiRewrite: (value?: CustomAiRewrite): Promise<CustomAiRewrite> => {
+      return handleOpenDialog("custom_ai_rewrite", value) as Promise<CustomAiRewrite>;
     }
   };
 
@@ -133,6 +138,12 @@ const RichTextDialogsContainer: React.SFC<EditorDialogsProps> = (
 
       <GenerateContentDialog
         open={openDialog != null && openDialog.type === "generate_content"}
+        onClose={handleCloseDialog}
+        onSubmit={handleSubmitDialog}
+        params={props.schema && props.schema["ui:extension"] && props.schema["ui:extension"].params && props.schema["ui:extension"].params.tools && props.schema["ui:extension"].params.tools.ai}
+      />
+      <CustomAiRewriteDialog
+        open={openDialog != null && openDialog.type === "custom_ai_rewrite"}
         onClose={handleCloseDialog}
         onSubmit={handleSubmitDialog}
         params={props.schema && props.schema["ui:extension"] && props.schema["ui:extension"].params && props.schema["ui:extension"].params.tools && props.schema["ui:extension"].params.tools.ai}
