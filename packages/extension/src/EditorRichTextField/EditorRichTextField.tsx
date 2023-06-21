@@ -164,6 +164,7 @@ const EditorRichTextField: React.SFC<EditorRichTextFieldProps> = (
           params.codeView ? params.codeView.readOnly : undefined
         }
         onChange={onChange}
+        params={params}
         value={valueProp}
       />
     </div>

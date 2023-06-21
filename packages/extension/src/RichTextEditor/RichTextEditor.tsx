@@ -8,7 +8,8 @@ import {
   RichLanguage,
   RichLanguageConfiguration,
   RichLanguageFormat,
-  RichTextEditorContextProps
+  RichTextEditorContextProps,
+  RichTextLanguageMap
 } from "@dc-extension-rich-text/common";
 import MarkdownLanguage from "@dc-extension-rich-text/language-markdown";
 import ProseMirrorToolbar, {
@@ -20,6 +21,7 @@ import { computeToolbarState, ProseMirrorToolbarState } from "../ProseMirrorTool
 import { RichTextDialogsContext } from "../RichTextDialogs";
 import RichtextEditorContext from "./RichTextEditorContext";
 import { RichTextActionsImpl } from "../RichTextActions";
+import RichTextEditorAIActionsBar from "../RichTextEditorAIActionsBar/RichTextEditorAIActionsBar";
 
 const styles = {
   root: {
@@ -37,28 +39,18 @@ const styles = {
   }
 };
 
-interface RichTextLanguageMap {
-  [name: string]: { language: RichLanguage; conf: RichLanguageConfiguration };
-}
-
 export interface RichTextEditorProps extends WithStyles<typeof styles> {
   languages?: RichTextLanguageMap;
   language?: string;
-
   disableToolbar?: boolean;
   toolbarLayout?: ToolbarElement[];
-
   disableCodeView?: boolean;
   readOnlyCodeView?: boolean;
-
   editorViewOptions?: any;
-
   value?: any;
   onChange?: (value: any) => void;
+  params?: any;
 }
-
-
-
 
 const RichTextEditor: React.SFC<RichTextEditorProps> = (
   props: RichTextEditorProps
@@ -69,14 +61,12 @@ const RichTextEditor: React.SFC<RichTextEditorProps> = (
     language: languageProp = "markdown",
     toolbarLayout: toolbarLayoutProp,
     disableToolbar = false,
-
     disableCodeView = false,
     readOnlyCodeView = false,
-
     editorViewOptions,
-
     value: valueProp,
-    onChange
+    onChange,
+    params
   } = props;
 
   const [isLocked, setIsLocked] = useState(false);
@@ -84,20 +74,21 @@ const RichTextEditor: React.SFC<RichTextEditorProps> = (
   const {dialogs} = React.useContext(RichTextDialogsContext);
   const [actions] = useState(new RichTextActionsImpl());
   
+  const languages: RichTextLanguageMap = languagesProp || {
+    markdown: MarkdownLanguage({})
+  };
+
   const editorContext: RichTextEditorContextProps = {
     isLocked,
     setIsLocked,
     proseMirrorEditorView,
     dialogs: dialogs!,
-    actions
+    actions,
+    params,
+    languages
   };
 
   actions.setRichTextEditorContext(editorContext);
-
-  console.log(languagesProp, languageProp);
-  const languages: RichTextLanguageMap = languagesProp || {
-    markdown: MarkdownLanguage({})
-  };
 
   if (!languages[languageProp]) {
     throw new Error(`Unable to find language ${props.language}`);
@@ -206,14 +197,17 @@ const RichTextEditor: React.SFC<RichTextEditorProps> = (
                   isLocked={editorContext.isLocked}
                 />
               )}
-              <ProseMirror
-                editorViewOptions={editorViewOptions}
-                schema={language.schema}
-                onChange={handleEditorChange}
-                onUpdateState={handleEditorUpdateState}
-                doc={proseMirrorDocument}
-                isLocked={editorContext.isLocked}
-              />
+              <div style={{position: 'relative'}}>
+                <ProseMirror
+                  editorViewOptions={editorViewOptions}
+                  schema={language.schema}
+                  onChange={handleEditorChange}
+                  onUpdateState={handleEditorUpdateState}
+                  doc={proseMirrorDocument}
+                  isLocked={editorContext.isLocked}
+                />
+                <RichTextEditorAIActionsBar />
+              </div>
             </div>
           ) : (
             <CodeTextArea

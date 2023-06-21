@@ -41,28 +41,27 @@ storiesOf("EditorRichTextField", module)
     );
   })
   .add("Generative AI", () => {
-    console.log(process.env.OPENAPI_KEY);
     const schema = {
       "ui:extension": {
-        params: {
-          tools: {
-            ai: {
-              api: {
-                key: process.env.OPENAI_KEY
-              },
-              edit_prompts: [
-                {
-                  label: 'Improve this',
-                  prompt: 'Improve this {{text}}'
-                },
-                {
-                  label: 'Shorten this',
-                  prompt: 'Shorten this {{text}}'
-                }
-              ]
-            }
-          }
-        }
+        // params: {
+        //   tools: {
+        //     ai: {
+        //       api: {
+        //         key: process.env.OPENAI_KEY
+        //       },
+        //       editPrompts: [
+        //         {
+        //           label: 'Improve this',
+        //           prompt: 'Improve this'
+        //         },
+        //         {
+        //           label: 'Shorten this',
+        //           prompt: 'Shorten this'
+        //         }
+        //       ]
+        //     }
+        //   }
+        // }
       }
     };
 
