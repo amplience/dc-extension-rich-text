@@ -28,7 +28,7 @@
     "tslint": "^5.20.1",
     "tslint-config-prettier": "^1.18.0",
     "tslint-react": "^4.1.0",
-    "typescript": "^3.5.3",
+    "typescript": "^3.8",
     "sass": "^1.62.1"
   },
   "resolutions": {

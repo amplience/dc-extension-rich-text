@@ -1,12 +1,6 @@
-import { RichTextActions } from "../actions";
-import { RichTextDialogs } from "../dialogs";
-
 export interface StandardToolOptions {
   useClasses?: boolean;
   classOverride?: { [originalName: string]: string };
-
-  dialogs?: RichTextDialogs;
-  actions?: RichTextActions;
 
   tools?: {
     whitelist?: string[];

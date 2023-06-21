@@ -1,4 +1,4 @@
-import { RichTextEditorContext } from "../editor";
+import { RichTextEditorContextProps } from "../editor";
 
 export interface ProseMirrorTool {
   name: string;
@@ -7,8 +7,8 @@ export interface ProseMirrorTool {
   displayLabel?: React.ReactElement;
   displayIcon?: React.ReactElement;
 
-  isVisible?(editorState: any, editorView?: any): boolean;
-  isEnabled?(editorState: any, editorView?: any): boolean;
-  isActive?(editorState: any, editorView?: any): boolean;
-  apply(state: any, dispatch: any, editorView: any, rteContext: RichTextEditorContext): void;
+  isVisible?(state: any, richTextEditorContext: RichTextEditorContextProps): boolean;
+  isEnabled?(state: any, richTextEditorContext: RichTextEditorContextProps): boolean;
+  isActive?(state: any, richTextEditorContext: RichTextEditorContextProps): boolean;
+  apply(state: any, dispatch: any, richTextEditorContext: RichTextEditorContextProps): void;
 }

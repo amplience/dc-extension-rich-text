@@ -17,8 +17,6 @@
       "resolveJsonModule": true,
       "jsx": "react",
       "baseUrl": "./packages",
-      "paths": {
-      },
       "typeRoots": ["./node_modules/@types"]
     },
     "include": [

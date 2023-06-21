@@ -4,6 +4,8 @@ import "./ProseMirror.scss";
 
 import { WithStyles, withStyles } from "@material-ui/core";
 
+import RichTextEditorContext from '../RichTextEditor/RichTextEditorContext';
+
 // tslint:disable-next-line
 const EditorState = require("prosemirror-state").EditorState;
 // tslint:disable-next-line
@@ -32,13 +34,12 @@ export interface ProseMirrorProps extends WithStyles<typeof styles> {
   editorViewOptions?: any;
   onUpdateState?: (state: any, editorView: any) => void;
   onChange?: (doc: any) => void;
-  locked?: boolean;
+  isLocked?: boolean;
 }
 
 interface ProseMirrorState {
   ref: RefObject<any>;
   editorView?: any;
-  locked?: boolean;
 }
 
 function getKeys(schema: any): any {
@@ -48,10 +49,12 @@ function getKeys(schema: any): any {
 }
 
 class ProseMirror extends React.Component<ProseMirrorProps, ProseMirrorState> {
+  context!: React.ContextType<typeof RichTextEditorContext>
+
   constructor(props: ProseMirrorProps) {
     super(props);
     const ref = React.createRef();
-    this.state = { ref, locked: props.locked };
+    this.state = { ref };
   }
 
   public createEditorState(): any {
@@ -100,7 +103,7 @@ class ProseMirror extends React.Component<ProseMirrorProps, ProseMirrorState> {
         return state;
       },
       editable() {
-        return !self.state.locked
+        return !self.context.isLocked
       }
     });
 
@@ -125,12 +128,6 @@ class ProseMirror extends React.Component<ProseMirrorProps, ProseMirrorState> {
     if (this.state.ref && !this.state.editorView) {
       const editorView = this.createEditorView(this.state.ref.current);
       this.setState({ editorView });
-    }
-  }
-
-  public componentDidUpdate(prevProps: ProseMirrorProps, prevState: ProseMirrorState): void {
-    if (prevState.locked !== this.props.locked) {
-      this.setState({...prevState, locked: this.props.locked});
     }
   }
 

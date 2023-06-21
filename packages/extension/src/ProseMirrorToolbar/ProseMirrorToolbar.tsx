@@ -12,6 +12,7 @@ import { ProseMirrorToolbarIconButton } from "../ProseMirrorToolbarIconButton";
 import ProseMirrorToolbarDropdown from "../ProseMirrorToolbarDropdown/ProseMirrorToolbarDropdown";
 import { ProseMirrorToolbarGroup } from "../ProseMirrorToolbarGroup";
 import { ProseMirrorToolbarState } from "./ProseMirrorToolbarState";
+import { useRichTextEditorContext } from "../RichTextEditor/RichTextEditorContext";
 
 const styles = {
   root: {
@@ -41,24 +42,25 @@ export type ToolbarElement = ToolbarButton | ToolbarGroup | ToolbarDropDown;
 export interface ProseMirrorToolbarProps extends WithStyles<typeof styles> {
   toolbarState: ProseMirrorToolbarState | undefined;
   layout: ToolbarElement[];
-  locked?: boolean;
+  isLocked?: boolean;
 }
 
 const ProseMirrorToolbar: React.SFC<ProseMirrorToolbarProps> = (
   props: ProseMirrorToolbarProps
 ) => {
   const { classes, layout, toolbarState } = props;
+  const richTextEditorContext = useRichTextEditorContext();
 
   const renderToolbarElement = (element: ToolbarElement) => {
     switch (element.type) {
       case "button":
-        return <ProseMirrorToolbarIconButton toolName={element.toolName} locked={props.locked} />;
+        return <ProseMirrorToolbarIconButton toolName={element.toolName} isLocked={props.isLocked} />;
       case "dropdown":
         return (
           <ProseMirrorToolbarDropdown
             toolNames={element.toolNames}
             label={element.label}
-            locked={props.locked}
+            isLocked={props.isLocked}
           />
         );
       case "group":
@@ -99,19 +101,17 @@ const ProseMirrorToolbar: React.SFC<ProseMirrorToolbarProps> = (
 
             if (clearFormatting) {
               clearFormatting.apply(
-                toolbarState.editorView.state,
-                toolbarState.editorView.dispatch,
-                toolbarState.editorView,
-                toolbarState.editorContext!
+                richTextEditorContext.proseMirrorEditorView.state,
+                richTextEditorContext.proseMirrorEditorView.dispatch,
+                richTextEditorContext
               );
             }
           }
 
           tool.apply(
-            toolbarState.editorView.state,
-            toolbarState.editorView.dispatch,
-            toolbarState.editorView,
-            toolbarState.editorContext!
+            richTextEditorContext.proseMirrorEditorView.state,
+            richTextEditorContext.proseMirrorEditorView.dispatch,
+            richTextEditorContext
           );
         },
         getToolState: (toolName: string) => {

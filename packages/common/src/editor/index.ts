@@ -1,1 +1,1 @@
-export * from './RichTextEditorContext';
+export * from './RichTextEditorContextProps';

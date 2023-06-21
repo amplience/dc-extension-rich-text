@@ -1,18 +1,21 @@
 import { createMarkdownParser } from '@dc-extension-rich-text/language-markdown';
 import { fetchEventSource } from '@microsoft/fetch-event-source';
-import { RichTextEditorContext, GenerateContentPrompt, RichTextActions } from '@dc-extension-rich-text/common';
+import { RichTextEditorContextProps, GenerateContentPrompt, RichTextActions } from '@dc-extension-rich-text/common';
 
 const CHAT_COMPLETIONS_URL = 'https://api.openai.com/v1/chat/completions';
 const TEXT_DECODER = new TextDecoder('utf-8');
 
 export class RichTextActionsImpl implements RichTextActions {
-    constructor() {
+    private context: RichTextEditorContextProps | undefined;
+
+    setRichTextEditorContext(context: RichTextEditorContextProps) {
+        this.context = context;
     }
 
-    async insertGeneratedContent(state: any, dispatch: any, rteContext: RichTextEditorContext, prompt: GenerateContentPrompt): Promise<void> {
+    async insertGeneratedContent(state: any, dispatch: any, prompt: GenerateContentPrompt): Promise<void> {
         const apiKey = process.env.OPENAI_KEY;
 
-        rteContext.lockEditor();
+        this.context && this.context.setIsLocked(true);
 
         const markdownParser = createMarkdownParser(state.schema, {});
         const startPosition = state.doc.content.size;
@@ -49,7 +52,7 @@ export class RichTextActionsImpl implements RichTextActions {
             }),
             onmessage: (e) => {
                 if (e.data === '[DONE]') {
-                    rteContext.unlockEditor();
+                    this.context && this.context.setIsLocked(false);
                     return;
                 }
                 try { 

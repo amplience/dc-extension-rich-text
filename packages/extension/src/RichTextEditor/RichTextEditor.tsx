@@ -7,7 +7,8 @@ import { EditorView, ViewSwitcher } from "../ViewSwitcher";
 import {
   RichLanguage,
   RichLanguageConfiguration,
-  RichLanguageFormat
+  RichLanguageFormat,
+  RichTextEditorContextProps
 } from "@dc-extension-rich-text/common";
 import MarkdownLanguage from "@dc-extension-rich-text/language-markdown";
 import ProseMirrorToolbar, {
@@ -17,7 +18,8 @@ import DefaultToolbar from "./DefaultToolbar";
 
 import { computeToolbarState, ProseMirrorToolbarState } from "../ProseMirrorToolbar/ProseMirrorToolbarState";
 import { RichTextDialogsContext } from "../RichTextDialogs";
-import RichtextEditorContext, { withRichTextEditorContext } from "./RichTextEditorContext";
+import RichtextEditorContext from "./RichTextEditorContext";
+import { RichTextActionsImpl } from "../RichTextActions";
 
 const styles = {
   root: {
@@ -55,6 +57,9 @@ export interface RichTextEditorProps extends WithStyles<typeof styles> {
   onChange?: (value: any) => void;
 }
 
+
+
+
 const RichTextEditor: React.SFC<RichTextEditorProps> = (
   props: RichTextEditorProps
 ) => {
@@ -74,13 +79,24 @@ const RichTextEditor: React.SFC<RichTextEditorProps> = (
     onChange
   } = props;
 
-  const { dialogs } = React.useContext(RichTextDialogsContext);
-  const editorContext = React.useContext(RichtextEditorContext);
+  const [isLocked, setIsLocked] = useState(false);
+  const [proseMirrorEditorView, setProseMirrorEditorView] = useState<any|undefined>(undefined);
+  const {dialogs} = React.useContext(RichTextDialogsContext);
+  const [actions] = useState(new RichTextActionsImpl());
+  
+  const editorContext: RichTextEditorContextProps = {
+    isLocked,
+    setIsLocked,
+    proseMirrorEditorView,
+    dialogs: dialogs!,
+    actions
+  };
 
+  actions.setRichTextEditorContext(editorContext);
+
+  console.log(languagesProp, languageProp);
   const languages: RichTextLanguageMap = languagesProp || {
-    markdown: MarkdownLanguage({
-      dialogs
-    })
+    markdown: MarkdownLanguage({})
   };
 
   if (!languages[languageProp]) {
@@ -164,49 +180,52 @@ const RichTextEditor: React.SFC<RichTextEditorProps> = (
 
   const handleEditorUpdateState = React.useCallback(
     (state: any, editorView: any) => {
-      setToolbarState(computeToolbarState(language.tools, state, editorView, editorContext));
+      setProseMirrorEditorView(editorView);
+      setToolbarState(computeToolbarState(language.tools, state, editorContext));
     },
     [language, setToolbarState]
   );
 
   return (
-    <div className={classes.root}>
-      <div className={classes.frame}>
-        <ViewSwitcher
-          onChange={setView}
-          language={language.label}
-          disableCodeView={disableCodeView}
-        />
-        {view === EditorView.EDIT ? (
-          <div>
-            {disableToolbar ? (
-              false
-            ) : (
-              <ProseMirrorToolbar
-                toolbarState={toolbarState}
-                layout={toolbarLayout}
-                locked={editorContext.locked}
-              />
-            )}
-            <ProseMirror
-              editorViewOptions={editorViewOptions}
-              schema={language.schema}
-              onChange={handleEditorChange}
-              onUpdateState={handleEditorUpdateState}
-              doc={proseMirrorDocument}
-              locked={editorContext.locked}
-            />
-          </div>
-        ) : (
-          <CodeTextArea
-            value={rawValue}
-            onChange={handleRawValueChange}
-            readOnly={editorContext.locked || readOnlyCodeView}
+    <RichtextEditorContext.Provider value={editorContext}>
+      <div className={classes.root}>
+        <div className={classes.frame}>
+          <ViewSwitcher
+            onChange={setView}
+            language={language.label}
+            disableCodeView={disableCodeView}
           />
-        )}
+          {view === EditorView.EDIT ? (
+            <div>
+              {disableToolbar ? (
+                false
+              ) : (
+                <ProseMirrorToolbar
+                  toolbarState={toolbarState}
+                  layout={toolbarLayout}
+                  isLocked={editorContext.isLocked}
+                />
+              )}
+              <ProseMirror
+                editorViewOptions={editorViewOptions}
+                schema={language.schema}
+                onChange={handleEditorChange}
+                onUpdateState={handleEditorUpdateState}
+                doc={proseMirrorDocument}
+                isLocked={editorContext.isLocked}
+              />
+            </div>
+          ) : (
+            <CodeTextArea
+              value={rawValue}
+              onChange={handleRawValueChange}
+              readOnly={editorContext.isLocked || readOnlyCodeView}
+            />
+          )}
+        </div>
       </div>
-    </div>
+    </RichtextEditorContext.Provider>
   );
 };
 
-export default withRichTextEditorContext(withStyles(styles)(RichTextEditor));
+export default withStyles(styles)(RichTextEditor);

@@ -22,7 +22,7 @@ export function createMarkdownTools(schema: any, options: StandardToolOptions): 
   }
 
   if (isToolEnabled("anchor", options) && schema.nodes.anchor) {
-    tools.push(AnchorTool(schema, options.dialogs ? options.dialogs.getAnchor : undefined));
+    tools.push(AnchorTool(schema));
   }
 
   if (isToolEnabled("soft_hyphen", options) && schema.nodes.soft_hyphen) {

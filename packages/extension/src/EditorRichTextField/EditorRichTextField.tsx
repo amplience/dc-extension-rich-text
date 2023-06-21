@@ -85,14 +85,12 @@ const EditorRichTextField: React.SFC<EditorRichTextFieldProps> = (
   const { schema, value: valueProp, onChange, classes } = props;
 
   let params: EditorRichTextFieldParams =
-    schema && schema["ui:extension"] && schema["ui:extension"].params
-      ? schema["ui:extension"].params
-      : {};
+    schema?.['ui:extension']?.params || {};
 
   const { sdk } = React.useContext(SdkContext);
   const { dialogs } = React.useContext(RichTextDialogsContext);
 
-  params = sdk ? { ...sdk.params.installation, ...sdk.params.instance } : params;
+  params = sdk ? { ...params, ...sdk.params?.installation, ...sdk.params?.instance } : params;
 
   const toolOptions = React.useMemo<DynamicContentToolOptions>(() => {
     const settings = {
