@@ -69,7 +69,7 @@ const RichTextEditorAIActionsBar: React.SFC<RichTextEditorAIActionsBarProps> = (
 
 
   return (
-    <div className={classes.root}>
+    <div className={classes.root} style={{display: proseMirrorEditorView?.state.selection.empty ? 'none' : 'block'}}>
       <Grid direction="row" spacing={1} container>
         {
           editPrompts.map((prompt: any) => {
