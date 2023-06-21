@@ -1,3 +1,4 @@
+import { RichTextActions } from "../actions";
 import { RichTextDialogs } from "../dialogs";
 
 export interface StandardToolOptions {
@@ -5,6 +6,7 @@ export interface StandardToolOptions {
   classOverride?: { [originalName: string]: string };
 
   dialogs?: RichTextDialogs;
+  actions?: RichTextActions;
 
   tools?: {
     whitelist?: string[];

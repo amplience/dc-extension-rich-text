@@ -20,9 +20,10 @@ import { SvgIcon } from '@material-ui/core';
 
 import OpenAIMark from '../icons/OpenAIMark';
 
-import { Code as Language, GeneratedContent, Hyperlink, Image } from "../dialogs";
+import { Code as Language, GenerateContentPrompt, Hyperlink, Image } from "../dialogs";
 import { ProseMirrorTool } from "./ProseMirrorTool";
 import { isToolEnabled, StandardToolOptions } from "./StandardToolOptions";
+import { RichTextEditorContext } from "../editor";
 
 // tslint:disable-next-line
 const { undo: undoFn, redo: redoFn } = require("prosemirror-history");
@@ -351,16 +352,24 @@ export function clear_formatting(): ProseMirrorTool {
   };
 }
 
-export function ai_generate(dialog?: () => Promise<GeneratedContent>): ProseMirrorTool {
+export function ai_generate(
+  getPrompt?: () => Promise<GenerateContentPrompt>,
+  insertGeneratedContent?: (state: any, dispatch: any,rteContext: RichTextEditorContext, prompt: GenerateContentPrompt) => Promise<void>
+): ProseMirrorTool {
   return {
     name: "ai_generate",
     label: "Generate Content",
     displayIcon: <SvgIcon>
       <OpenAIMark />
     </SvgIcon>,
-    apply: async () => {
-      if (dialog) {
-        const value = await dialog();
+    apply: async (state: any, dispatch: any, view: any, rteContext: RichTextEditorContext) => {
+      if (getPrompt && insertGeneratedContent) {
+        try {
+          const prompt = await getPrompt();
+          await insertGeneratedContent(state, dispatch, rteContext, prompt);
+        } catch (err) {
+          console.log(err);
+        }
       }
     },
     isEnabled: (state: any) => {
@@ -442,7 +451,10 @@ export function createStandardTools(
   }
 
   if (isToolEnabled('ai', options)) {
-    tools.push(ai_generate(options.dialogs ? options.dialogs.getGeneratedContent : undefined));
+    tools.push(ai_generate(
+      options.dialogs ? options.dialogs.getGenerateContentPrompt : undefined, 
+      options.actions ? options.actions.insertGeneratedContent : undefined
+    ));
   }
 
   return tools;

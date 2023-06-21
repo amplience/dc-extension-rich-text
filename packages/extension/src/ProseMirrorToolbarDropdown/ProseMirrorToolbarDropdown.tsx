@@ -17,6 +17,7 @@ export interface ProseMirrorToolbarButtonProps
   extends WithStyles<typeof styles> {
   toolNames: string[];
   label?: string;
+  locked?: boolean;
 }
 
 const ProseMirrorToolbarDropdown: React.SFC<ProseMirrorToolbarButtonProps> = (
@@ -91,6 +92,7 @@ const ProseMirrorToolbarDropdown: React.SFC<ProseMirrorToolbarButtonProps> = (
       renderValue={renderValue}
       displayEmpty={true}
       onMouseDown={(e) => e.preventDefault()}
+      disabled={props.locked}
     >
       {toolStates.map(toolState => {
         return (

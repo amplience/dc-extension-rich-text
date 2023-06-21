@@ -8,6 +8,7 @@ import clsx from "clsx";
 export interface ProseMirrorToolbarButtonProps
   extends PropsWithChildren<WithStyles<typeof styles>> {
   toolName: string;
+  locked?: boolean;
 }
 
 const styles = {
@@ -48,7 +49,7 @@ const ProseMirrorToolbarIconButton: React.SFC<ProseMirrorToolbarButtonProps> = (
       className={clsx(classes.root)}
       onMouseDown={handleClick}
       size="small"
-      disabled={!toolState.enabled}
+      disabled={!toolState.enabled || props.locked}
       color={toolState.active ? "primary" : "default"}
       title={toolState.label}
     >

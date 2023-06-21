@@ -57,7 +57,7 @@ const Editor: React.SFC<{}> = (props: any) => {
 
   const handleUpdateState = React.useCallback(
     (state: any, view: any) => {
-      const newToolbarState = computeToolbarState(tools, state, view);
+      const newToolbarState = computeToolbarState(tools, state, view, {} as any);
       setToolbarState(newToolbarState);
     },
     [setToolbarState]

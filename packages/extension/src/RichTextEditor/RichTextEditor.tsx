@@ -1,5 +1,5 @@
 import { WithStyles, withStyles } from "@material-ui/core";
-import React, { ChangeEvent } from "react";
+import React, { ChangeEvent, useReducer, useState } from "react";
 import CodeTextArea from "../CodeTextArea/CodeTextArea";
 import ProseMirror from "../ProseMirror/ProseMirror";
 import { EditorView, ViewSwitcher } from "../ViewSwitcher";
@@ -17,6 +17,7 @@ import DefaultToolbar from "./DefaultToolbar";
 
 import { computeToolbarState, ProseMirrorToolbarState } from "../ProseMirrorToolbar/ProseMirrorToolbarState";
 import { RichTextDialogsContext } from "../RichTextDialogs";
+import RichtextEditorContext, { withRichTextEditorContext } from "./RichTextEditorContext";
 
 const styles = {
   root: {
@@ -74,6 +75,7 @@ const RichTextEditor: React.SFC<RichTextEditorProps> = (
   } = props;
 
   const { dialogs } = React.useContext(RichTextDialogsContext);
+  const editorContext = React.useContext(RichtextEditorContext);
 
   const languages: RichTextLanguageMap = languagesProp || {
     markdown: MarkdownLanguage({
@@ -162,7 +164,7 @@ const RichTextEditor: React.SFC<RichTextEditorProps> = (
 
   const handleEditorUpdateState = React.useCallback(
     (state: any, editorView: any) => {
-      setToolbarState(computeToolbarState(language.tools, state, editorView));
+      setToolbarState(computeToolbarState(language.tools, state, editorView, editorContext));
     },
     [language, setToolbarState]
   );
@@ -183,6 +185,7 @@ const RichTextEditor: React.SFC<RichTextEditorProps> = (
               <ProseMirrorToolbar
                 toolbarState={toolbarState}
                 layout={toolbarLayout}
+                locked={editorContext.locked}
               />
             )}
             <ProseMirror
@@ -191,13 +194,14 @@ const RichTextEditor: React.SFC<RichTextEditorProps> = (
               onChange={handleEditorChange}
               onUpdateState={handleEditorUpdateState}
               doc={proseMirrorDocument}
+              locked={editorContext.locked}
             />
           </div>
         ) : (
           <CodeTextArea
             value={rawValue}
             onChange={handleRawValueChange}
-            readOnly={readOnlyCodeView}
+            readOnly={editorContext.locked || readOnlyCodeView}
           />
         )}
       </div>
@@ -205,4 +209,4 @@ const RichTextEditor: React.SFC<RichTextEditorProps> = (
   );
 };
 
-export default withStyles(styles)(RichTextEditor);
+export default withRichTextEditorContext(withStyles(styles)(RichTextEditor));

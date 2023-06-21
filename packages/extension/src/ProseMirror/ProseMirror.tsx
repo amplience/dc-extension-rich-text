@@ -32,11 +32,13 @@ export interface ProseMirrorProps extends WithStyles<typeof styles> {
   editorViewOptions?: any;
   onUpdateState?: (state: any, editorView: any) => void;
   onChange?: (doc: any) => void;
+  locked?: boolean;
 }
 
 interface ProseMirrorState {
   ref: RefObject<any>;
   editorView?: any;
+  locked?: boolean;
 }
 
 function getKeys(schema: any): any {
@@ -49,7 +51,7 @@ class ProseMirror extends React.Component<ProseMirrorProps, ProseMirrorState> {
   constructor(props: ProseMirrorProps) {
     super(props);
     const ref = React.createRef();
-    this.state = { ref };
+    this.state = { ref, locked: props.locked };
   }
 
   public createEditorState(): any {
@@ -73,6 +75,7 @@ class ProseMirror extends React.Component<ProseMirrorProps, ProseMirrorState> {
     const { onUpdateState, onChange } = this.props;
 
     const editorState = this.createEditorState();
+    const self = this;
 
     const view = new EditorView(parent, {
       ...this.props.editorViewOptions,
@@ -94,12 +97,26 @@ class ProseMirror extends React.Component<ProseMirrorProps, ProseMirrorState> {
         }
 
         this.forceUpdate();
+        return state;
+      },
+      editable() {
+        return !self.state.locked
       }
     });
 
     if (onUpdateState) {
       onUpdateState(view.state, view);
     }
+
+    // TODO: Is there a cleaner way than this monkey patch for getting the updated state after a dispatch?
+    view.dispatch = (function (this: any, tr: any) {
+      var dispatchTransaction = this._props.dispatchTransaction;
+      if (dispatchTransaction) {
+        return dispatchTransaction.call(this, tr);
+      } else {
+        return this.updateState(this.state.apply(tr));
+      }
+    }).bind(view);
 
     return view;
   }
@@ -108,6 +125,12 @@ class ProseMirror extends React.Component<ProseMirrorProps, ProseMirrorState> {
     if (this.state.ref && !this.state.editorView) {
       const editorView = this.createEditorView(this.state.ref.current);
       this.setState({ editorView });
+    }
+  }
+
+  public componentDidUpdate(prevProps: ProseMirrorProps, prevState: ProseMirrorState): void {
+    if (prevState.locked !== this.props.locked) {
+      this.setState({...prevState, locked: this.props.locked});
     }
   }
 

@@ -1,18 +1,21 @@
 import {
   ProseMirrorTool,
-  ProseMirrorToolState
+  ProseMirrorToolState,
+  RichTextEditorContext
 } from "@dc-extension-rich-text/common";
 
 export interface ProseMirrorToolbarState {
   tools: ProseMirrorTool[];
   toolStates: { [toolName: string]: ProseMirrorToolState };
   editorView: any;
+  editorContext: RichTextEditorContext | undefined;
 }
 
 export function computeToolbarState(
   tools: ProseMirrorTool[],
   editorState: any,
-  editorView: any
+  editorView: any,
+  editorContext?: RichTextEditorContext
 ): ProseMirrorToolbarState {
   const toolStates: { [toolName: string]: ProseMirrorToolState } = {};
 
@@ -42,6 +45,7 @@ export function computeToolbarState(
   return {
     tools,
     toolStates,
-    editorView
+    editorView,
+    editorContext
   };
 }

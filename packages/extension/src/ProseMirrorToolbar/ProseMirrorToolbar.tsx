@@ -41,6 +41,7 @@ export type ToolbarElement = ToolbarButton | ToolbarGroup | ToolbarDropDown;
 export interface ProseMirrorToolbarProps extends WithStyles<typeof styles> {
   toolbarState: ProseMirrorToolbarState | undefined;
   layout: ToolbarElement[];
+  locked?: boolean;
 }
 
 const ProseMirrorToolbar: React.SFC<ProseMirrorToolbarProps> = (
@@ -51,12 +52,13 @@ const ProseMirrorToolbar: React.SFC<ProseMirrorToolbarProps> = (
   const renderToolbarElement = (element: ToolbarElement) => {
     switch (element.type) {
       case "button":
-        return <ProseMirrorToolbarIconButton toolName={element.toolName}/>;
+        return <ProseMirrorToolbarIconButton toolName={element.toolName} locked={props.locked} />;
       case "dropdown":
         return (
           <ProseMirrorToolbarDropdown
             toolNames={element.toolNames}
             label={element.label}
+            locked={props.locked}
           />
         );
       case "group":
@@ -99,7 +101,8 @@ const ProseMirrorToolbar: React.SFC<ProseMirrorToolbarProps> = (
               clearFormatting.apply(
                 toolbarState.editorView.state,
                 toolbarState.editorView.dispatch,
-                toolbarState.editorView
+                toolbarState.editorView,
+                toolbarState.editorContext!
               );
             }
           }
@@ -107,7 +110,8 @@ const ProseMirrorToolbar: React.SFC<ProseMirrorToolbarProps> = (
           tool.apply(
             toolbarState.editorView.state,
             toolbarState.editorView.dispatch,
-            toolbarState.editorView
+            toolbarState.editorView,
+            toolbarState.editorContext!
           );
         },
         getToolState: (toolName: string) => {

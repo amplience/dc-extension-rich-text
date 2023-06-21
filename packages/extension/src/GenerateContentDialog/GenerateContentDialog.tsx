@@ -18,37 +18,33 @@ import {
 } from "@material-ui/core";
 import React, { useMemo, useState } from "react";
 import AssistantIcon from '@material-ui/icons/Assistant';
-import { GeneratedContent } from "@dc-extension-rich-text/common";
+import { GenerateContentPrompt } from "@dc-extension-rich-text/common";
 
 interface GenerateContentDialogProps {
   open: boolean;
   onClose: () => void;
-  onSubmit: (value: GeneratedContent) => void;
+  onSubmit: (value: GenerateContentPrompt) => void;
   params: any;
 }
 
 const GenerateContentDialog: React.SFC<GenerateContentDialogProps> = (
   props: GenerateContentDialogProps
 ) => {
-  const { open, onClose, onSubmit } = props;
-
-  const [selectedPrompt, setSelectedPrompt] = useState(0);
+  const {open, onClose, onSubmit} = props;
   const [prompt, setPrompt] = useState('');
 
   const handleCancel = React.useCallback(() => {
     onClose();
   }, [onSubmit]);
 
-  const handleSubmit = React.useCallback(() => {
-    // onSubmit(value);
-  }, [onSubmit]);
-
   const handlePromptChange = (event: any) => {
     setPrompt(event.target.value);
   }
 
-  const handleGenerate = () => {
-
+  const handleSubmit = async () => {
+    onSubmit({
+      prompt
+    })
   }
 
   return (
@@ -73,48 +69,18 @@ const GenerateContentDialog: React.SFC<GenerateContentDialogProps> = (
               ),
               endAdornment: (
                 <InputAdornment position="end">
-                  <Button onClick={handleGenerate}>Generate</Button>
+                  <Button onClick={handleSubmit}>Generate</Button>
                 </InputAdornment>
               )
             }}
             fullWidth
             variant="outlined"
           />
-
-        {/* <TextField placeholder="Write a blog post about..." fullWidth /> */}
-        {/* <FormControl>
-          <InputLabel>Generate</InputLabel>
-          <Select
-            autoWidth={true}
-            onChange={(handleChangePrompt)}
-            defaultValue={selectedPrompt}
-          >
-            {prompts.map(({label}, index: number) => (
-              <MenuItem key={index} value={index}>
-                {`${label}`}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl> */}
-
-        {/* {
-          prompts[selectedPrompt].tokens.map((token: string) => {
-            return <FormControl fullWidth>
-              <TextField style={{marginTop: 10}} label={token} multiline fullWidth variant="outlined" rows={5} />
-            </FormControl>
-          })
-        } */}
         <Typography variant="caption">
           Powered by ChatGPT API
         </Typography>
       </DialogContent>
       <DialogActions>
-        {/* <Button onClick={handleCancel} color="primary">
-          Cancel
-        </Button>
-        <Button onClick={handleSubmit} color="primary">
-          Generate
-        </Button> */}
       </DialogActions>
     </Dialog>
   );

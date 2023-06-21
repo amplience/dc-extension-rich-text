@@ -20,8 +20,8 @@ export interface Code {
   params?: string;
 }
 
-export interface GeneratedContent {
-  value: string;
+export interface GenerateContentPrompt {
+  prompt: string;
 }
 
 export interface RichTextDialogs {
@@ -34,5 +34,5 @@ export interface RichTextDialogs {
     contentTypeIds: string[],
     value?: ContentItemLink
   ): Promise<ContentItemLink>;
-  getGeneratedContent(): Promise<GeneratedContent>;
+  getGenerateContentPrompt(): Promise<GenerateContentPrompt>;
 }

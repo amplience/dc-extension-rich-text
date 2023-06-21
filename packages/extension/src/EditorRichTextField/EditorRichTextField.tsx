@@ -21,6 +21,7 @@ import {
   OldContentTypeExtensionSettings
 } from "@dc-extension-rich-text/prosemirror-dynamic-content";
 import { RichTextDialogsContext } from "../RichTextDialogs";
+import { RichTextActionsImpl } from "../RichTextActions";
 
 export const styles = {
   root: {
@@ -97,8 +98,8 @@ const EditorRichTextField: React.SFC<EditorRichTextFieldProps> = (
     const settings = {
       useClasses: params.useClasses,
       classOverride: params.classOverride,
-
       dialogs,
+      actions: new RichTextActionsImpl(),
       dynamicContent: {
         stagingEnvironment: sdk ? sdk.stagingEnvironment : undefined
       },

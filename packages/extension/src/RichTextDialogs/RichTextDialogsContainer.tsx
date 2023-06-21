@@ -5,7 +5,7 @@ import {
   Hyperlink,
   Image,
   RichTextDialogs,
-  GeneratedContent
+  GenerateContentPrompt
 } from "@dc-extension-rich-text/common";
 import { ContentItemLink, MediaImageLink } from "dc-extensions-sdk";
 import AnchorDialog from "../AnchorDialog/AnchorDialog";
@@ -98,8 +98,8 @@ const RichTextDialogsContainer: React.SFC<EditorDialogsProps> = (
         return sdk.contentLink.get(contentTypeIds);
       }
     },
-    getGeneratedContent(): Promise<GeneratedContent> {
-      return handleOpenDialog("generate_content") as Promise<GeneratedContent>;
+    getGenerateContentPrompt(): Promise<GenerateContentPrompt> {
+      return handleOpenDialog("generate_content") as Promise<GenerateContentPrompt>;
     }
   };
 

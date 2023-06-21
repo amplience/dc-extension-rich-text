@@ -1,3 +1,5 @@
+import { RichTextEditorContext } from "../editor";
+
 export interface ProseMirrorTool {
   name: string;
   label: string;
@@ -8,5 +10,5 @@ export interface ProseMirrorTool {
   isVisible?(editorState: any, editorView?: any): boolean;
   isEnabled?(editorState: any, editorView?: any): boolean;
   isActive?(editorState: any, editorView?: any): boolean;
-  apply(state: any, dispatch: any, editorView: any): void;
+  apply(state: any, dispatch: any, editorView: any, rteContext: RichTextEditorContext): void;
 }
