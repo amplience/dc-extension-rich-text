@@ -1,88 +1,91 @@
 import React from "react";
 
-import {
-  Chip,
-  WithStyles,
-  withStyles
-} from "@material-ui/core";
-import { Grid } from '@material-ui/core';
+import { Chip, Grid, Theme, WithStyles, withStyles } from "@material-ui/core";
 
+import { isToolEnabled } from "@dc-extension-rich-text/common";
+import { Assistant as AssistantIcon } from "@material-ui/icons";
+import { AIConfiguration } from "../AIPromptDialog";
 import { useRichTextEditorContext } from "../RichTextEditor/RichTextEditorContext";
-import AssistantIcon from '@material-ui/icons/Assistant';
 
-const styles = {
+const styles = (theme: Theme) => ({
   root: {
     borderTop: "1px solid rgb(218, 220, 224)",
-    position: 'absolute' as 'absolute',
-    background: 'white',
-    paddingTop: '8px',
-    width: '100%',
+    position: "absolute" as "absolute",
+    background: "white",
+    paddingTop: "10px",
+    width: "100%",
     bottom: 0
+  },
+  chip: {
+    background: theme.palette.background.paper,
+    "& .MuiChip-icon": {
+      color: theme.palette.primary.main
+    }
   }
-};
+});
 
-export interface RichTextEditorAIActionsBarProps extends WithStyles<typeof styles> {
-}
+export interface RichTextEditorAIActionsBarProps
+  extends WithStyles<typeof styles> {}
 
 const RichTextEditorAIActionsBar: React.SFC<RichTextEditorAIActionsBarProps> = (
   props: RichTextEditorAIActionsBarProps
 ) => {
   const { classes } = props;
-  const { params, actions, dialogs, proseMirrorEditorView } = useRichTextEditorContext();
+  const {
+    params,
+    actions,
+    dialogs,
+    proseMirrorEditorView
+  } = useRichTextEditorContext();
 
-  const editPrompts = params?.tools?.ai?.editPrompts || [
-    {
-      label: 'Improve this',
-    prompt: 'Improve this'
-    },
-    {
-      label: 'Shorten this',
-      prompt: 'Shorten this'
-    },
-    {
-      label: 'Elaborate on this',
-      prompt: 'Elaborate on this'
-    },
-    {
-      label: 'Shakespeareify this',
-      prompt: 'Rewrite this in the style of shakespeare'
-    },
-    {
-      label: 'leetspeak this',
-      prompt: 'Rewrite this in leetspeak'
-    }
-  ];
+  const configuration = new AIConfiguration(params);
+  const isAiToolEnabled = isToolEnabled("ai", params);
+  const hasKey = Boolean(configuration.getKey());
+  const editPrompts = configuration.getEditPrompts();
 
   const handleEditPrompt = async (prompt: any) => {
-    const from = proseMirrorEditorView?.state.selection.from;
-    const to = proseMirrorEditorView?.state.selection.to;
-    await actions.rewriteSelectedContentUsingGenerativeAI(from, to, prompt.prompt);
+    await actions.rewriteSelectedContentUsingAI(prompt.prompt);
   };
-
 
   const handleCustomAiRewrite = async () => {
-    const from = proseMirrorEditorView?.state.selection.from;
-    const to = proseMirrorEditorView?.state.selection.to;
-    const prompt = await dialogs.customAiRewrite();
-    await actions.rewriteSelectedContentUsingGenerativeAI(from, to, prompt.prompt);
+    const prompt = await dialogs.getAIPrompt({ variant: "rewrite" });
+    await actions.rewriteSelectedContentUsingAI(prompt);
   };
 
-
-  return (
-    <div className={classes.root} style={{display: proseMirrorEditorView?.state.selection.empty ? 'none' : 'block'}}>
-      <Grid direction="row" spacing={1} container>
-        {
-          editPrompts.map((prompt: any) => {
-            return <Grid item>
-              <Chip icon={<AssistantIcon color="primary"/>} label={prompt.label} variant='outlined' onClick={() => handleEditPrompt(prompt)} />
-            </Grid>;
-          })
-        }
-        <Grid item>
-              <Chip icon={<AssistantIcon color="primary"/>} label='Custom...' variant='outlined' onClick={() => handleCustomAiRewrite()} />
+  return isAiToolEnabled && hasKey ? (
+    <div
+      className={classes.root}
+      style={{
+        display: proseMirrorEditorView?.state.selection.empty ? "none" : "block"
+      }}
+    >
+      <Grid direction="row" spacing={1} container={true}>
+        {editPrompts.map((prompt: any) => {
+          return (
+            <Grid key={prompt.label} item={true}>
+              <Chip
+                className={classes.chip}
+                icon={<AssistantIcon color="primary" />}
+                label={prompt.label}
+                variant="outlined"
+                onClick={() => handleEditPrompt(prompt)}
+              />
             </Grid>
+          );
+        })}
+        <Grid item={true}>
+          <Chip
+            className={classes.chip}
+            icon={<AssistantIcon color="primary" />}
+            label="Custom..."
+            variant="outlined"
+            onClick={() => handleCustomAiRewrite()}
+          />
+        </Grid>
       </Grid>
     </div>
+  ) : (
+    <></>
   );
 };
 

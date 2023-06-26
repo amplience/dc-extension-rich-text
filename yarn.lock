@@ -1248,6 +1248,26 @@
   resolved "https://registry.npmjs.org/@csstools/normalize.css/-/normalize.css-9.0.1.tgz"
   integrity sha512-6It2EVfGskxZCQhuykrfnALg7oVeiI6KclWSmGDqB0AiInVrTGB9Jp9i4/Ad21u9Jde/voVQz6eFX/eSg/UsPA==
 
+"@datadog/browser-core@4.43.0":
+  version "4.43.0"
+  resolved "https://registry.yarnpkg.com/@datadog/browser-core/-/browser-core-4.43.0.tgz#4b307fae2f8c797ce3359e34cbc077e3b6d6a8e6"
+  integrity sha512-sign974DvQxSE2BnCtPpHiHI9+MgXq35Gb/I5YcdpdWh5HczgMNIzNWWXTxrkrfkft6+z1M/6AM62yqofeYqog==
+
+"@datadog/browser-rum-core@4.43.0":
+  version "4.43.0"
+  resolved "https://registry.yarnpkg.com/@datadog/browser-rum-core/-/browser-rum-core-4.43.0.tgz#cdbe9acd09302f9c39315bd89558b323a8f39165"
+  integrity sha512-x9QYLbOnoDId9oVGOGSxS1lZoQ8I6ZujmEt8OWvJ+jykdaKdqzyh3cv0euBzfWj+fCtZP8yrSXUZ+0zpSY4f1A==
+  dependencies:
+    "@datadog/browser-core" "4.43.0"
+
+"@datadog/browser-rum@^4.43.0":
+  version "4.43.0"
+  resolved "https://registry.yarnpkg.com/@datadog/browser-rum/-/browser-rum-4.43.0.tgz#811f1a55228d304ae7b3f7a9204450544d860222"
+  integrity sha512-Cc4e3kViyarfZVwZx4vWHj2/wwyhCF2/KDeWCq+Aa31om5FwP+lzhVfFnxq0711SkhZ8XXa2JjjQb5x4g3B1bw==
+  dependencies:
+    "@datadog/browser-core" "4.43.0"
+    "@datadog/browser-rum-core" "4.43.0"
+
 "@emotion/cache@^10.0.27":
   version "10.0.29"
   resolved "https://registry.npmjs.org/@emotion/cache/-/cache-10.0.29.tgz"
@@ -2570,6 +2590,11 @@
     invariant "^2.2.3"
     prop-types "^15.6.1"
     react-lifecycles-compat "^3.0.4"
+
+"@rehooks/local-storage@^2.4.4":
+  version "2.4.4"
+  resolved "https://registry.yarnpkg.com/@rehooks/local-storage/-/local-storage-2.4.4.tgz#ccf40f60c2dcbab86dc88f9e3ea898d1fb8bea2d"
+  integrity sha512-zE+kfOkG59n/1UTxdmbwktIosclr67Nlbf2MzUJ9mNtCSypVscNHeD1qT6JCSo5Pjj8DO893IKWNLJqKKzDL/Q==
 
 "@sindresorhus/df@^1.0.1":
   version "1.0.1"

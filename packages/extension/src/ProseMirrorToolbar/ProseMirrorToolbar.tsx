@@ -11,8 +11,8 @@ import { ProseMirrorToolbarIconButton } from "../ProseMirrorToolbarIconButton";
 
 import ProseMirrorToolbarDropdown from "../ProseMirrorToolbarDropdown/ProseMirrorToolbarDropdown";
 import { ProseMirrorToolbarGroup } from "../ProseMirrorToolbarGroup";
-import { ProseMirrorToolbarState } from "./ProseMirrorToolbarState";
 import { useRichTextEditorContext } from "../RichTextEditor/RichTextEditorContext";
+import { ProseMirrorToolbarState } from "./ProseMirrorToolbarState";
 
 const styles = {
   root: {
@@ -54,7 +54,12 @@ const ProseMirrorToolbar: React.SFC<ProseMirrorToolbarProps> = (
   const renderToolbarElement = (element: ToolbarElement) => {
     switch (element.type) {
       case "button":
-        return <ProseMirrorToolbarIconButton toolName={element.toolName} isLocked={props.isLocked} />;
+        return (
+          <ProseMirrorToolbarIconButton
+            toolName={element.toolName}
+            isLocked={props.isLocked}
+          />
+        );
       case "dropdown":
         return (
           <ProseMirrorToolbarDropdown
@@ -65,13 +70,17 @@ const ProseMirrorToolbar: React.SFC<ProseMirrorToolbarProps> = (
         );
       case "group":
         const toolVisible = (tool: ToolbarButton): boolean => {
-          const state = toolbarState == null ? null : toolbarState.toolStates[tool.toolName];
+          const state =
+            toolbarState == null
+              ? null
+              : toolbarState.toolStates[tool.toolName];
           return state == null ? true : state.visible;
         };
 
-        const anyVisible = element.children.findIndex(child =>
-          child.type !== "button" || toolVisible(child)
-        ) !== -1;
+        const anyVisible =
+          element.children.findIndex(
+            child => child.type !== "button" || toolVisible(child)
+          ) !== -1;
         return anyVisible ? (
           <ProseMirrorToolbarGroup>
             {element.children.map(child => renderToolbarElement(child))}
@@ -91,13 +100,18 @@ const ProseMirrorToolbar: React.SFC<ProseMirrorToolbarProps> = (
           }
 
           const tool = toolbarState.tools.find(x => x.name === toolName);
-          const areInlineStyles = Object.keys(toolbarState.toolStates).filter((x: any) => (/inline_styles/.test(x) && toolbarState.toolStates[x].active));
+          const areInlineStyles = Object.keys(toolbarState.toolStates).filter(
+            (x: any) =>
+              /inline_styles/.test(x) && toolbarState.toolStates[x].active
+          );
           if (!tool) {
             return;
           }
 
           if (areInlineStyles && areInlineStyles.length) {
-            const clearFormatting = toolbarState.tools.find(x => x.name === "clear_formatting");
+            const clearFormatting = toolbarState.tools.find(
+              x => x.name === "clear_formatting"
+            );
 
             if (clearFormatting) {
               clearFormatting.apply(

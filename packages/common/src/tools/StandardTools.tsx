@@ -3,6 +3,7 @@ import React from "react";
 import { canInsert, clearAllMarks, getSelectionMarks, isMarkActive } from "../utils";
 
 // tslint:disable:no-submodule-imports
+import { SvgIcon } from '@material-ui/core';
 import CalendarViewDay from "@material-ui/icons/CalendarViewDay";
 import Code from "@material-ui/icons/Code";
 import FormatBold from "@material-ui/icons/FormatBold";
@@ -16,14 +17,13 @@ import ImageIcon from "@material-ui/icons/Image";
 import Link from "@material-ui/icons/Link";
 import Redo from "@material-ui/icons/Redo";
 import Undo from "@material-ui/icons/Undo";
-import { SvgIcon } from '@material-ui/core';
 
 import OpenAIMark from '../icons/OpenAIMark';
 
-import { Code as Language, GenerateContentPrompt, Hyperlink, Image } from "../dialogs";
+import { Code as Language, Hyperlink, Image } from "../dialogs";
+import { RichTextEditorContextProps } from "../editor";
 import { ProseMirrorTool } from "./ProseMirrorTool";
 import { isToolEnabled, StandardToolOptions } from "./StandardToolOptions";
-import { RichTextEditorContextProps } from "../editor";
 
 // tslint:disable-next-line
 const { undo: undoFn, redo: redoFn } = require("prosemirror-history");
@@ -344,15 +344,12 @@ export function ai_generate(): ProseMirrorTool {
   return {
     name: "ai_generate",
     label: "Generate Content",
-    displayIcon: <SvgIcon>
-      <OpenAIMark />
-    </SvgIcon>,
+    displayIcon: <SvgIcon><OpenAIMark /></SvgIcon>,
     apply: async (state: any, dispatch: any, richTextEditorContext: RichTextEditorContextProps) => {
       try {
-        const prompt = await richTextEditorContext.dialogs.getGenerateContentPrompt();
-        await richTextEditorContext.actions.insertGeneratedContent(state, dispatch, prompt);
-      } catch (err) {
-        console.log(err);
+        const prompt = await richTextEditorContext.dialogs.getAIPrompt({variant: 'generate'});
+        await richTextEditorContext.actions.insertAIContent(prompt);
+      } catch {
       }
     },
     isEnabled: (state: any) => {

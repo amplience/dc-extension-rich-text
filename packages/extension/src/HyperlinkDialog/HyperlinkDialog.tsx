@@ -69,7 +69,7 @@ const HyperlinkDialog: React.SFC<HyperlinkDialogProps> = (
     if (lastValue === undefined) {
       onClose();
     } else {
-      onSubmit({...lastValue, cancel: true});
+      onSubmit({ ...lastValue, cancel: true });
     }
   }, [lastValue, setLastValue, onSubmit]);
 

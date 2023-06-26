@@ -12,11 +12,15 @@ export function isMarkActive(state: any, type: any): boolean {
   }
 }
 
-export function getSelectionMarks(state: any): Array<{mark: any, from: number, to: number}> {
+export function getSelectionMarks(
+  state: any
+): Array<{ mark: any; from: number; to: number }> {
   const { $from, $to } = state.selection;
-  const currentMarks: Array<{mark: any, from: number, to: number}> = [];
+  const currentMarks: Array<{ mark: any; from: number; to: number }> = [];
   state.doc.nodesBetween($from.pos, $to.pos, (node: any, start: number) => {
-    node.marks.forEach((mark: any) => currentMarks.push({from: start, to: start + node.nodeSize, mark}));
+    node.marks.forEach((mark: any) =>
+      currentMarks.push({ from: start, to: start + node.nodeSize, mark })
+    );
   });
   return currentMarks;
 }

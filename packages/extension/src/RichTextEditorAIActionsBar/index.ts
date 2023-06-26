@@ -1,1 +1,1 @@
-export * from './RichTextEditorAIActionsBar';
+export * from "./RichTextEditorAIActionsBar";

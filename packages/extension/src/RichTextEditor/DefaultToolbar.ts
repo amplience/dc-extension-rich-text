@@ -31,7 +31,7 @@ export default [
       { type: "button", toolName: "em" },
       { type: "button", toolName: "soft_hyphen" },
       { type: "button", toolName: "link" },
-      { type: "button", toolName: "anchor" },
+      { type: "button", toolName: "anchor" }
     ]
   },
 

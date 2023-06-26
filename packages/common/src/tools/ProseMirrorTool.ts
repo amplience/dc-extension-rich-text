@@ -7,8 +7,21 @@ export interface ProseMirrorTool {
   displayLabel?: React.ReactElement;
   displayIcon?: React.ReactElement;
 
-  isVisible?(state: any, richTextEditorContext: RichTextEditorContextProps): boolean;
-  isEnabled?(state: any, richTextEditorContext: RichTextEditorContextProps): boolean;
-  isActive?(state: any, richTextEditorContext: RichTextEditorContextProps): boolean;
-  apply(state: any, dispatch: any, richTextEditorContext: RichTextEditorContextProps): void;
+  isVisible?(
+    state: any,
+    richTextEditorContext: RichTextEditorContextProps
+  ): boolean;
+  isEnabled?(
+    state: any,
+    richTextEditorContext: RichTextEditorContextProps
+  ): boolean;
+  isActive?(
+    state: any,
+    richTextEditorContext: RichTextEditorContextProps
+  ): boolean;
+  apply(
+    state: any,
+    dispatch: any,
+    richTextEditorContext: RichTextEditorContextProps
+  ): void;
 }

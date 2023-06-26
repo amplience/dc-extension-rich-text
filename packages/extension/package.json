@@ -4,6 +4,7 @@
   "private": true,
   "homepage": "./",
   "dependencies": {
+    "@datadog/browser-rum": "^4.43.0",
     "@dc-extension-rich-text/common": "0.1.0",
     "@dc-extension-rich-text/language-json": "0.1.0",
     "@dc-extension-rich-text/language-markdown": "0.1.0",
@@ -12,6 +13,7 @@
     "@material-ui/icons": "^4.5.1",
     "@material/react-material-icon": "^0.15.0",
     "@microsoft/fetch-event-source": "^2.0.1",
+    "@rehooks/local-storage": "^2.4.4",
     "@types/node": "12.7.2",
     "@types/react": "16.9.2",
     "@types/react-dom": "16.8.5",

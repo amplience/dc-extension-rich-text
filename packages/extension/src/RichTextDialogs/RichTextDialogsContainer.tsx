@@ -1,13 +1,15 @@
 import React, { PropsWithChildren } from "react";
 
 import {
+  AIPromptDialogOptions,
+  Alert,
+  AlertOptions,
   Anchor,
   Hyperlink,
   Image,
-  RichTextDialogs,
-  GenerateContentPrompt,
-  CustomAiRewrite
+  RichTextDialogs
 } from "@dc-extension-rich-text/common";
+
 import { ContentItemLink, MediaImageLink } from "dc-extensions-sdk";
 import AnchorDialog from "../AnchorDialog/AnchorDialog";
 import CodeDialog from "../CodeDialog/CodeDialog";
@@ -15,12 +17,13 @@ import HyperlinkDialog from "../HyperlinkDialog/HyperlinkDialog";
 import ImageDialog from "../ImageDialog/ImageDialog";
 import RichTextDialogsContext from "./RichTextDialogsContext";
 
+import { Snackbar, Typography } from "@material-ui/core";
 import { SdkContext } from "unofficial-dynamic-content-ui";
-import { GenerateContentDialog } from "../GenerateContentDialog";
-import { CustomAiRewriteDialog } from "../CustomAiRewrite";
+import { AIPromptDialog } from "../AIPromptDialog";
+import RichTextAlert from "./RichTextAlert";
 
 interface EditorDialogsProps extends PropsWithChildren<{}> {
-  schema?: any
+  schema?: any;
 }
 
 interface OpenDialog {
@@ -28,7 +31,10 @@ interface OpenDialog {
   resolve: (value: any) => void;
   reject: () => void;
   value: any;
+  options?: any;
 }
+
+let alertId = 0;
 
 const RichTextDialogsContainer: React.SFC<EditorDialogsProps> = (
   props: EditorDialogsProps
@@ -36,6 +42,28 @@ const RichTextDialogsContainer: React.SFC<EditorDialogsProps> = (
   const { children } = props;
 
   const [openDialog, setOpenDialog] = React.useState<OpenDialog>();
+  const [alerts, dispatchAlertEvent] = React.useReducer(
+    (state: Alert[], action: any) => {
+      switch (action.type) {
+        case "ADD_ALERT":
+          return [...state, action.alert];
+        case "REMOVE_ALERT":
+          const alertIndex = state.findIndex(x => x.id === action.id);
+          if (alertIndex !== -1) {
+            state.splice(alertIndex, 1);
+          }
+          return [...state];
+        case "UPDATE_ALERT_CONTENT":
+          const alert = state.find(x => x.id === action.id);
+          if (alert) {
+            alert.content = action.content;
+          }
+          return [...state];
+      }
+      return state;
+    },
+    []
+  );
 
   const handleCloseDialog = React.useCallback(() => {
     if (openDialog) {
@@ -55,13 +83,14 @@ const RichTextDialogsContainer: React.SFC<EditorDialogsProps> = (
   );
 
   const handleOpenDialog = React.useCallback(
-    (type: string, value?: any) => {
+    (type: string, value?: any, options?: any) => {
       return new Promise((resolve, reject) => {
         setOpenDialog({
           type,
           resolve,
           reject,
-          value
+          value,
+          options
         });
       });
     },
@@ -69,6 +98,27 @@ const RichTextDialogsContainer: React.SFC<EditorDialogsProps> = (
   );
 
   const { sdk } = React.useContext(SdkContext);
+
+  const handleUpdateAlertContent = React.useCallback(
+    (id, content) => {
+      dispatchAlertEvent({
+        type: "UPDATE_ALERT_CONTENT",
+        id,
+        content
+      });
+    },
+    [dispatchAlertEvent]
+  );
+
+  const handleCloseAlert = React.useCallback(
+    id => {
+      dispatchAlertEvent({
+        type: "REMOVE_ALERT",
+        id
+      });
+    },
+    [dispatchAlertEvent]
+  );
 
   const dialogs: RichTextDialogs = {
     getAnchor: (existing: Set<string>, value?: Anchor): Promise<Anchor> => {
@@ -100,11 +150,24 @@ const RichTextDialogsContainer: React.SFC<EditorDialogsProps> = (
         return sdk.contentLink.get(contentTypeIds);
       }
     },
-    getGenerateContentPrompt(): Promise<GenerateContentPrompt> {
-      return handleOpenDialog("generate_content") as Promise<GenerateContentPrompt>;
+    getAIPrompt(dialogProps: AIPromptDialogOptions): Promise<string> {
+      return handleOpenDialog("ai_prompt", undefined, dialogProps) as Promise<
+        string
+      >;
     },
-    customAiRewrite: (value?: CustomAiRewrite): Promise<CustomAiRewrite> => {
-      return handleOpenDialog("custom_ai_rewrite", value) as Promise<CustomAiRewrite>;
+    alert(alertProps: AlertOptions): Alert {
+      const alert: any = {
+        id: `${alertId++}`,
+        ...alertProps
+      };
+      alert.updateContent = (content: string | React.ReactElement) => {
+        handleUpdateAlertContent(alert.id, content);
+      };
+      dispatchAlertEvent({
+        type: "ADD_ALERT",
+        alert
+      });
+      return alert;
     }
   };
 
@@ -136,18 +199,36 @@ const RichTextDialogsContainer: React.SFC<EditorDialogsProps> = (
         onSubmit={handleSubmitDialog}
       />
 
-      <GenerateContentDialog
-        open={openDialog != null && openDialog.type === "generate_content"}
+      <AIPromptDialog
+        open={openDialog != null && openDialog.type === "ai_prompt"}
         onClose={handleCloseDialog}
         onSubmit={handleSubmitDialog}
-        params={props.schema && props.schema["ui:extension"] && props.schema["ui:extension"].params && props.schema["ui:extension"].params.tools && props.schema["ui:extension"].params.tools.ai}
+        params={
+          props.schema &&
+          props.schema["ui:extension"] &&
+          props.schema["ui:extension"].params
+        }
+        {...(openDialog?.options || {})}
       />
-      <CustomAiRewriteDialog
-        open={openDialog != null && openDialog.type === "custom_ai_rewrite"}
-        onClose={handleCloseDialog}
-        onSubmit={handleSubmitDialog}
-        params={props.schema && props.schema["ui:extension"] && props.schema["ui:extension"].params && props.schema["ui:extension"].params.tools && props.schema["ui:extension"].params.tools.ai}
-      />
+
+      {alerts.map((alert: Alert) => (
+        <Snackbar
+          key={alert.id}
+          onClose={() => handleCloseAlert(alert.id)}
+          open={true}
+          autoHideDuration={6000}
+          anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+        >
+          <RichTextAlert
+            severity={alert.severity}
+            title={alert.title}
+            icon={alert.icon}
+            onClose={() => handleCloseAlert(alert.id)}
+          >
+            {alert.content}
+          </RichTextAlert>
+        </Snackbar>
+      ))}
     </RichTextDialogsContext.Provider>
   );
 };
