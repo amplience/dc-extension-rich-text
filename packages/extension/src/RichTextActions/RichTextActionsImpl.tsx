@@ -224,7 +224,8 @@ export class RichTextActionsImpl implements RichTextActions {
     const { proseMirrorEditorView, setIsLocked, params } = this.context!;
     const configuration = new AIConfiguration(params);
 
-    const { state, dispatch } = proseMirrorEditorView;
+    const { dispatch } = proseMirrorEditorView;
+    let { state } = proseMirrorEditorView;
 
     setIsLocked(true);
 

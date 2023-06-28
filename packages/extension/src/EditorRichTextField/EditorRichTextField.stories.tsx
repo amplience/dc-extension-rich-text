@@ -32,7 +32,7 @@ mockSdk.contentLink.get = () => {
   });
 };
 
-function editorWithSchema(schema: any): React.FunctionComponent {
+function editorWithSchema(schema: any): any {
   return () => {
     return withTheme(
       <SdkContext.Provider value={{ sdk: mockSdk }}>
