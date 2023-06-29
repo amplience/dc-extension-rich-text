@@ -81,6 +81,12 @@ const RichTextEditor: React.SFC<RichTextEditorProps> = (
     markdown: MarkdownLanguage({})
   };
 
+  if (!languages[languageProp]) {
+    throw new Error(`Unable to find language ${props.language}`);
+  }
+
+  const { language, conf: languageConfiguration } = languages[languageProp];
+
   const editorContext: RichTextEditorContextProps = {
     isLocked,
     setIsLocked,
@@ -88,16 +94,11 @@ const RichTextEditor: React.SFC<RichTextEditorProps> = (
     dialogs: dialogs!,
     actions,
     params,
-    languages
+    languages,
+    language
   };
 
   actions.setRichTextEditorContext(editorContext);
-
-  if (!languages[languageProp]) {
-    throw new Error(`Unable to find language ${props.language}`);
-  }
-
-  const { language, conf: languageConfiguration } = languages[languageProp];
 
   const [view, setView] = React.useState(EditorView.EDIT);
   const [rawValue, setRawValue] = React.useState(() => {

@@ -1,6 +1,6 @@
 import { RichTextActions } from "../actions";
 import { RichTextDialogs } from "../dialogs";
-import { RichTextLanguageMap } from "../languages";
+import { RichLanguage, RichTextLanguageMap } from "../languages";
 
 export interface RichTextEditorContextProps {
   params: any;
@@ -9,5 +9,6 @@ export interface RichTextEditorContextProps {
   dialogs: RichTextDialogs;
   actions: RichTextActions;
   languages: RichTextLanguageMap;
+  language: RichLanguage;
   setIsLocked(locked: boolean): void;
 }

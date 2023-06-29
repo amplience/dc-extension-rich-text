@@ -5,16 +5,31 @@ import {
   RichLanguage,
   StandardToolOptions
 } from "@dc-extension-rich-text/common";
-import { AlignCenterTool, AlignJustifyTool, AlignLeftTool, AlignRightTool } from "./alignment/AlignmentTools";
+import {
+  AlignCenterTool,
+  AlignJustifyTool,
+  AlignLeftTool,
+  AlignRightTool
+} from "./alignment/AlignmentTools";
 import { AnchorTool } from "./anchor";
 import { createInlineStylesTools } from "./inline_styles";
 import { createMarkdownParser } from "./markdown/MarkdownParser";
 import { createMarkdownSerializer } from "./markdown/MarkdownSerializer";
 import { createSchema } from "./schema/createSchema";
 import { SoftHyphenTool } from "./soft_hyphen";
-import { AddColumnTool, AddRowTool, CreateTableTool, DeleteColumnTool, DeleteRowTool, DeleteTableTool } from "./tables/TableTools";
+import {
+  AddColumnTool,
+  AddRowTool,
+  CreateTableTool,
+  DeleteColumnTool,
+  DeleteRowTool,
+  DeleteTableTool
+} from "./tables/TableTools";
 
-export function createMarkdownTools(schema: any, options: StandardToolOptions): ProseMirrorTool[] {
+export function createMarkdownTools(
+  schema: any,
+  options: StandardToolOptions
+): ProseMirrorTool[] {
   let tools: ProseMirrorTool[] = [];
 
   if (isToolEnabled("inline_styles", options)) {
@@ -84,7 +99,7 @@ export default class MarkdownLanguage implements RichLanguage {
     const tools = [
       ...createStandardTools(schema, options),
       ...createMarkdownTools(schema, options)
-    ]
+    ];
 
     const serializer = createMarkdownSerializer(options);
     const parser = createMarkdownParser(schema, options);
@@ -96,10 +111,26 @@ export default class MarkdownLanguage implements RichLanguage {
   }
 
   public serialize(doc: any): any {
-    return this.serializer.serialize(doc);
+    return this.serializeMarkdown(doc);
   }
 
   public parse(data: any): any {
+    return this.parseMarkdown(data);
+  }
+
+  public serializeMarkdown(doc: any): any {
+    return this.serializer.serialize(doc);
+  }
+
+  public canSerializeNodeToMarkdown(schema: any, node: any): boolean {
+    if (!node.type) {
+      return false;
+    } else {
+      return this.serializer.nodes[node.type] != null;
+    }
+  }
+
+  public parseMarkdown(data: any): any {
     if (!data) {
       data = "";
     }

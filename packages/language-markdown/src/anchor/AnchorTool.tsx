@@ -1,5 +1,5 @@
 import { Anchor, canInsert, ProseMirrorTool, RichTextEditorContextProps } from "@dc-extension-rich-text/common";
-import Directions from "@material-ui/icons/Directions";
+import {Directions} from "@material-ui/icons";
 import React from "react";
 
 export function AnchorTool(

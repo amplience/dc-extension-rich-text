@@ -5,6 +5,7 @@ import {
   RichTextActions,
   RichTextEditorContextProps
 } from "@dc-extension-rich-text/common";
+import { MarkdownLanguage } from '@dc-extension-rich-text/language-markdown';
 import { Assistant as AssistantIcon } from "@material-ui/icons";
 import { fetchEventSource } from "@microsoft/fetch-event-source";
 import React from "react";
@@ -97,7 +98,7 @@ export class RichTextActionsImpl implements RichTextActions {
       datadogRum.addAction("rewriteSelectedContentUsingAI", { prompt });
     } catch (err) {}
 
-    const { proseMirrorEditorView, languages = {} } = this.context || {};
+    const { proseMirrorEditorView, language } = this.context || {};
 
     const { state } = proseMirrorEditorView;
 
@@ -105,10 +106,9 @@ export class RichTextActionsImpl implements RichTextActions {
     const to = state.selection.to;
 
     const content = state.doc.cut(from, to);
-    const markdownLanguage = languages.markdown.language;
 
-    const bodyMarkdown = markdownLanguage.serialize(state.doc);
-    const selectionMarkdown = markdownLanguage.serialize(content);
+    const bodyMarkdown = (language as MarkdownLanguage).serializeMarkdown(state.doc);
+    const selectionMarkdown = (language as MarkdownLanguage).serializeMarkdown(content);
 
     const sampleDocument = `
         # Say Cheese: The Ultimate Guide to Cheese
@@ -221,16 +221,13 @@ export class RichTextActionsImpl implements RichTextActions {
   }
 
   public async handleInsertAIContent(payload: any): Promise<void> {
-    const { proseMirrorEditorView, setIsLocked, params } = this.context!;
+    const { proseMirrorEditorView, setIsLocked, params, language } = this.context!;
     const configuration = new AIConfiguration(params);
 
     const { dispatch } = proseMirrorEditorView;
     let { state } = proseMirrorEditorView;
 
     setIsLocked(true);
-
-    const { languages = {} } = this.context || {};
-    const markdownLanguage = languages.markdown.language;
 
     const startPosition = state.selection?.from ?? state.doc.content.size;
     let endPosition = state.selection?.to || startPosition;
@@ -269,7 +266,7 @@ export class RichTextActionsImpl implements RichTextActions {
             return;
           }
 
-          let fragment = markdownLanguage.parse(buffer.trim()).content;
+          let fragment = (language as MarkdownLanguage).parseMarkdown(buffer.trim()).content;
           if (
             fragment.content.length === 1 &&
             fragment.content[0].type.name === "paragraph"
@@ -303,4 +300,6 @@ export class RichTextActionsImpl implements RichTextActions {
 
     this.context?.setIsLocked(false);
   }
+
+  
 }

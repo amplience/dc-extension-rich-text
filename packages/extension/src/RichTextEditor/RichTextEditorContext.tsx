@@ -8,7 +8,8 @@ const context = React.createContext<RichTextEditorContextProps>({
   proseMirrorEditorView: undefined,
   dialogs: {} as any,
   actions: {} as any,
-  languages: {}
+  languages: {},
+  language: {} as any
 });
 export default context;
 

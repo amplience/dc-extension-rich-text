@@ -19,5 +19,6 @@ export default function(
 export * from "./schema/createSchema";
 export { createMarkdownTools } from "./MarkdownLanguage";
 
-export * from './markdown/MarkdownParser';
-export * from './markdown/MarkdownSerializer';
+export * from "./markdown/MarkdownParser";
+export * from "./markdown/MarkdownSerializer";
+export { default as MarkdownLanguage } from "./MarkdownLanguage";

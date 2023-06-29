@@ -18,10 +18,6 @@ export const anchor = {
   ],
   toDOM(node: any): any {
     const { value } = node.attrs;
-    return [
-      "a",
-      { "id": JSON.stringify(value) },
-      value
-    ];
+    return ["a", { id: JSON.stringify(value) }, value];
   }
 };

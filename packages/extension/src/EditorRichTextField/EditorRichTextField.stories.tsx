@@ -79,6 +79,23 @@ storiesOf("EditorRichTextField/AI", module)
     })
   )
   .add(
+    "JSON",
+    editorWithSchema({
+      "ui:extension": {
+        params: {
+          language: 'json',
+          tools: {
+            ai: {
+              api: {
+                key: process.env.OPENAI_KEY
+              }
+            }
+          }
+        }
+      }
+    })
+  )
+  .add(
     "Invalid API key",
     editorWithSchema({
       "ui:extension": {
