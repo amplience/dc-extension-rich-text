@@ -2,23 +2,26 @@ import {
   createStandardTools,
   isToolEnabled,
   ProseMirrorTool,
-  RichLanguage
+  RichLanguage,
 } from "@dc-extension-rich-text/common";
 import {
   createMarkdownParser,
   createMarkdownSerializer,
   createMarkdownTools,
-  MarkdownLanguage
+  MarkdownLanguage,
 } from "@dc-extension-rich-text/language-markdown";
 import {
   createDynamicContentTools,
-  DynamicContentToolOptions
+  DcContentLinkNode,
+  DcImageLinkNode,
+  DynamicContentToolOptions,
 } from "@dc-extension-rich-text/prosemirror-dynamic-content";
 import { Block, BlockConverter } from "./blocks/Block";
 import DcContentLinkBlock from "./blocks/DcContentLinkBlock";
 import DcImageLinkBlock from "./blocks/DcImageLinkBlock";
 import MarkdownBlock from "./blocks/MarkdownBlock";
-import { createSchema } from "./schema/createSchema";
+// tslint:disable-next-line
+const { Schema } = require("prosemirror-model");
 
 // tslint:disable-next-line
 const Node = require("prosemirror-model").Node;
@@ -34,15 +37,22 @@ export default class JSONLanguage extends MarkdownLanguage {
   ) {
     super(options);
 
+    this.schema = new Schema({
+      nodes: this.schema.spec.nodes
+        .addBefore("image", "dc-image-link", DcImageLinkNode())
+        .addBefore("image", "dc-content-link", DcContentLinkNode()),
+      marks: this.schema.spec.marks,
+    });
+
     this.blockTypes = blockTypes || [
       new MarkdownBlock(options, this),
       new DcImageLinkBlock(),
-      new DcContentLinkBlock()
+      new DcContentLinkBlock(),
     ];
 
     this.tools = [
       ...this.tools,
-      ...createDynamicContentTools(this.schema, options)
+      ...createDynamicContentTools(this.schema, options),
     ];
   }
 
@@ -84,15 +94,15 @@ export default class JSONLanguage extends MarkdownLanguage {
         type: "doc",
         content: [
           {
-            type: "paragraph"
-          }
-        ]
+            type: "paragraph",
+          },
+        ],
       });
     }
 
     const result: any = {
       type: "doc",
-      content: []
+      content: [],
     };
 
     const blocksGroupedByConverter = groupBy(blocks, (block: Block):
@@ -138,7 +148,7 @@ function groupBy<T, G>(
       if (currentGroupItems.length > 0) {
         result.push({
           group: currentGroup,
-          items: currentGroupItems
+          items: currentGroupItems,
         });
       }
 
@@ -150,7 +160,7 @@ function groupBy<T, G>(
   if (currentGroupItems.length > 0 && currentGroup !== null) {
     result.push({
       group: currentGroup,
-      items: currentGroupItems
+      items: currentGroupItems,
     });
   }
 

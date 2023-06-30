@@ -10,6 +10,7 @@ interface AppState {
   connected: boolean;
   sdk?: SDK;
   value?: string;
+  params?: any;
 }
 
 export default class App extends React.Component<{}, AppState> {
@@ -53,18 +54,25 @@ export default class App extends React.Component<{}, AppState> {
   public async handleConnect(): Promise<void> {
     const sdk: SDK = await init();
     sdk.frame.startAutoResizer();
-
+    
     sdk.contentItem.getCurrent().then(item => {
       datadogRum.setGlobalContext({
         deliveryId: item.deliveryId
       });
     });
 
+    let params = {
+      ...sdk.field?.schema?.["ui:extension"]?.params,
+      ...sdk.params?.installation,
+      ...sdk.params?.instance
+    };
+
     const value: any = await sdk.field.getValue();
     this.setState({
       sdk,
       connected: true,
-      value
+      value,
+      params
     });
   }
 
@@ -80,14 +88,14 @@ export default class App extends React.Component<{}, AppState> {
 
   public render(): React.ReactElement {
     const { connected, value, sdk } = this.state;
-
+    
     return (
       <div className="App">
         {connected && sdk ? (
           <div>
             {withTheme(
               <SdkContext.Provider value={{ sdk }}>
-                <RichTextDialogsContainer schema={sdk.field.schema}>
+                <RichTextDialogsContainer params={this.state.params}>
                   <EditorRichTextField
                     onChange={this.handleValueChange}
                     value={value}

@@ -36,7 +36,7 @@ function editorWithSchema(schema: any): any {
   return () => {
     return withTheme(
       <SdkContext.Provider value={{ sdk: mockSdk }}>
-        <RichTextDialogsContainer schema={schema}>
+        <RichTextDialogsContainer params={schema?.["ui:extension"]?.params}>
           <EditorRichTextField schema={schema} />
         </RichTextDialogsContainer>
       </SdkContext.Provider>
@@ -53,9 +53,7 @@ storiesOf("EditorRichTextField/AI", module)
           tools: {
             blacklist: ["ai"],
             ai: {
-              api: {
-                key: process.env.OPENAI_KEY
-              }
+              key: process.env.OPENAI_KEY
             }
           }
         }
@@ -69,9 +67,7 @@ storiesOf("EditorRichTextField/AI", module)
         params: {
           tools: {
             ai: {
-              api: {
-                key: process.env.OPENAI_KEY
-              }
+              key: process.env.OPENAI_KEY
             }
           }
         }
@@ -86,9 +82,7 @@ storiesOf("EditorRichTextField/AI", module)
           language: 'json',
           tools: {
             ai: {
-              api: {
-                key: process.env.OPENAI_KEY
-              }
+              key: process.env.OPENAI_KEY
             }
           }
         }
@@ -102,9 +96,7 @@ storiesOf("EditorRichTextField/AI", module)
         params: {
           tools: {
             ai: {
-              api: {
-                key: "invalid"
-              }
+              key: "invalid"
             }
           }
         }
@@ -118,10 +110,8 @@ storiesOf("EditorRichTextField/AI", module)
         params: {
           tools: {
             ai: {
-              api: {
-                key: process.env.OPENAI_KEY,
-                model: "gpt-3.5-turbo"
-              }
+              key: process.env.OPENAI_KEY,
+              model: "gpt-3.5-turbo"
             }
           }
         }
@@ -135,10 +125,8 @@ storiesOf("EditorRichTextField/AI", module)
         params: {
           tools: {
             ai: {
-              api: {
-                key: process.env.OPENAI_KEY,
-                model: "gpt-4"
-              }
+              key: process.env.OPENAI_KEY,
+              model: "gpt-4"
             }
           }
         }
@@ -152,9 +140,7 @@ storiesOf("EditorRichTextField/AI", module)
         params: {
           tools: {
             ai: {
-              api: {
-                key: process.env.OPENAI_KEY
-              },
+              key: process.env.OPENAI_KEY,
               editPrompts: [
                 {
                   label: "Improve this",

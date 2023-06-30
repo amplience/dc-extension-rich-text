@@ -3,7 +3,7 @@ import React from "react";
 import { canInsert, clearAllMarks, getSelectionMarks, isMarkActive } from "../utils";
 
 // tslint:disable:no-submodule-imports
-import { SvgIcon } from '@material-ui/core';
+import { Badge } from '@material-ui/core';
 import CalendarViewDay from "@material-ui/icons/CalendarViewDay";
 import Code from "@material-ui/icons/Code";
 import FormatBold from "@material-ui/icons/FormatBold";
@@ -17,8 +17,7 @@ import ImageIcon from "@material-ui/icons/Image";
 import Link from "@material-ui/icons/Link";
 import Redo from "@material-ui/icons/Redo";
 import Undo from "@material-ui/icons/Undo";
-
-import OpenAIMark from '../icons/OpenAIMark';
+import Assistant from '@material-ui/icons/Assistant';
 
 import { Code as Language, Hyperlink, Image } from "../dialogs";
 import { RichTextEditorContextProps } from "../editor";
@@ -343,8 +342,10 @@ export function clear_formatting(): ProseMirrorTool {
 export function ai_generate(): ProseMirrorTool {
   return {
     name: "ai_generate",
-    label: "Generate Content",
-    displayIcon: <SvgIcon><OpenAIMark /></SvgIcon>,
+    label: "AI Assistant",
+    displayIcon: <Badge variant="dot" badgeContent='NEW' color="error" overlap="rectangle">
+      <Assistant color="primary" />
+    </Badge>,
     apply: async (state: any, dispatch: any, richTextEditorContext: RichTextEditorContextProps) => {
       try {
         const prompt = await richTextEditorContext.dialogs.getAIPrompt({variant: 'generate'});

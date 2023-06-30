@@ -59,6 +59,7 @@ export function createDynamicContentTools(schema: any, options: DynamicContentTo
         tools.push(dcImageLink(schema));
     }
 
+    console.log(options);
     if (isToolEnabled('dc-content-link', options) &&
         schema.nodes['dc-content-link'] &&
         // must provide a list of content types for this tool to be active

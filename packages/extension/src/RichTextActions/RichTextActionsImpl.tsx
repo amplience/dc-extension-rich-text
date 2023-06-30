@@ -1,18 +1,64 @@
 import { datadogRum } from "@datadog/browser-rum";
 import {
   Alert,
-  OpenAIMark,
   RichTextActions,
-  RichTextEditorContextProps
+  RichTextEditorContextProps,
 } from "@dc-extension-rich-text/common";
-import { MarkdownLanguage } from '@dc-extension-rich-text/language-markdown';
+import { MarkdownLanguage } from "@dc-extension-rich-text/language-markdown";
 import { Assistant as AssistantIcon } from "@material-ui/icons";
 import { fetchEventSource } from "@microsoft/fetch-event-source";
 import React from "react";
 import { AIConfiguration } from "../AIPromptDialog";
 
+interface ChatModel {
+  name: string;
+  version: string;
+  maxTokens: number;
+}
+
 const CHAT_COMPLETIONS_URL = "https://api.openai.com/v1/chat/completions";
+const CHAT_ESTIMATED_CHARS_PER_TOKEN = 4;
+const CHAT_MODELS: ChatModel[] = [
+  {
+    name: "gpt-3.5-turbo",
+    version: "gpt-3.5",
+    maxTokens: 4096,
+  },
+  {
+    name: "gpt-3.5-turbo-16k",
+    version: "gpt-3.5",
+    maxTokens: 16384,
+  },
+  {
+    name: "gpt-4",
+    version: "gpt-4",
+    maxTokens: 8192,
+  },
+  {
+    name: "gpt-4-32k",
+    version: "gpt-4",
+    maxTokens: 32768,
+  },
+];
 const DIALOG_PREFIX = "[DIALOG]";
+
+function getSuitableModel(
+  desiredModelName: string,
+  estimatedConsumedTokens: number
+) {
+  const desiredModel = CHAT_MODELS.find((x) => x.name === desiredModelName);
+
+  if (desiredModel && estimatedConsumedTokens > desiredModel.maxTokens) {
+    const rightSizeModel = CHAT_MODELS.find(
+      (x) =>
+        x.version === desiredModel.version &&
+        x.maxTokens > estimatedConsumedTokens
+    );
+    return rightSizeModel?.name || desiredModelName;
+  } else {
+    return desiredModelName;
+  }
+}
 
 async function invokeChatCompletions(
   configuration: AIConfiguration,
@@ -20,20 +66,30 @@ async function invokeChatCompletions(
   onMessage: (buffer: string, complete: boolean) => void,
   onError: (error: any) => void
 ): Promise<void> {
+  const maxOutputTokens = 2048;
+  const estimatedInputTokens =
+    body.messages
+      .map((x: any) => x.content.length)
+      .reduce((partialSum: number, a: number) => partialSum + a, 0) /
+    CHAT_ESTIMATED_CHARS_PER_TOKEN;
+  const estimatedConsumedTokens = maxOutputTokens + estimatedInputTokens;
   let markdownBuffer = "";
   await fetchEventSource(CHAT_COMPLETIONS_URL, {
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${configuration.getKey()}`
+      Authorization: `Bearer ${configuration.getKey()}`,
     },
     method: "POST",
     body: JSON.stringify({
-      model: configuration.getModel(),
-      max_tokens: 2048,
+      model: getSuitableModel(
+        configuration.getModel(),
+        estimatedConsumedTokens
+      ),
+      max_tokens: maxOutputTokens,
       stream: true,
-      ...body
+      ...body,
     }),
-    onmessage: e => {
+    onmessage: (e) => {
       try {
         if (e.data === "[DONE]") {
           onMessage(markdownBuffer, true);
@@ -63,7 +119,7 @@ async function invokeChatCompletions(
     },
     onerror(err): void {
       throw err;
-    }
+    },
   });
 }
 
@@ -80,17 +136,16 @@ export class RichTextActionsImpl implements RichTextActions {
     prompt: string
   ): string {
     return `This is the original content I am starting with: 
-        ---
-        ${body}
-        ---
-        This is the selection I want to update:
-        ---
-        ${selection}
-        ---
-        This is the description of the change I want to make:
-        ---
-        ${prompt}
-        `;
+---
+${body}
+---
+This is the selection I want to update:
+---
+${selection}
+---
+This is the description of the change I want to make:
+---
+${prompt}`;
   }
 
   public async rewriteSelectedContentUsingAI(prompt: string): Promise<void> {
@@ -107,62 +162,42 @@ export class RichTextActionsImpl implements RichTextActions {
 
     const content = state.doc.cut(from, to);
 
-    const bodyMarkdown = (language as MarkdownLanguage).serializeMarkdown(state.doc);
-    const selectionMarkdown = (language as MarkdownLanguage).serializeMarkdown(content);
+    const bodyMarkdown = (language as MarkdownLanguage).serializeMarkdown(
+      state.doc
+    );
+    const selectionMarkdown = (language as MarkdownLanguage).serializeMarkdown(
+      content
+    );
 
-    const sampleDocument = `
-        # Say Cheese: The Ultimate Guide to Cheese
+    const sampleDocument = `# Say Cheese: The Ultimate Guide to Cheese
 
-        Cheese, the dairy product that has a special place in everyone's hearts, is a versatile ingredient that has been enjoyed for thousands of years across the globe. You can melt it, slice it, crumble it, or grate it - whatever way you choose, cheese always adds an extra dimension to any dish. In this ultimate guide to cheese, you'll learn everything you need to know about the world's favorite dairy product.
-        
-        ## History of Cheese
-        
-        The origin of cheese can be traced back to ancient times. Even before recorded history, it is believed that the process of cheesemaking was discovered accidentally by storing milk in animal bladders or stomachs, causing it to curdle and form cheese. Cheese quickly became a staple in the diets of people around the world and is now enjoyed in cultures all across the globe.
-        
-        ## Types of Cheese
-        
-        There are thousands of different types of cheese, each with its own flavor, texture, and aroma. From mild and creamy Brie to sharp and nutty Cheddar, there is a cheese for every taste preference. Some popular varieties of cheese include:
-        
-        * Cheddar
-        
-        * Brie
-        
-        * Mozzarella
-        
-        * Parmesan
-        
-        * Feta
-        
-        * Blue Cheese
-        
-        * Gouda
-        
-        * Swiss
-        
-        ## How to Enjoy Cheese
-        
-        Cheese can be enjoyed in a variety of ways, from simply snacking on it to cooking with it. Here are some delicious ways to enjoy cheese:
-        
-        * Add cheese to a charcuterie board with crackers and meats
-        
-        * Serve melted cheese over nachos or fries
-        
-        * Make a gourmet grilled cheese sandwich
-        
-        * Add cheese to pasta dishes such as mac and cheese or lasagna
-        
-        * Use cheese as a pizza topping
-        
-        * Enjoy with a glass of wine or beer
-        
-        ## How to Store Cheese
-        
-        To keep your cheese fresh and delicious for as long as possible, it's essential to store it properly. Soft and semi-soft cheeses such as Brie and Camembert should be wrapped in wax paper or plastic wrap and stored in the fridge. Hard cheeses like Cheddar and Parmesan can be stored in the fridge in a sealed container or in their original wrapping.
-        
-        ## Conclusion
-        
-        Cheese is a delicious and versatile ingredient that can be enjoyed in a variety of ways. From its humble beginnings thousands of years ago to its place as one of the world's most popular dairy products, cheese has a special place in the hearts of people around the world. So, let's raise a glass of wine and say cheese!
-        `;
+Cheese, the dairy product that has a special place in everyone's hearts, is a versatile ingredient that has been enjoyed for thousands of years across the globe. You can melt it, slice it, crumble it, or grate it - whatever way you choose, cheese always adds an extra dimension to any dish. In this ultimate guide to cheese, you'll learn everything you need to know about the world's favorite dairy product.
+
+## History of Cheese
+
+The origin of cheese can be traced back to ancient times. Even before recorded history, it is believed that the process of cheesemaking was discovered accidentally by storing milk in animal bladders or stomachs, causing it to curdle and form cheese. Cheese quickly became a staple in the diets of people around the world and is now enjoyed in cultures all across the globe.
+
+## Types of Cheese
+
+There are thousands of different types of cheese, each with its own flavor, texture, and aroma. From mild and creamy Brie to sharp and nutty Cheddar, there is a cheese for every taste preference. Some popular varieties of cheese include:
+
+* Cheddar
+
+* Brie
+
+* Mozzarella
+
+* Parmesan
+
+* Feta
+
+* Blue Cheese
+
+* Gouda
+
+## Conclusion
+
+Cheese is a delicious and versatile ingredient that can be enjoyed in a variety of ways. From its humble beginnings thousands of years ago to its place as one of the world's most popular dairy products, cheese has a special place in the hearts of people around the world. So, let's raise a glass of wine and say cheese!`;
 
     const sampleSelection = `You can melt it, slice it, crumble it, or grate it - whatever way you choose, cheese always adds an extra dimension to any dish.`;
     const sampleResponse = `You can melt, slice, crumble, or grate it - cheese enhances any dish.`;
@@ -171,10 +206,25 @@ export class RichTextActionsImpl implements RichTextActions {
       messages: [
         {
           role: "system",
-          content:
-            'I want you to act as a copywriter that makes edits to markdown formatted content provided by a user. You will receive the original markdown document, followed by a selection from the document that the user wants to change, followed by a description of the change you should make. You should reply with a markdown formatted string that can replace the provided selection. Do not converse with the user. Only rewrite the selected content not the entire document. If you return an error, prefix it with "' +
-            DIALOG_PREFIX +
-            '"'
+          content: `I want you to act as an editor for marketing copy.
+  - You will receive the original markdown document, followed by a selection from the document that the user wants to change, followed by a description of the change you should make.
+  - You should reply with a markdown formatted string that can replace the provided selection.
+
+Do not produce more content than you were originally provided unless specifically requested. 
+  - If the selection includes only a header, reply with only a header. 
+  - If the selection includes only a bullet point, reply with only a bullet point. 
+  - If the selection includes only one line, reply with only one line. 
+  - If the user asks you to make the selection longer, you can expand on the provided selection, but do not produce any additional elements.
+  - For example, if given a header, and asked to make it longer, you can add more text to the header, but you should not add any more lines.
+
+If the user requests a change that you cannot produce a reasonable replacement for, you should respond with an error. 
+  - Return errors sparingly, try to make a best effort attempt at handling the user's request whenever possible.
+  - If you return an error, prefix it with \`[DIALOG]\`. 
+  - For example, if the user provides the selection \`Banana\` and asks you to shorten it, you might reply: \`[DIALOG] I can't shorten "Banana" any further.\`.
+
+Do not converse with the user. 
+  - Do not ask clarifying questions. 
+  - Do not add conversational preamble such as \`Sure, I can do that\`, or \`Ok, here's the change\`.`,
         },
         {
           role: "user",
@@ -182,11 +232,11 @@ export class RichTextActionsImpl implements RichTextActions {
             sampleDocument,
             sampleSelection,
             `Shorten this`
-          )
+          ),
         },
         {
           role: "assistant",
-          content: sampleResponse
+          content: sampleResponse,
         },
         {
           role: "user",
@@ -194,9 +244,9 @@ export class RichTextActionsImpl implements RichTextActions {
             bodyMarkdown,
             selectionMarkdown,
             prompt
-          )
-        }
-      ]
+          ),
+        },
+      ],
     });
   }
 
@@ -209,19 +259,41 @@ export class RichTextActionsImpl implements RichTextActions {
       messages: [
         {
           role: "system",
-          content:
-            "I want you to act as a copywriter that produces markdown formatted content in response to a user's prompts. Do not converse with the user."
+          content: `I want you to act as a copywriter that produces markdown formatted content for marketing.
+  - You will receive a prompt from the user.
+  - You should reply with a markdown document that can be used in marketing materials.
+  - Do not include hyperlinks in your response.
+  - Do not include images in your response.
+
+If the user's prompt asks for only a portion of a document, you should return only that portion.
+  - If the user asks for only a title, produce only a title.
+  - If the user asks for only a paragraph, produce only a paragraph.
+  - If the user asks for only a bullet list, produce only a bullet list.
+
+If the user provides a prompt that you cannot produce a document for, you should return an error.
+  - Prefix any errors with [DIALOG].
+  - For example, if the user's prompt is \`Hello?\`, then you might respond with \`[DIALOG] Please describe the content you want to generate.\`
+
+Do not converse with the user.
+  - Do not ask clarifying questions.
+  - Do not add conversational preamble such as \`Sure, I can do that\`, or \`Ok, here's the change\`.
+  - Do not include [DIALOG] if you've successfully produced a document.`,
         },
         {
           role: "user",
-          content: prompt
-        }
-      ]
+          content: prompt,
+        },
+      ],
     });
   }
 
   public async handleInsertAIContent(payload: any): Promise<void> {
-    const { proseMirrorEditorView, setIsLocked, params, language } = this.context!;
+    const {
+      proseMirrorEditorView,
+      setIsLocked,
+      params,
+      language,
+    } = this.context!;
     const configuration = new AIConfiguration(params);
 
     const { dispatch } = proseMirrorEditorView;
@@ -250,10 +322,10 @@ export class RichTextActionsImpl implements RichTextActions {
             const content = buffer.slice(DIALOG_PREFIX.length);
             if (!alert) {
               alert = this.context!.dialogs.alert({
-                title: "ChatGPT",
+                title: "AI Assistant",
                 icon: <AssistantIcon />,
                 severity: "info",
-                content
+                content,
               });
             } else {
               alert.updateContent(content);
@@ -266,7 +338,9 @@ export class RichTextActionsImpl implements RichTextActions {
             return;
           }
 
-          let fragment = (language as MarkdownLanguage).parseMarkdown(buffer.trim()).content;
+          let fragment = (language as MarkdownLanguage).parseMarkdown(
+            buffer.trim()
+          ).content;
           if (
             fragment.content.length === 1 &&
             fragment.content[0].type.name === "paragraph"
@@ -285,13 +359,13 @@ export class RichTextActionsImpl implements RichTextActions {
             startPosition + fragment.size
           );
         },
-        err => {
+        (err) => {
           if (err?.error?.message) {
             this.context!.dialogs.alert({
-              title: "ChatGPT",
+              title: "AI Assistant",
               icon: <AssistantIcon />,
               severity: "error",
-              content: err?.error?.message
+              content: err?.error?.message,
             });
           }
         }
@@ -300,6 +374,4 @@ export class RichTextActionsImpl implements RichTextActions {
 
     this.context?.setIsLocked(false);
   }
-
-  
 }

@@ -23,7 +23,7 @@ import { AIPromptDialog } from "../AIPromptDialog";
 import RichTextAlert from "./RichTextAlert";
 
 interface EditorDialogsProps extends PropsWithChildren<{}> {
-  schema?: any;
+  params?: any;
 }
 
 interface OpenDialog {
@@ -39,7 +39,7 @@ let alertId = 0;
 const RichTextDialogsContainer: React.SFC<EditorDialogsProps> = (
   props: EditorDialogsProps
 ) => {
-  const { children } = props;
+  const { children, params } = props;
 
   const [openDialog, setOpenDialog] = React.useState<OpenDialog>();
   const [alerts, dispatchAlertEvent] = React.useReducer(
@@ -203,11 +203,7 @@ const RichTextDialogsContainer: React.SFC<EditorDialogsProps> = (
         open={openDialog != null && openDialog.type === "ai_prompt"}
         onClose={handleCloseDialog}
         onSubmit={handleSubmitDialog}
-        params={
-          props.schema &&
-          props.schema["ui:extension"] &&
-          props.schema["ui:extension"].params
-        }
+        params={params}
         {...(openDialog?.options || {})}
       />
 
