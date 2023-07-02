@@ -93,9 +93,7 @@ export default class MarkdownLanguage implements RichLanguage {
   private parser: any;
 
   constructor(options: StandardToolOptions = {}) {
-    const isInlineStylesEnabled = isToolEnabled("inline_styles", options);
-
-    const schema = createSchema(options, isInlineStylesEnabled);
+    const schema = this.createSchema(options);
     const tools = [
       ...createStandardTools(schema, options),
       ...createMarkdownTools(schema, options)
@@ -135,5 +133,10 @@ export default class MarkdownLanguage implements RichLanguage {
       data = "";
     }
     return this.parser.parse(data);
+  }
+
+  protected createSchema(options: StandardToolOptions = {}): any {
+    const isInlineStylesEnabled = isToolEnabled("inline_styles", options);
+    return createSchema(options, isInlineStylesEnabled);
   }
 }

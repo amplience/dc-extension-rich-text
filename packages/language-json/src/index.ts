@@ -1,6 +1,6 @@
 import {
   RichLanguage,
-  RichLanguageConfiguration,
+  RichLanguageConfiguration
 } from "@dc-extension-rich-text/common";
 import { DynamicContentToolOptions } from "@dc-extension-rich-text/prosemirror-dynamic-content";
 import JSONLanguage from "./JSONLanguage";
@@ -11,7 +11,7 @@ export default function(
 ): { language: RichLanguage; conf: RichLanguageConfiguration } {
   return {
     language: new JSONLanguage(options),
-    conf: JSONLanguageConfiguration,
+    conf: JSONLanguageConfiguration
   };
 }
 
