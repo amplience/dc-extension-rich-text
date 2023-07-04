@@ -24,7 +24,10 @@ const TextToMarkdown = {
   }
 };
 
-export function createMarkdownSerializer(options: StandardToolOptions): any {
+export function createMarkdownSerializer(
+  options: StandardToolOptions,
+  serializers: Record<string, any> = {}
+): any {
   return new markdown.MarkdownSerializer(
     {
       ...markdown.defaultMarkdownSerializer.nodes,
@@ -33,7 +36,8 @@ export function createMarkdownSerializer(options: StandardToolOptions): any {
       ...TableToMarkdown,
       ...AlignedParagraphToMarkdown(options),
       ...AlignedHeaderToMarkdown(options),
-      ...TextToMarkdown
+      ...TextToMarkdown,
+      ...serializers
     },
     {
       ...markdown.defaultMarkdownSerializer.marks,

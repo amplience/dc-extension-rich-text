@@ -2,7 +2,7 @@ import { datadogRum } from "@datadog/browser-rum";
 import {
   Alert,
   RichTextActions,
-  RichTextEditorContextProps,
+  RichTextEditorContextProps
 } from "@dc-extension-rich-text/common";
 import { MarkdownLanguage } from "@dc-extension-rich-text/language-markdown";
 import { Assistant as AssistantIcon } from "@material-ui/icons";
@@ -22,35 +22,35 @@ const CHAT_MODELS: ChatModel[] = [
   {
     name: "gpt-3.5-turbo",
     version: "gpt-3.5",
-    maxTokens: 4096,
+    maxTokens: 4096
   },
   {
     name: "gpt-3.5-turbo-16k",
     version: "gpt-3.5",
-    maxTokens: 16384,
+    maxTokens: 16384
   },
   {
     name: "gpt-4",
     version: "gpt-4",
-    maxTokens: 8192,
+    maxTokens: 8192
   },
   {
     name: "gpt-4-32k",
     version: "gpt-4",
-    maxTokens: 32768,
-  },
+    maxTokens: 32768
+  }
 ];
 const DIALOG_PREFIX = "[DIALOG]";
 
 function getSuitableModel(
   desiredModelName: string,
   estimatedConsumedTokens: number
-) {
-  const desiredModel = CHAT_MODELS.find((x) => x.name === desiredModelName);
+): string {
+  const desiredModel = CHAT_MODELS.find(x => x.name === desiredModelName);
 
   if (desiredModel && estimatedConsumedTokens > desiredModel.maxTokens) {
     const rightSizeModel = CHAT_MODELS.find(
-      (x) =>
+      x =>
         x.version === desiredModel.version &&
         x.maxTokens > estimatedConsumedTokens
     );
@@ -77,7 +77,7 @@ async function invokeChatCompletions(
   await fetchEventSource(CHAT_COMPLETIONS_URL, {
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${configuration.getKey()}`,
+      Authorization: `Bearer ${configuration.getKey()}`
     },
     method: "POST",
     body: JSON.stringify({
@@ -87,9 +87,9 @@ async function invokeChatCompletions(
       ),
       max_tokens: maxOutputTokens,
       stream: true,
-      ...body,
+      ...body
     }),
-    onmessage: (e) => {
+    onmessage: e => {
       try {
         if (e.data === "[DONE]") {
           onMessage(markdownBuffer, true);
@@ -119,7 +119,7 @@ async function invokeChatCompletions(
     },
     onerror(err): void {
       throw err;
-    },
+    }
   });
 }
 
@@ -224,7 +224,7 @@ If the user requests a change that you cannot produce a reasonable replacement f
 
 Do not converse with the user. 
   - Do not ask clarifying questions. 
-  - Do not add conversational preamble such as \`Sure, I can do that\`, or \`Ok, here's the change\`.`,
+  - Do not add conversational preamble such as \`Sure, I can do that\`, or \`Ok, here's the change\`.`
         },
         {
           role: "user",
@@ -232,11 +232,11 @@ Do not converse with the user.
             sampleDocument,
             sampleSelection,
             `Shorten this`
-          ),
+          )
         },
         {
           role: "assistant",
-          content: sampleResponse,
+          content: sampleResponse
         },
         {
           role: "user",
@@ -244,9 +244,9 @@ Do not converse with the user.
             bodyMarkdown,
             selectionMarkdown,
             prompt
-          ),
-        },
-      ],
+          )
+        }
+      ]
     });
   }
 
@@ -277,13 +277,13 @@ If the user provides a prompt that you cannot produce a document for, you should
 Do not converse with the user.
   - Do not ask clarifying questions.
   - Do not add conversational preamble such as \`Sure, I can do that\`, or \`Ok, here's the change\`.
-  - Do not include [DIALOG] if you've successfully produced a document.`,
+  - Do not include [DIALOG] if you've successfully produced a document.`
         },
         {
           role: "user",
-          content: prompt,
-        },
-      ],
+          content: prompt
+        }
+      ]
     });
   }
 
@@ -292,7 +292,7 @@ Do not converse with the user.
       proseMirrorEditorView,
       setIsLocked,
       params,
-      language,
+      language
     } = this.context!;
     const configuration = new AIConfiguration(params);
 
@@ -301,8 +301,17 @@ Do not converse with the user.
 
     setIsLocked(true);
 
-    const startPosition = state.selection?.from ?? state.doc.content.size;
+    let startPosition = state.selection?.from ?? state.doc.content.size;
     let endPosition = state.selection?.to || startPosition;
+
+    const resolved = state.doc.resolve(startPosition, endPosition);
+    const isEmptyParagraph =
+      resolved?.parent?.type?.name === "paragraph" &&
+      resolved?.parent?.content?.size === 0;
+
+    if (isEmptyParagraph) {
+      startPosition--;
+    }
 
     let alert: Alert | undefined;
 
@@ -325,7 +334,7 @@ Do not converse with the user.
                 title: "AI Assistant",
                 icon: <AssistantIcon />,
                 severity: "info",
-                content,
+                content
               });
             } else {
               alert.updateContent(content);
@@ -341,12 +350,11 @@ Do not converse with the user.
           let fragment = (language as MarkdownLanguage).parseMarkdown(
             buffer.trim()
           ).content;
-          if (
-            fragment.content.length === 1 &&
-            fragment.content[0].type.name === "paragraph"
-          ) {
+
+          if (fragment.content.length === 1) {
             fragment = fragment.content[0].content;
           }
+
           const transaction = state.tr.replaceWith(
             startPosition,
             endPosition,
@@ -359,13 +367,13 @@ Do not converse with the user.
             startPosition + fragment.size
           );
         },
-        (err) => {
+        err => {
           if (err?.error?.message) {
             this.context!.dialogs.alert({
               title: "AI Assistant",
               icon: <AssistantIcon />,
               severity: "error",
-              content: err?.error?.message,
+              content: err?.error?.message
             });
           }
         }

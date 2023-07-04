@@ -54,14 +54,14 @@ export default class App extends React.Component<{}, AppState> {
   public async handleConnect(): Promise<void> {
     const sdk: SDK = await init();
     sdk.frame.startAutoResizer();
-    
+
     sdk.contentItem.getCurrent().then(item => {
       datadogRum.setGlobalContext({
         deliveryId: item.deliveryId
       });
     });
 
-    let params = {
+    const params = {
       ...sdk.field?.schema?.["ui:extension"]?.params,
       ...sdk.params?.installation,
       ...sdk.params?.instance
@@ -88,7 +88,7 @@ export default class App extends React.Component<{}, AppState> {
 
   public render(): React.ReactElement {
     const { connected, value, sdk } = this.state;
-    
+
     return (
       <div className="App">
         {connected && sdk ? (

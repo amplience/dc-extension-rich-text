@@ -4,4 +4,3 @@ export * from "./tools";
 export * from "./utils";
 export * from "./actions";
 export * from "./editor";
-export * from "./icons";

@@ -31,6 +31,7 @@ export default class JSONLanguage extends MarkdownLanguage {
   public name: string = "json";
   public label: string = "JSON";
   private blockTypes: BlockConverter[];
+  private markdownBlock: MarkdownBlock;
 
   constructor(
     options: DynamicContentToolOptions = {},
@@ -38,8 +39,9 @@ export default class JSONLanguage extends MarkdownLanguage {
   ) {
     super(options);
 
+    this.markdownBlock = new MarkdownBlock(options, this);
     this.blockTypes = blockTypes || [
-      new MarkdownBlock(options, this),
+      this.markdownBlock,
       new DcImageLinkBlock(),
       new DcContentLinkBlock()
     ];
@@ -125,6 +127,13 @@ export default class JSONLanguage extends MarkdownLanguage {
         .addBefore("image", "dc-content-link", DcContentLinkNode()),
       marks: schema.spec.marks
     });
+  }
+
+  protected getNodeSerializers(): any {
+    return {
+      "dc-image-link": () => "",
+      "dc-content-linl": () => ""
+    };
   }
 }
 

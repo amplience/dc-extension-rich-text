@@ -3,16 +3,16 @@ const OPENAI_CHATGPT_DEFAULT_MODEL = "gpt-3.5-turbo";
 const DEFAULT_EDIT_PROMPTS = [
   {
     label: "Improve this",
-    prompt: "Improve this",
+    prompt: "Improve this"
   },
   {
     label: "Shorten this",
-    prompt: "Shorten this",
+    prompt: "Shorten this"
   },
   {
-    label: "Elaborate on this",
-    prompt: "Elaborate on this",
-  },
+    label: "Expand this",
+    prompt: "Expand this"
+  }
 ];
 
 export interface AIEditPrompt {

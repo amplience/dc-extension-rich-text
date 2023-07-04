@@ -99,7 +99,10 @@ export default class MarkdownLanguage implements RichLanguage {
       ...createMarkdownTools(schema, options)
     ];
 
-    const serializer = createMarkdownSerializer(options);
+    const serializer = createMarkdownSerializer(
+      options,
+      this.getNodeSerializers()
+    );
     const parser = createMarkdownParser(schema, options);
 
     this.schema = schema;
@@ -133,6 +136,10 @@ export default class MarkdownLanguage implements RichLanguage {
       data = "";
     }
     return this.parser.parse(data);
+  }
+
+  protected getNodeSerializers(): Record<string, any> {
+    return {};
   }
 
   protected createSchema(options: StandardToolOptions = {}): any {

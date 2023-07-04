@@ -79,5 +79,5 @@ export default [
     ]
   },
 
-  { type: "button", toolName: "ai_generate" }
+  { type: "button", toolName: "ai" }
 ] as ToolbarElement[];
