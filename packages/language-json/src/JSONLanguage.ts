@@ -3,19 +3,19 @@ import {
   isToolEnabled,
   ProseMirrorTool,
   RichLanguage,
-  StandardToolOptions
+  StandardToolOptions,
 } from "@dc-extension-rich-text/common";
 import {
   createMarkdownParser,
   createMarkdownSerializer,
   createMarkdownTools,
-  MarkdownLanguage
+  MarkdownLanguage,
 } from "@dc-extension-rich-text/language-markdown";
 import {
   createDynamicContentTools,
   DcContentLinkNode,
   DcImageLinkNode,
-  DynamicContentToolOptions
+  DynamicContentToolOptions,
 } from "@dc-extension-rich-text/prosemirror-dynamic-content";
 import { Block, BlockConverter } from "./blocks/Block";
 import DcContentLinkBlock from "./blocks/DcContentLinkBlock";
@@ -41,14 +41,14 @@ export default class JSONLanguage extends MarkdownLanguage {
 
     this.markdownBlock = new MarkdownBlock(options, this);
     this.blockTypes = blockTypes || [
-      this.markdownBlock,
       new DcImageLinkBlock(),
-      new DcContentLinkBlock()
+      new DcContentLinkBlock(),
+      this.markdownBlock,
     ];
 
     this.tools = [
       ...this.tools,
-      ...createDynamicContentTools(this.schema, options)
+      ...createDynamicContentTools(this.schema, options),
     ];
   }
 
@@ -90,15 +90,15 @@ export default class JSONLanguage extends MarkdownLanguage {
         type: "doc",
         content: [
           {
-            type: "paragraph"
-          }
-        ]
+            type: "paragraph",
+          },
+        ],
       });
     }
 
     const result: any = {
       type: "doc",
-      content: []
+      content: [],
     };
 
     const blocksGroupedByConverter = groupBy(blocks, (block: Block):
@@ -125,14 +125,14 @@ export default class JSONLanguage extends MarkdownLanguage {
       nodes: schema.spec.nodes
         .addBefore("image", "dc-image-link", DcImageLinkNode())
         .addBefore("image", "dc-content-link", DcContentLinkNode()),
-      marks: schema.spec.marks
+      marks: schema.spec.marks,
     });
   }
 
   protected getNodeSerializers(): any {
     return {
       "dc-image-link": () => "",
-      "dc-content-linl": () => ""
+      "dc-content-linl": () => "",
     };
   }
 }
@@ -161,7 +161,7 @@ function groupBy<T, G>(
       if (currentGroupItems.length > 0) {
         result.push({
           group: currentGroup,
-          items: currentGroupItems
+          items: currentGroupItems,
         });
       }
 
@@ -173,7 +173,7 @@ function groupBy<T, G>(
   if (currentGroupItems.length > 0 && currentGroup !== null) {
     result.push({
       group: currentGroup,
-      items: currentGroupItems
+      items: currentGroupItems,
     });
   }
 
