@@ -132,7 +132,7 @@ export default class JSONLanguage extends MarkdownLanguage {
   protected getNodeSerializers(): any {
     return {
       "dc-image-link": () => "",
-      "dc-content-linl": () => "",
+      "dc-content-link": () => "",
     };
   }
 }
