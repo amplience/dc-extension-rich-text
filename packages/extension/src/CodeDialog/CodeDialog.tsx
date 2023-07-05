@@ -19,7 +19,8 @@ interface CodeDialogProps {
 
 const htmlIdRegex = /^[a-zA-Z]?[\w:.\-\/]*$/;
 
-const validate = (checkValue: string) => !htmlIdRegex.test(checkValue) ? "Value contains invalid characters" : "";
+const validate = (checkValue: string) =>
+  !htmlIdRegex.test(checkValue) ? "Value contains invalid characters" : "";
 
 const CodeDialog: React.SFC<CodeDialogProps> = (props: CodeDialogProps) => {
   const { open, onClose, onSubmit } = props;
@@ -81,7 +82,9 @@ const CodeDialog: React.SFC<CodeDialogProps> = (props: CodeDialogProps) => {
             value={value}
             onChange={event => handleInputChanged(event.target.value || "")}
           />
-          <FormHelperText>The language to use for syntax highlighting, e.g. javascript or html</FormHelperText>
+          <FormHelperText>
+            The language to use for syntax highlighting, e.g. javascript or html
+          </FormHelperText>
         </FormControl>
       </DialogContent>
       <DialogActions>

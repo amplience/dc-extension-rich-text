@@ -1,4 +1,5 @@
 import { ContentItemLink, MediaImageLink } from "dc-extensions-sdk";
+import React from "react";
 
 export interface Image {
   src: string;
@@ -20,6 +21,24 @@ export interface Code {
   params?: string;
 }
 
+export type AlertSeverity = "info" | "success" | "error" | "warning";
+
+export interface AlertOptions {
+  title: string;
+  severity: AlertSeverity;
+  content: string | React.ReactElement;
+  icon?: React.ReactElement;
+}
+
+export interface Alert extends AlertOptions {
+  id: string;
+  updateContent(content: string | React.ReactElement): void;
+}
+
+export interface AIPromptDialogOptions {
+  variant: "generate" | "rewrite";
+}
+
 export interface RichTextDialogs {
   getAnchor(existing: Set<string>, value?: Anchor): Promise<Anchor>;
   getCode(value?: string): Promise<string>;
@@ -30,4 +49,6 @@ export interface RichTextDialogs {
     contentTypeIds: string[],
     value?: ContentItemLink
   ): Promise<ContentItemLink>;
+  getAIPrompt(options: AIPromptDialogOptions): Promise<string>;
+  alert(options: AlertOptions): Alert;
 }

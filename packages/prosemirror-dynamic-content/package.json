@@ -21,7 +21,7 @@
     "prosemirror-view": "^1.11.7",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
-    "typescript": "3.5.3",
+    "typescript": "3.8",
     "unofficial-dynamic-content-ui": "^0.2.3",
     "dc-extensions-sdk": "^1.0.1"
   },
@@ -44,7 +44,7 @@
     "copyfiles": "^2.1.1",
     "jest": "^24.9.0",
     "ts-jest": "^24.0.2",
-    "typescript": "^3.6.2",
+    "typescript": "^3.8",
     "@storybook/html": "^5.1.11"
   }
 }

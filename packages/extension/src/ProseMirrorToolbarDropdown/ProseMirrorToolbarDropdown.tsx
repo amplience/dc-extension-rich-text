@@ -17,6 +17,7 @@ export interface ProseMirrorToolbarButtonProps
   extends WithStyles<typeof styles> {
   toolNames: string[];
   label?: string;
+  isLocked?: boolean;
 }
 
 const ProseMirrorToolbarDropdown: React.SFC<ProseMirrorToolbarButtonProps> = (
@@ -35,14 +36,15 @@ const ProseMirrorToolbarDropdown: React.SFC<ProseMirrorToolbarButtonProps> = (
     })
     .filter(x => x != null) as ProseMirrorToolState[];
 
-  let selectedItems: ProseMirrorToolState[] = toolStates.filter(x => x.active);
-  let selected;
+  const selectedItems: ProseMirrorToolState[] = toolStates.filter(
+    x => x.active
+  );
 
-  if (selectedItems && selectedItems.length > 1 ){
-    selected = selectedItems.find(x => /inline_styles/.test(x.name)) || selectedItems[0];
-  } else {
-    selected = selectedItems.find(x => x.active);
-  }
+  const selected =
+    selectedItems && selectedItems.length > 1
+      ? selectedItems.find(x => /inline_styles/.test(x.name)) ||
+        selectedItems[0]
+      : selectedItems.find(x => x.active);
 
   const value = selected ? selected.name : "";
 
@@ -90,11 +92,16 @@ const ProseMirrorToolbarDropdown: React.SFC<ProseMirrorToolbarButtonProps> = (
       onChange={handleChange}
       renderValue={renderValue}
       displayEmpty={true}
-      onMouseDown={(e) => e.preventDefault()}
+      onMouseDown={e => e.preventDefault()}
+      disabled={props.isLocked}
     >
       {toolStates.map(toolState => {
         return (
-          <MenuItem value={toolState.name} key={toolState.name} onMouseDown={(e) => e.preventDefault()}>
+          <MenuItem
+            value={toolState.name}
+            key={toolState.name}
+            onMouseDown={e => e.preventDefault()}
+          >
             {toolState.displayLabel ? (
               toolState.displayLabel
             ) : (

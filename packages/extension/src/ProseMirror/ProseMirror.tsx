@@ -4,6 +4,8 @@ import "./ProseMirror.scss";
 
 import { WithStyles, withStyles } from "@material-ui/core";
 
+import RichTextEditorContext from "../RichTextEditor/RichTextEditorContext";
+
 // tslint:disable-next-line
 const EditorState = require("prosemirror-state").EditorState;
 // tslint:disable-next-line
@@ -32,31 +34,35 @@ export interface ProseMirrorProps extends WithStyles<typeof styles> {
   editorViewOptions?: any;
   onUpdateState?: (state: any, editorView: any) => void;
   onChange?: (doc: any) => void;
+  isLocked?: boolean;
 }
 
 interface ProseMirrorState {
   ref: RefObject<any>;
   editorView?: any;
+  isLocked?: boolean;
 }
 
 function getKeys(schema: any): any {
   return {
     Tab: sinkListItem(schema.nodes.list_item)
-  }
+  };
 }
 
 class ProseMirror extends React.Component<ProseMirrorProps, ProseMirrorState> {
   constructor(props: ProseMirrorProps) {
     super(props);
     const ref = React.createRef();
-    this.state = { ref };
+    this.state = { ref, isLocked: props.isLocked };
   }
 
   public createEditorState(): any {
     const { schema, doc } = this.props;
 
     const withTablePlugins = schema.nodes.table != null;
-    const tablePlugins = withTablePlugins ? [ columnResizing(), tableEditing() ] : [];
+    const tablePlugins = withTablePlugins
+      ? [columnResizing(), tableEditing()]
+      : [];
 
     return EditorState.create({
       schema,
@@ -64,7 +70,7 @@ class ProseMirror extends React.Component<ProseMirrorProps, ProseMirrorState> {
       plugins: [
         ...tablePlugins,
         keymap(getKeys(schema)),
-        ...exampleSetup({ schema, menuBar: false }), // can pass mapkeys to suppress some bindings
+        ...exampleSetup({ schema, menuBar: false }) // can pass mapkeys to suppress some bindings
       ]
     });
   }
@@ -73,6 +79,8 @@ class ProseMirror extends React.Component<ProseMirrorProps, ProseMirrorState> {
     const { onUpdateState, onChange } = this.props;
 
     const editorState = this.createEditorState();
+    // tslint:disable-next-line: no-this-assignment
+    const self = this;
 
     const view = new EditorView(parent, {
       ...this.props.editorViewOptions,
@@ -94,12 +102,26 @@ class ProseMirror extends React.Component<ProseMirrorProps, ProseMirrorState> {
         }
 
         this.forceUpdate();
+        return state;
+      },
+      editable(): boolean {
+        return !self.state.isLocked;
       }
     });
 
     if (onUpdateState) {
       onUpdateState(view.state, view);
     }
+
+    // TODO: Is there a cleaner way than this monkey patch for getting the updated state after a dispatch?
+    view.dispatch = function(this: any, tr: any): any {
+      const dispatchTransaction = this._props.dispatchTransaction;
+      if (dispatchTransaction) {
+        return dispatchTransaction.call(this, tr);
+      } else {
+        return this.updateState(this.state.apply(tr));
+      }
+    }.bind(view);
 
     return view;
   }
@@ -108,6 +130,16 @@ class ProseMirror extends React.Component<ProseMirrorProps, ProseMirrorState> {
     if (this.state.ref && !this.state.editorView) {
       const editorView = this.createEditorView(this.state.ref.current);
       this.setState({ editorView });
+    }
+  }
+
+  public componentDidUpdate(
+    prevProps: Readonly<ProseMirrorProps>,
+    prevState: Readonly<ProseMirrorState>,
+    snapshot?: any
+  ): void {
+    if (this.props.isLocked !== prevProps.isLocked) {
+      this.setState({ ...this.state, isLocked: this.props.isLocked });
     }
   }
 

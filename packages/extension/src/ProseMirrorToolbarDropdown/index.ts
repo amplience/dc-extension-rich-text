@@ -1,3 +1,1 @@
-export {
-  default as ProseMirrorToolbarDropdown
-} from "./ProseMirrorToolbarDropdown";
+export { default as ProseMirrorToolbarDropdown } from "./ProseMirrorToolbarDropdown";

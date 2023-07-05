@@ -32,6 +32,158 @@ mockSdk.contentLink.get = () => {
   });
 };
 
+function editorWithSchema(schema: any): any {
+  return () => {
+    return withTheme(
+      <SdkContext.Provider value={{ sdk: mockSdk }}>
+        <RichTextDialogsContainer params={schema?.["ui:extension"]?.params}>
+          <EditorRichTextField schema={schema} />
+        </RichTextDialogsContainer>
+      </SdkContext.Provider>
+    );
+  };
+}
+
+storiesOf("EditorRichTextField/AI", module)
+  .add(
+    "Disabled",
+    editorWithSchema({
+      "ui:extension": {
+        params: {
+          tools: {
+            blacklist: ["ai"],
+            ai: {
+              key: process.env.OPENAI_KEY
+            }
+          }
+        }
+      }
+    })
+  )
+  .add(
+    "No API key",
+    editorWithSchema({
+      "ui:extension": {
+        params: {
+          tools: {
+            ai: {
+              key: undefined
+            }
+          }
+        }
+      }
+    })
+  )
+  .add(
+    "Configured API key",
+    editorWithSchema({
+      "ui:extension": {
+        params: {
+          tools: {
+            ai: {
+              key: process.env.OPENAI_KEY
+            }
+          }
+        }
+      }
+    })
+  )
+  .add(
+    "JSON",
+    editorWithSchema({
+      "ui:extension": {
+        params: {
+          language: "json",
+          tools: {
+            ai: {
+              key: process.env.OPENAI_KEY
+            }
+          }
+        }
+      }
+    })
+  )
+  .add(
+    "Invalid API key",
+    editorWithSchema({
+      "ui:extension": {
+        params: {
+          tools: {
+            ai: {
+              key: "invalid"
+            }
+          }
+        }
+      }
+    })
+  )
+  .add(
+    "GPT-3.5",
+    editorWithSchema({
+      "ui:extension": {
+        params: {
+          tools: {
+            ai: {
+              key: process.env.OPENAI_KEY,
+              model: "gpt-3.5-turbo"
+            }
+          }
+        }
+      }
+    })
+  )
+  .add(
+    "GPT-4",
+    editorWithSchema({
+      "ui:extension": {
+        params: {
+          tools: {
+            ai: {
+              key: process.env.OPENAI_KEY,
+              model: "gpt-4"
+            }
+          }
+        }
+      }
+    })
+  )
+  .add(
+    "Custom edit prompts",
+    editorWithSchema({
+      "ui:extension": {
+        params: {
+          tools: {
+            ai: {
+              key: process.env.OPENAI_KEY,
+              editPrompts: [
+                {
+                  label: "Improve this",
+                  prompt: "Improve this"
+                },
+                {
+                  label: "Shorten this",
+                  prompt: "Shorten this"
+                },
+                {
+                  label: "Elaborate on this",
+                  prompt: "Elaborate on this"
+                },
+                {
+                  label: "Shakespeareify this",
+                  prompt: "Rewrite this in the style of shakespeare"
+                },
+                {
+                  label: "leetspeak this",
+                  prompt: "Rewrite this in leetspeak"
+                }
+              ]
+            }
+          }
+        }
+      }
+    })
+  );
+
 storiesOf("EditorRichTextField", module)
   .add("Default Component", () => {
     return withTheme(
@@ -104,8 +256,10 @@ storiesOf("EditorRichTextField", module)
                       ],
                       contentTypeSettings: [
                         {
-                          id: "https://raw.githubusercontent.com/neilmistryamplience/dc-example-website/willow/content-types/card.json",
-                          card: "https://d3rcavkmxce5gq.cloudfront.net/preview/card?vse={{vse.domain}}&content={{content.sys.id}}"
+                          id:
+                            "https://raw.githubusercontent.com/neilmistryamplience/dc-example-website/willow/content-types/card.json",
+                          card:
+                            "https://d3rcavkmxce5gq.cloudfront.net/preview/card?vse={{vse.domain}}&content={{content.sys.id}}"
                         }
                       ]
                     }

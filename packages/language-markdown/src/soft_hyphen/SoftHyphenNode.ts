@@ -11,10 +11,6 @@ export const soft_hyphen = {
     }
   ],
   toDOM(node: any): any {
-    return [
-      "span",
-      { "data-shy": true },
-      "-"
-    ];
+    return ["span", { "data-shy": true }, "-"];
   }
 };

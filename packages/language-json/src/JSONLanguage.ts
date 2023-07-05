@@ -2,49 +2,54 @@ import {
   createStandardTools,
   isToolEnabled,
   ProseMirrorTool,
-  RichLanguage
+  RichLanguage,
+  StandardToolOptions
 } from "@dc-extension-rich-text/common";
 import {
-  createMarkdownTools
+  createMarkdownParser,
+  createMarkdownSerializer,
+  createMarkdownTools,
+  MarkdownLanguage
 } from "@dc-extension-rich-text/language-markdown";
 import {
   createDynamicContentTools,
+  DcContentLinkNode,
+  DcImageLinkNode,
   DynamicContentToolOptions
 } from "@dc-extension-rich-text/prosemirror-dynamic-content";
 import { Block, BlockConverter } from "./blocks/Block";
 import DcContentLinkBlock from "./blocks/DcContentLinkBlock";
 import DcImageLinkBlock from "./blocks/DcImageLinkBlock";
 import MarkdownBlock from "./blocks/MarkdownBlock";
-import { createSchema } from "./schema/createSchema";
+// tslint:disable-next-line
+const { Schema } = require("prosemirror-model");
 
 // tslint:disable-next-line
 const Node = require("prosemirror-model").Node;
 
-export default class JSONLanguage implements RichLanguage {
+export default class JSONLanguage extends MarkdownLanguage {
   public name: string = "json";
   public label: string = "JSON";
-  public schema: any;
-  public tools: ProseMirrorTool[];
+  private blockTypes: BlockConverter[];
+  private markdownBlock: MarkdownBlock;
 
   constructor(
     options: DynamicContentToolOptions = {},
-    private blockTypes: BlockConverter[] = [
-      new MarkdownBlock(options),
+    blockTypes?: BlockConverter[]
+  ) {
+    super(options);
+
+    this.markdownBlock = new MarkdownBlock(options, this);
+    this.blockTypes = blockTypes || [
+      this.markdownBlock,
       new DcImageLinkBlock(),
       new DcContentLinkBlock()
-    ]
-  ) {
-    const isInlineStylesEnabled = isToolEnabled("inline_styles", options);
-    const schema = createSchema(options, isInlineStylesEnabled);
-
-    const tools = [
-      ...createStandardTools(schema, options),
-      ...createDynamicContentTools(schema, options),
-      ...createMarkdownTools(schema, options)
     ];
 
-    this.schema = schema;
-    this.tools = tools;
+    this.tools = [
+      ...this.tools,
+      ...createDynamicContentTools(this.schema, options)
+    ];
   }
 
   public serialize(doc: any): Block[] {
@@ -112,6 +117,23 @@ export default class JSONLanguage implements RichLanguage {
     }
 
     return Node.fromJSON(this.schema, result);
+  }
+
+  protected createSchema(options: StandardToolOptions): any {
+    const schema = super.createSchema(options);
+    return new Schema({
+      nodes: schema.spec.nodes
+        .addBefore("image", "dc-image-link", DcImageLinkNode())
+        .addBefore("image", "dc-content-link", DcContentLinkNode()),
+      marks: schema.spec.marks
+    });
+  }
+
+  protected getNodeSerializers(): any {
+    return {
+      "dc-image-link": () => "",
+      "dc-content-linl": () => ""
+    };
   }
 }
 

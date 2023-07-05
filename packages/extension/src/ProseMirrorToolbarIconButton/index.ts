@@ -1,3 +1,1 @@
-export {
-  default as ProseMirrorToolbarIconButton
-} from "./ProseMirrorToolbarIconButton";
+export { default as ProseMirrorToolbarIconButton } from "./ProseMirrorToolbarIconButton";

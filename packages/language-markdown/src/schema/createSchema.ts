@@ -12,7 +12,10 @@ const { tableNodes } = require("prosemirror-tables");
 // tslint:disable-next-line
 const { Schema } = require("prosemirror-model");
 
-export function createSchema(options: StandardToolOptions, isInlineStylesEnabled: boolean = false): any {
+export function createSchema(
+  options: StandardToolOptions,
+  isInlineStylesEnabled: boolean = false
+): any {
   const schema = require("prosemirror-markdown").schema;
 
   // TODO: don't register nodes and marks that are disabled in the options
@@ -21,22 +24,33 @@ export function createSchema(options: StandardToolOptions, isInlineStylesEnabled
     marks = marks.addToEnd("inline_styles", inline_styles);
   }
 
-  const nodes = schema.spec.nodes.append(tableNodes({
-    tableGroup: "block",
-    cellContent: "block",
-    cellAttributes: {
-      background: {
-        default: null,
-        // tslint:disable-next-line
-        getFromDOM(dom: any) { return dom.style.backgroundColor || null },
-        // tslint:disable-next-line
-        setDOMAttr(value: any, attrs: any) { if (value) attrs.style = (attrs.style || "") + `background-color: ${value};` }
-      }
-    }
-  })).addToEnd("soft_hyphen", soft_hyphen)
-     .addToEnd("anchor", anchor)
-     .update("paragraph", paragraph_align)
-     .update("heading", heading_align);
+  const nodes = schema.spec.nodes
+    .append(
+      tableNodes({
+        tableGroup: "block",
+        cellContent: "block",
+        cellAttributes: {
+          background: {
+            default: null,
+            // tslint:disable-next-line
+            getFromDOM(dom: any) {
+              return dom.style.backgroundColor || null;
+            },
+            // tslint:disable-next-line
+            setDOMAttr(value: any, attrs: any) {
+              if (value) {
+                attrs.style =
+                  (attrs.style || "") + `background-color: ${value};`;
+              }
+            }
+          }
+        }
+      })
+    )
+    .addToEnd("soft_hyphen", soft_hyphen)
+    .addToEnd("anchor", anchor)
+    .update("paragraph", paragraph_align)
+    .update("heading", heading_align);
 
   return new Schema({
     nodes,
@@ -47,7 +61,10 @@ export function createSchema(options: StandardToolOptions, isInlineStylesEnabled
 let serializer: any;
 let parser: any;
 
-export function getDefaultSerializerParser(schema: any, options: StandardToolOptions): [any, any] {
+export function getDefaultSerializerParser(
+  schema: any,
+  options: StandardToolOptions
+): [any, any] {
   if (serializer == null) {
     serializer = createMarkdownSerializer(options);
     parser = createMarkdownParser(schema, options);

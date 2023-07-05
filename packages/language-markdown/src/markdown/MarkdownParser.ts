@@ -1,4 +1,7 @@
-import { getDefaultClass, StandardToolOptions } from "@dc-extension-rich-text/common";
+import {
+  getDefaultClass,
+  StandardToolOptions
+} from "@dc-extension-rich-text/common";
 import { html_block } from "../alignment";
 import { soft_hyphen_from } from "../soft_hyphen";
 
@@ -7,7 +10,7 @@ const markdown = require("prosemirror-markdown");
 // tslint:disable-next-line
 const markdownit = require("markdown-it");
 // tslint:disable-next-line
-var { markdownItTable } = require('markdown-it-table');
+var { markdownItTable } = require("markdown-it-table");
 
 export function createMarkdownParser(
   schema: any,
@@ -26,8 +29,8 @@ export function createMarkdownParser(
     anchor: {
       node: "anchor",
       getAttrs: (tok: any) => ({
-        value: tok.attrGet("value"),
-      }),
+        value: tok.attrGet("value")
+      })
     },
     fence: {
       block: "code_block",
@@ -36,16 +39,18 @@ export function createMarkdownParser(
     },
     soft_hyphen: { node: "soft_hyphen" },
     table: { block: "table" },
-    th: { block: "table_header",
+    th: {
+      block: "table_header",
       getAttrs: (tok: any) => ({
-        style: tok.attrGet("style"),
-      }),
+        style: tok.attrGet("style")
+      })
     },
     tr: { block: "table_row" },
-    td: { block: "table_cell",
+    td: {
+      block: "table_cell",
       getAttrs: (tok: any) => ({
-        style: tok.attrGet("style"),
-      }),
+        style: tok.attrGet("style")
+      })
     }
   });
 
@@ -103,15 +108,15 @@ export function createMarkdownParser(
     ["H3", "heading"],
     ["H4", "heading"],
     ["H5", "heading"],
-    ["H6", "heading"],
-  ])
+    ["H6", "heading"]
+  ]);
 
   const alignmentClasses = new Map<string, string>([
     ["amp-align-left", "left"],
     ["amp-align-center", "center"],
     ["amp-align-right", "right"],
     ["amp-align-justify", "justify"]
-  ])
+  ]);
 
   // tslint:disable-next-line
   parser.tokenHandlers.html_block_open = (state: any, token: any) => {
@@ -119,26 +124,35 @@ export function createMarkdownParser(
       return;
     }
 
-    const styleAttr = token.meta.attrs.find((attr: Attr) => attr.name === 'style') as Attr;
-    let alignAttr = 'left';
+    const styleAttr = token.meta.attrs.find(
+      (attr: Attr) => attr.name === "style"
+    ) as Attr;
+    let alignAttr = "left";
     if (styleAttr) {
-      alignAttr = (styleAttr.ownerElement as HTMLElement).style.textAlign || alignAttr;
+      alignAttr =
+        (styleAttr.ownerElement as HTMLElement).style.textAlign || alignAttr;
     }
 
-    const classAttr = token.meta.attrs.find((attr: Attr) => attr.name === 'class') as Attr;
+    const classAttr = token.meta.attrs.find(
+      (attr: Attr) => attr.name === "class"
+    ) as Attr;
     if (classAttr) {
       // Styles may be present in classes instead
       (classAttr.ownerElement as HTMLElement).classList.forEach(value => {
         const asDefault = getDefaultClass(value, options);
-        
-        alignAttr = alignmentClasses.get(asDefault) || 'left';
+
+        alignAttr = alignmentClasses.get(asDefault) || "left";
       });
     }
 
     const nodeType = alignedParagraphTypes.get(token.meta.tag) as string;
 
-    const level = (nodeType === 'heading') ? Number(token.meta.tag[1]) : undefined;    
-    state.openNode(schema.nodes[nodeType], { align: alignAttr ? alignAttr : 'left', level });
+    const level =
+      nodeType === "heading" ? Number(token.meta.tag[1]) : undefined;
+    state.openNode(schema.nodes[nodeType], {
+      align: alignAttr ? alignAttr : "left",
+      level
+    });
   };
 
   // tslint:disable-next-line
