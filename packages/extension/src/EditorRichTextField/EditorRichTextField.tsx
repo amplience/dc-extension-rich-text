@@ -14,12 +14,13 @@ import {
   RichLanguageConfiguration
 } from "@dc-extension-rich-text/common";
 import {
+  ContentTypeExtensionSettings,
   DcContentLinkView,
   DcImageLinkView,
   DynamicContentToolOptions,
-  ContentTypeExtensionSettings,
   OldContentTypeExtensionSettings
 } from "@dc-extension-rich-text/prosemirror-dynamic-content";
+import { RichTextActionsImpl } from "../RichTextActions";
 import { RichTextDialogsContext } from "../RichTextDialogs";
 
 export const styles = {
@@ -34,7 +35,7 @@ export const styles = {
     boxSizing: "border-box" as "border-box",
     "-webkit-font-smoothing": "auto",
     fontFamily: "roboto,sans-serif!important"
-  },
+  }
 };
 
 export interface EditorRichTextFieldProps extends WithStyles<typeof styles> {
@@ -84,21 +85,21 @@ const EditorRichTextField: React.SFC<EditorRichTextFieldProps> = (
   const { schema, value: valueProp, onChange, classes } = props;
 
   let params: EditorRichTextFieldParams =
-    schema && schema["ui:extension"] && schema["ui:extension"].params
-      ? schema["ui:extension"].params
-      : {};
+    schema?.["ui:extension"]?.params || {};
 
   const { sdk } = React.useContext(SdkContext);
   const { dialogs } = React.useContext(RichTextDialogsContext);
 
-  params = sdk ? { ...sdk.params.installation, ...sdk.params.instance } : params;
+  params = sdk
+    ? { ...params, ...sdk.params?.installation, ...sdk.params?.instance }
+    : params;
 
   const toolOptions = React.useMemo<DynamicContentToolOptions>(() => {
     const settings = {
       useClasses: params.useClasses,
       classOverride: params.classOverride,
-
       dialogs,
+      actions: new RichTextActionsImpl(),
       dynamicContent: {
         stagingEnvironment: sdk ? sdk.stagingEnvironment : undefined
       },
@@ -131,7 +132,7 @@ const EditorRichTextField: React.SFC<EditorRichTextFieldProps> = (
           new DcImageLinkView(node, view, getPos, toolOptions),
         "dc-content-link": (node: any, view: any, getPos: any) =>
           new DcContentLinkView(node, view, getPos, toolOptions)
-      },
+      }
     };
   }, [sdk, toolOptions]);
 
@@ -165,6 +166,7 @@ const EditorRichTextField: React.SFC<EditorRichTextFieldProps> = (
           params.codeView ? params.codeView.readOnly : undefined
         }
         onChange={onChange}
+        params={params}
         value={valueProp}
       />
     </div>

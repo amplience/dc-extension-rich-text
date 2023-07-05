@@ -8,6 +8,7 @@ import clsx from "clsx";
 export interface ProseMirrorToolbarButtonProps
   extends PropsWithChildren<WithStyles<typeof styles>> {
   toolName: string;
+  isLocked?: boolean;
 }
 
 const styles = {
@@ -26,18 +27,21 @@ const ProseMirrorToolbarIconButton: React.SFC<ProseMirrorToolbarButtonProps> = (
   );
 
   const toolState = getToolState ? getToolState(toolName) : null;
-  const handleClick = React.useCallback(event => {
-    const focus = document.activeElement;
-    if (applyTool) {
-      applyTool(toolName);
-    }
+  const handleClick = React.useCallback(
+    event => {
+      const focus = document.activeElement;
+      if (applyTool) {
+        applyTool(toolName);
+      }
 
-    // Focus will switch to the button, which is required to play the ripple effect.
-    // If we return it to the original element as soon as possible, the cursor will be in the same spot.
-    if (focus != null) {
-      setTimeout(() => (focus as HTMLElement).focus(), 0);
-    }
-  }, [toolName, applyTool]);
+      // Focus will switch to the button, which is required to play the ripple effect.
+      // If we return it to the original element as soon as possible, the cursor will be in the same spot.
+      if (focus != null) {
+        setTimeout(() => (focus as HTMLElement).focus(), 0);
+      }
+    },
+    [toolName, applyTool]
+  );
 
   if (!toolState || !toolState.visible) {
     return null;
@@ -48,7 +52,7 @@ const ProseMirrorToolbarIconButton: React.SFC<ProseMirrorToolbarButtonProps> = (
       className={clsx(classes.root)}
       onMouseDown={handleClick}
       size="small"
-      disabled={!toolState.enabled}
+      disabled={!toolState.enabled || props.isLocked}
       color={toolState.active ? "primary" : "default"}
       title={toolState.label}
     >

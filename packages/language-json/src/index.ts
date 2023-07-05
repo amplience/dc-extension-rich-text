@@ -17,7 +17,6 @@ export default function(
 
 export * from "./JSONLanguage";
 export * from "./JSONLanguageConfiguration";
-export * from "./schema/createSchema";
 export * from "./blocks/Block";
 export * from "./blocks/DcImageLinkBlock";
 export * from "./blocks/MarkdownBlock";

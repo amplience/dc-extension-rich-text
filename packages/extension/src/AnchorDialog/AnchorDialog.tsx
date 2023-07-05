@@ -27,15 +27,15 @@ const htmlIdRegex = /^[a-zA-Z][\w:.\-]*$/;
 
 function validateId(value: string, existing: Set<string>): string | undefined {
   if (value == null || value.length === 0) {
-    return 'ID cannot be empty.';
+    return "ID cannot be empty.";
   }
 
   if (!htmlIdRegex.test(value)) {
-    return 'Invalid ID.';
+    return "Invalid ID.";
   }
 
   if (existing.has(value)) {
-    return 'ID is already in use.'
+    return "ID is already in use.";
   }
 
   return undefined;
@@ -53,7 +53,11 @@ const AnchorDialog: React.SFC<AnchorDialogProps> = (
 
   const [lastValue, setLastValue] = React.useState<Anchor>();
 
-  if (props.value != null && props.value.value != null && lastValue !== props.value.value) {
+  if (
+    props.value != null &&
+    props.value.value != null &&
+    lastValue !== props.value.value
+  ) {
     setValue(props.value.value);
     setLastValue(props.value.value);
   }
@@ -119,16 +123,18 @@ const AnchorDialog: React.SFC<AnchorDialogProps> = (
             onChange={event => handleInputChanged("value", event.target.value)}
             helperText={validError}
           />
-          <FormHelperText>
-            Example: paragraph-4
-          </FormHelperText>
+          <FormHelperText>Example: paragraph-4</FormHelperText>
         </FormControl>
       </DialogContent>
       <DialogActions>
         <Button onClick={handleCancel} color="primary">
           Cancel
         </Button>
-        <Button disabled={validError !== undefined} onClick={handleSubmit} color="primary">
+        <Button
+          disabled={validError !== undefined}
+          onClick={handleSubmit}
+          color="primary"
+        >
           Confirm
         </Button>
       </DialogActions>

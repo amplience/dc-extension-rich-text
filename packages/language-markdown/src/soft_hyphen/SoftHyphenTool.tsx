@@ -1,5 +1,5 @@
 import { canInsert, ProseMirrorTool } from "@dc-extension-rich-text/common";
-import Remove from "@material-ui/icons/Remove";
+import {Remove} from "@material-ui/icons";
 import React from "react";
 
 export function SoftHyphenTool(schema: any): ProseMirrorTool {

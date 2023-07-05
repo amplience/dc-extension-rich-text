@@ -6,9 +6,9 @@ export const AnchorToMarkdown = {
     }
 
     const attrsSerialized = Object.keys(attrs)
-      .map((key) => `${key}="${attrs[key]}"`)
+      .map(key => `${key}="${attrs[key]}"`)
       .join(" ");
 
     state.write(`<a ${attrsSerialized}></a>`);
-  },
+  }
 };

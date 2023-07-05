@@ -15,7 +15,7 @@ export const inline_styles = {
       getAttrs: (node: any) => {
         return {
           class: node.getAttribute("class"),
-          style: (node.attributes.style) ? node.attributes.style.value : undefined
+          style: node.attributes.style ? node.attributes.style.value : undefined
         };
       }
     }

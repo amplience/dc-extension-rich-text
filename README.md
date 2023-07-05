@@ -10,35 +10,35 @@ This extension is designed to replace the built in rich text editor with additio
 
 ## Features
 
-* Markdown output
-  * Paragraphs
-  * Headings
-  * Bold text
-  * Italic text
-  * Soft hyphens
-  * Hyperlinks
-  * Anchors
-  * Text alignment
-  * Bullet lists
-  * Numeric lists
-  * External images
-  * Block quotes
-  * Code snippets
-  * Horizontal rules
-  * Inline styles
-* JSON output
-  * Markdown Blocks
-  * Content Blocks
-  * Image Blocks
-* User friendly editor based on [ProseMirror](https://prosemirror.net/)
-  * Cut/copy/paste content
-  * Formatting when copying content from other tools
-  * Keyboard shortcuts
-  * Undo/Redo
-* Customizability
-  * Enable/disable tools
-  * Change toolbar layout
-  * Custom styles
+- Markdown output
+  - Paragraphs
+  - Headings
+  - Bold text
+  - Italic text
+  - Soft hyphens
+  - Hyperlinks
+  - Anchors
+  - Text alignment
+  - Bullet lists
+  - Numeric lists
+  - External images
+  - Block quotes
+  - Code snippets
+  - Horizontal rules
+  - Inline styles
+- JSON output
+  - Markdown Blocks
+  - Content Blocks
+  - Image Blocks
+- User friendly editor based on [ProseMirror](https://prosemirror.net/)
+  - Cut/copy/paste content
+  - Formatting when copying content from other tools
+  - Keyboard shortcuts
+  - Undo/Redo
+- Customizability
+  - Enable/disable tools
+  - Change toolbar layout
+  - Custom styles
 
 More details on the available features can be found on the [Features](FEATURES.md) page, whilst further information on how to configure and customise these features can be found in the [Configuration](#configuration) section.
 
@@ -50,12 +50,12 @@ This extension needs to be [registered](https://amplience.com/docs/development/r
 
 ![Setup](media/setup.png)
 
-* Category: Content Field
-* Label: Rich Text
-* Name: dc-extension-rich-text _(needs to be unique with the Hub)_
-* URL: [https://rich-text.extensions.content.amplience.net](https://rich-text.extensions.content.amplience.net)
-* Description: Rich text editor _(can be left blank, if you wish)_
-* Initial height: 500
+- Category: Content Field
+- Label: Rich Text
+- Name: dc-extension-rich-text _(needs to be unique with the Hub)_
+- URL: [https://rich-text.extensions.content.amplience.net](https://rich-text.extensions.content.amplience.net)
+- Description: Rich text editor _(can be left blank, if you wish)_
+- Initial height: 500
 
 Note:
 You can use our deployed version of this extension (builds from the "production" branch) -
@@ -69,6 +69,7 @@ _As this is an open source project you're welcome to host your own "fork" of thi
 ![Permissions](media/permissions.png)
 
 Sandbox permissions:
+
 - Allow same origin
 
 ### Assign the extension to schema
@@ -77,14 +78,14 @@ To use the rich text editor, you simply need to add a field to your content type
 
 ```json
 {
-    "type": "string",
-    "ui:extension": {
-        "url": "https://rich-text.extensions.content.amplience.net",
+  "type": "string",
+  "ui:extension": {
+    "url": "https://rich-text.extensions.content.amplience.net",
 
-        "params": {
-            "language": "markdown"
-        }
+    "params": {
+      "language": "markdown"
     }
+  }
 }
 ```
 
@@ -96,14 +97,14 @@ Using markdown output:
 
 ```json
 {
-    "type": "string",
-    "ui:extension": {
-        "url": "https://rich-text.extensions.content.amplience.net",
+  "type": "string",
+  "ui:extension": {
+    "url": "https://rich-text.extensions.content.amplience.net",
 
-        "params": {
-            "language": "markdown"
-        }
+    "params": {
+      "language": "markdown"
     }
+  }
 }
 ```
 
@@ -111,7 +112,9 @@ The markdown language will output standard [CommonMark](https://commonmark.org/)
 
 ```markdown
 # Heading 1
+
 ## Heading 2
+
 Paragraph
 ```
 
@@ -119,14 +122,14 @@ Using JSON output:
 
 ```json
 {
-    "type": "array",
-    "ui:extension": {
-        "url": "https://rich-text.extensions.content.amplience.net",
+  "type": "array",
+  "ui:extension": {
+    "url": "https://rich-text.extensions.content.amplience.net",
 
-        "params": {
-            "language": "json"
-        }
+    "params": {
+      "language": "json"
     }
+  }
 }
 ```
 
@@ -134,24 +137,24 @@ This will output an array of "blocks". Each block has a type and associated data
 
 ```json
 [
-   {
-      "type": "markdown",
-      "data": "# Ethical Beauty\n\n*10 Organic, Cruelty-Free & Vegan Products to Buy Now*"
-   },
-   {
-      "type": "dc-content-link",
-      "data": {
-         "id": "e9248f05-ec46-4558-8a18-b6b881597695",
-         "contentType": "https://github.com/amplience/dc-accelerators-content-types/blob/master/banner.json",
-         "_meta": {
-            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
-         }
+  {
+    "type": "markdown",
+    "data": "# Ethical Beauty\n\n*10 Organic, Cruelty-Free & Vegan Products to Buy Now*"
+  },
+  {
+    "type": "dc-content-link",
+    "data": {
+      "id": "e9248f05-ec46-4558-8a18-b6b881597695",
+      "contentType": "https://github.com/amplience/dc-accelerators-content-types/blob/master/banner.json",
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
       }
-   },
-   {
-      "type": "markdown",
-      "data": "The ethical beauty market is stronger than ever before. Gone are the days of compromising on a product’s efficacy or luxury in supporting a particular set of values. Here, our Editor talks through some of the best cruelty-free products of the moment."
-   }
+    }
+  },
+  {
+    "type": "markdown",
+    "data": "The ethical beauty market is stronger than ever before. Gone are the days of compromising on a product’s efficacy or luxury in supporting a particular set of values. Here, our Editor talks through some of the best cruelty-free products of the moment."
+  }
 ]
 ```
 
@@ -165,9 +168,28 @@ You can set a whitelist of tools which the user can choose from:
 
 ```json
 {
-    "tools": {
-        "whitelist": ["undo", "redo", "strong", "em", "code", "link", "lift", "bullet_list", "ordered_list", "image", "blockquote", "heading", "paragraph", "code_block", "horizontal_rule", "clear_formatting", "dc-image-link", "dc-content-link"]
-    }
+  "tools": {
+    "whitelist": [
+      "undo",
+      "redo",
+      "strong",
+      "em",
+      "code",
+      "link",
+      "lift",
+      "bullet_list",
+      "ordered_list",
+      "image",
+      "blockquote",
+      "heading",
+      "paragraph",
+      "code_block",
+      "horizontal_rule",
+      "clear_formatting",
+      "dc-image-link",
+      "dc-content-link"
+    ]
+  }
 }
 ```
 
@@ -175,9 +197,9 @@ You can also blacklist individual tools:
 
 ```json
 {
-    "tools": {
-        "blacklist": ["code", "code_block", "inline_styles"]
-    }
+  "tools": {
+    "blacklist": ["code", "code_block", "inline_styles"]
+  }
 }
 ```
 
@@ -187,30 +209,31 @@ The default toolbar layout can be overridden as follows:
 
 ```json
 {
-    "toolbar": {
-        "layout": [
-            { "type": "button", "toolName": "undo" },
-            { "type": "button", "toolName": "redo" },
-            {
-                "type": "group",
-                "children": [
-                    { "type": "button", "toolName": "strong" },
-                    { "type": "button", "toolName": "em" }
-                ]
-            },
-            {
-                "type": "dropdown",
-                "toolNames": [
-                    "heading_1",
-                    "heading_2",
-                    "heading_3",
-                    "heading_4",
-                    "heading_5",
-                    "heading_6"
-                ]
-            }
+  "toolbar": {
+    "layout": [
+      { "type": "button", "toolName": "undo" },
+      { "type": "button", "toolName": "redo" },
+      {
+        "type": "group",
+        "children": [
+          { "type": "button", "toolName": "strong" },
+          { "type": "button", "toolName": "em" }
         ]
-    }
+      },
+      {
+        "type": "dropdown",
+        "toolNames": [
+          "heading_1",
+          "heading_2",
+          "heading_3",
+          "heading_4",
+          "heading_5",
+          "heading_6"
+        ]
+      },
+      { "type": "button", "toolName": "ai" }
+    ]
+  }
 }
 ```
 
@@ -224,7 +247,7 @@ Using inline styles:
 
 ```json
 {
-    "styles": "h1 { color: 'red' }"
+  "styles": "h1 { color: 'red' }"
 }
 ```
 
@@ -232,12 +255,13 @@ Using an external stylesheet:
 
 ```json
 {
-    "stylesheet": "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+  "stylesheet": "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
 }
 ```
 
 | WARNING: Custom styles are loaded into the extension and may impact the styling of the UI. You can prefix styles with .ProseMirror to only target the editor area. |
-| --- |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+
 
 ### Disable code view
 
@@ -245,9 +269,9 @@ If you want to prevent non-technical users modifying the raw markdown or JSON, y
 
 ```json
 {
-    "codeView": {
-        "disabled": true
-    }
+  "codeView": {
+    "disabled": true
+  }
 }
 ```
 
@@ -255,9 +279,9 @@ Or
 
 ```json
 {
-    "codeView": {
-        "readOnly": true
-    }
+  "codeView": {
+    "readOnly": true
+  }
 }
 ```
 
@@ -271,11 +295,11 @@ To enable this tool, you must provide a list of content types that the user can 
 
 ```json
 {
-    "tools": {
-        "dc-content-link": {
-            "contentTypes": ["<schema-id>"]
-        }
+  "tools": {
+    "dc-content-link": {
+      "contentTypes": ["<schema-id>"]
     }
+  }
 }
 ```
 
@@ -283,17 +307,17 @@ By default, an icon will be displayed for embedded content items. You can provid
 
 ```json
 {
-    "tools": {
-        "dc-content-link": {
-            "contentTypes": ["<schema-id>"],
-            "contentTypeSettings": [
-                {
-                    "id": "<schema-id>",
-                    "icon":  "<icon-url>"
-                }
-            ]
+  "tools": {
+    "dc-content-link": {
+      "contentTypes": ["<schema-id>"],
+      "contentTypeSettings": [
+        {
+          "id": "<schema-id>",
+          "icon": "<icon-url>"
         }
+      ]
     }
+  }
 }
 ```
 
@@ -303,12 +327,12 @@ If you wish to display a card / visualization, provide a templated URL in the pa
 
 ```json
 {
-    "contentTypeSettings": [
-        {
-            "id": "<schema-id>",
-            "card": "http://myapp.com/visualization?vse={{vse.domain}}&content={{content.sys.id}}"
-        }
-    ]
+  "contentTypeSettings": [
+    {
+      "id": "<schema-id>",
+      "card": "http://myapp.com/visualization?vse={{vse.domain}}&content={{content.sys.id}}"
+    }
+  ]
 }
 ```
 
@@ -318,12 +342,12 @@ Finally, you can also provide a custom aspect ratio for each content type.
 
 ```json
 {
-    "contentTypeSettings": [
-        {
-            "id": "<schema-id>",
-            "aspectRatio": "3:1"
-        }
-    ]
+  "contentTypeSettings": [
+    {
+      "id": "<schema-id>",
+      "aspectRatio": "3:1"
+    }
+  ]
 }
 ```
 
@@ -331,14 +355,83 @@ When using multiple of these properties, use them on the same object:
 
 ```json
 {
-    "contentTypeSettings": [
+  "contentTypeSettings": [
+    {
+      "id": "<schema-id>",
+      "icon": "<icon-url>",
+      "card": "http://myapp.com/visualization?vse={{vse.domain}}&content={{content.sys.id}}",
+      "aspectRatio": "3:1"
+    }
+  ]
+}
+```
+
+### AI Assistant
+
+Powered by ChatGPT, the AI Assistant allows users to quickly generate and edit content using natural language prompts.
+
+![Generate content from prompt](media/aiPrompt.png)
+
+To get started, you will need to provide your own OpenAI API key which will be used by the extension to communicate with the ChatGPT API. Note, ChatGPT is not affiliated with Amplience and therefore any impact to ChatGPT services such as updates, busy periods, or outages are outside of Amplience control.
+
+By using this feature, you are solely responsible for ensuring that AI generated content complies with internal company policies, applicable laws and [OpenAI's Terms](https://openai.com/policies).
+
+To create your key, you first need an OpenAI account which you can create [here](https://platform.openai.com/signup). Once you have an account you can create an API key [here](https://platform.openai.com/account/api-keys).
+
+Once you have your API key, you can enable the AI Assistant feature by adding your API key to the extension parameters as follows:
+
+```json
+{
+  "tools": {
+    "ai": {
+      "key": "<OpenAI key>"
+    }
+  }
+}
+```
+
+#### ChatGPT 4
+
+If you have access to ChatGPT 4 or wish to use a different OpenAI model, you can choose the specific model the system should use as follows:
+
+```json
+{
+  "tools": {
+    "ai": {
+      "key": "<OpenAI key>",
+      "model": "gpt-4"
+    }
+  }
+}
+```
+
+A detailed list of avaliable models can be found [here](https://platform.openai.com/docs/models).
+
+#### Custom edit prompts
+
+When text is selected, preset edit prompts are displayed which save users needing to type out common prompts multiple times. These can be customized to add or remove your preferred prompts.
+
+```json
+{
+  "tools": {
+    "ai": {
+      "key": "<OpenAI key>",
+      "editPrompts": [
         {
-            "id": "<schema-id>",
-            "icon":  "<icon-url>",
-            "card": "http://myapp.com/visualization?vse={{vse.domain}}&content={{content.sys.id}}",
-            "aspectRatio": "3:1"
+          "label": "Improve this",
+          "prompt": "Improve this"
+        },
+        {
+          "label": "Shorten this",
+          "prompt": "Shorten this"
+        },
+        {
+          "label": "Elaborate on this",
+          "prompt": "Elaborate on this"
         }
-    ]
+      ]
+    }
+  }
 }
 ```
 
@@ -354,7 +447,7 @@ To enable this feature:
 
 ```json
 {
-    "styles": ".was-price { color: red; }"
+  "styles": ".was-price { color: red; }"
 }
 ```
 
@@ -390,9 +483,7 @@ To enable this feature:
       {
         "type": "dropdown",
         "label": "Styles",
-        "toolNames": [
-          "inline_styles_className_was-price"
-        ]
+        "toolNames": ["inline_styles_className_was-price"]
       },
       {
         "type": "button",
@@ -430,9 +521,7 @@ An example of configured parameters for inline styles combining each the previou
             {
               "type": "dropdown",
               "label": "Styles",
-              "toolNames": [
-                "inline_styles_className_was-price"
-              ]
+              "toolNames": ["inline_styles_className_was-price"]
             },
             {
               "type": "button",

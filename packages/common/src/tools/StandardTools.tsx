@@ -1,12 +1,19 @@
 import React from "react";
 
-import { canInsert, clearAllMarks, getSelectionMarks, isMarkActive } from "../utils";
+import {
+  canInsert,
+  clearAllMarks,
+  getSelectionMarks,
+  isMarkActive,
+} from "../utils";
 
 // tslint:disable:no-submodule-imports
+import { Badge } from "@material-ui/core";
+import Assistant from "@material-ui/icons/Assistant";
 import CalendarViewDay from "@material-ui/icons/CalendarViewDay";
 import Code from "@material-ui/icons/Code";
 import FormatBold from "@material-ui/icons/FormatBold";
-import FormatClearIcon from '@material-ui/icons/FormatClear';
+import FormatClearIcon from "@material-ui/icons/FormatClear";
 import FormatIndentDecrease from "@material-ui/icons/FormatIndentDecrease";
 import FormatItalic from "@material-ui/icons/FormatItalic";
 import FormatListBulleted from "@material-ui/icons/FormatListBulleted";
@@ -18,6 +25,7 @@ import Redo from "@material-ui/icons/Redo";
 import Undo from "@material-ui/icons/Undo";
 
 import { Code as Language, Hyperlink, Image } from "../dialogs";
+import { RichTextEditorContextProps } from "../editor";
 import { ProseMirrorTool } from "./ProseMirrorTool";
 import { isToolEnabled, StandardToolOptions } from "./StandardToolOptions";
 
@@ -41,7 +49,7 @@ export function createMarkToggleTool(
     label,
     displayIcon: icon,
     isActive: (state: any) => isMarkActive(state, type),
-    apply: toggleMark(type)
+    apply: toggleMark(type),
   };
 }
 
@@ -51,7 +59,7 @@ export function undo(): ProseMirrorTool {
     label: "Undo",
     displayIcon: <Undo />,
     isEnabled: (state: any) => undoFn(state),
-    apply: undoFn
+    apply: undoFn,
   };
 }
 
@@ -61,7 +69,7 @@ export function redo(): ProseMirrorTool {
     label: "Redo",
     displayIcon: <Redo />,
     isEnabled: (state: any) => redoFn(state),
-    apply: redoFn
+    apply: redoFn,
   };
 }
 
@@ -88,43 +96,60 @@ export function code(schema: any): ProseMirrorTool {
 }
 
 export function editLink(
-  type: any,
-  dialog?: (value?: Hyperlink) => Promise<Hyperlink>
-): (state: any, dispatch: any, view: any) => Promise<void> {
-  return async (state: any, dispatch: any, view: any): Promise<void> => {
-    const marks = getSelectionMarks(state).filter(mark => mark.mark.type === type);
-    const attrs: Hyperlink | undefined = marks.length === 1 ? marks[0].mark.attrs : undefined;
+  type: any
+): (
+  state: any,
+  dispatch: any,
+  richTextEditorContext: RichTextEditorContextProps
+) => Promise<void> {
+  return async (
+    state: any,
+    dispatch: any,
+    richTextEditorContext: RichTextEditorContextProps
+  ): Promise<void> => {
+    const marks = getSelectionMarks(state).filter(
+      (mark) => mark.mark.type === type
+    );
+    const attrs: Hyperlink | undefined =
+      marks.length === 1 ? marks[0].mark.attrs : undefined;
 
-    if (dialog) {
-      try {
-        const linkValue = await dialog(attrs);
+    try {
+      const linkValue = await richTextEditorContext.dialogs.getHyperlink(attrs);
 
-        if (linkValue.cancel) {
-          return;
-        }
-
-        const newAttrs = {
-          href: linkValue.href,
-          title: linkValue.title === "" ? undefined : linkValue.title
-        };
-
-        if (marks.length > 0) {
-          const { tr, selection } = state;
-
-          if (newAttrs.href !== "") {
-            if (marks.length < 2 && !(selection.from < marks[0].from || selection.to > marks[0].to)) {
-              dispatch(tr.addMark(marks[0].from, marks[0].to, type.create(newAttrs)));
-            } else {
-              dispatch(tr.addMark(selection.from, selection.to, type.create(newAttrs)));
-            }
-          }
-        } else {
-          toggleMark(type, newAttrs)(state, dispatch, view);
-        }
-
+      if (linkValue.cancel) {
         return;
-        // tslint:disable-next-line
-      } catch (err) { /* Clear the link instead */ }
+      }
+
+      const newAttrs = {
+        href: linkValue.href,
+        title: linkValue.title === "" ? undefined : linkValue.title,
+      };
+
+      if (marks.length > 0) {
+        const { tr, selection } = state;
+
+        if (newAttrs.href !== "") {
+          if (
+            marks.length < 2 &&
+            !(selection.from < marks[0].from || selection.to > marks[0].to)
+          ) {
+            dispatch(
+              tr.addMark(marks[0].from, marks[0].to, type.create(newAttrs))
+            );
+          } else {
+            dispatch(
+              tr.addMark(selection.from, selection.to, type.create(newAttrs))
+            );
+          }
+        }
+      } else {
+        toggleMark(type, newAttrs)(state, dispatch);
+      }
+
+      return;
+      // tslint:disable-next-line
+    } catch (err) {
+      /* Clear the link instead */
     }
 
     if (isMarkActive(state, type)) {
@@ -134,72 +159,82 @@ export function editLink(
 }
 
 export function editCode(
-  type: any,
-  dialog?: (value?: string) => Promise<string>
-): (state: any, dispatch: any, view: any) => Promise<void> {
-  return async (state: any, dispatch: any, view: any): Promise<void> => {
+  type: any
+): (
+  state: any,
+  dispatch: any,
+  richTextEditorContext: RichTextEditorContextProps
+) => Promise<void> {
+  return async (
+    state: any,
+    dispatch: any,
+    richTextEditorContext: RichTextEditorContextProps
+  ): Promise<void> => {
     const params: Language | undefined = getCurrentParams(state, type);
-    if (dialog) {
-      try {
-        const val = await dialog(params.params || "");
+    try {
+      const val = await richTextEditorContext.dialogs.getCode(
+        params.params || ""
+      );
 
-        return setBlockType(type, { params: val })(state, dispatch, view);
-        // tslint:disable-next-line
-      } catch (err) {
-      }
-    }
+      return setBlockType(type, { params: val })(state, dispatch);
+      // tslint:disable-next-line
+    } catch (err) {}
   };
 }
 
-export function link(
-  schema: any,
-  dialog?: (value?: Hyperlink) => Promise<Hyperlink>
-): ProseMirrorTool {
+export function link(schema: any): ProseMirrorTool {
   return {
     name: "link",
     label: "Add or remove Link",
     displayIcon: <Link />,
     isActive: (state: any) => isMarkActive(state, schema.marks.link),
     isEnabled: (state: any) => {
-      return !state.selection.empty || getSelectionMarks(state).filter(mark => mark.mark.type === schema.marks.link).length > 0;
+      return (
+        !state.selection.empty ||
+        getSelectionMarks(state).filter(
+          (mark) => mark.mark.type === schema.marks.link
+        ).length > 0
+      );
     },
-    apply: editLink(schema.marks.link, dialog)
+    apply: editLink(schema.marks.link),
   };
 }
 
 export function insertImage(
-  type: any,
-  dialog?: (value?: Image) => Promise<Image>
-): (state: any, dispatch: any, view: any) => Promise<void> {
-  return async (state: any, dispatch: any, view: any): Promise<void> => {
-    if (dialog) {
-      try {
-        const imageValue = await dialog();
+  type: any
+): (
+  state: any,
+  dispatch: any,
+  richTextEditorContext: RichTextEditorContextProps
+) => Promise<void> {
+  return async (
+    state: any,
+    dispatch: any,
+    richTextEditorContext: RichTextEditorContextProps
+  ): Promise<void> => {
+    try {
+      const imageValue = await richTextEditorContext.dialogs.getImage();
 
-        view.dispatch(
-          view.state.tr.replaceSelectionWith(
-            type.createAndFill({
-              src: imageValue.src,
-              title: imageValue.title === "" ? undefined : imageValue.title,
-              alt: imageValue.alt === "" ? undefined : imageValue.alt
-            })
-          )
-        );
-        // tslint:disable-next-line
-      } catch (err) { }
-    }
+      dispatch(
+        state.tr.replaceSelectionWith(
+          type.createAndFill({
+            src: imageValue.src,
+            title: imageValue.title === "" ? undefined : imageValue.title,
+            alt: imageValue.alt === "" ? undefined : imageValue.alt,
+          })
+        )
+      );
+      // tslint:disable-next-line
+    } catch (err) {}
   };
 }
 
-export function image(
-  schema: any,
-  dialog?: (value?: Image) => Promise<Image>
-): ProseMirrorTool {
+export function image(schema: any): ProseMirrorTool {
   return {
     name: "image",
     label: "Insert Image from URL",
     displayIcon: <ImageIcon />,
-    apply: insertImage(schema.nodes.image, dialog)
+    apply: insertImage(schema.nodes.image),
   };
 }
 
@@ -209,7 +244,7 @@ export function lift_tool(schema: any): ProseMirrorTool {
     label: "Decrease Indentation",
     displayIcon: <FormatIndentDecrease />,
     isVisible: (state: any) => lift(state),
-    apply: lift
+    apply: lift,
   };
 }
 
@@ -219,7 +254,7 @@ export function bullet_list(schema: any): ProseMirrorTool {
     label: "Bullet List",
     displayIcon: <FormatListBulleted />,
     isEnabled: (state: any) => wrapInList(schema.nodes.bullet_list, {})(state),
-    apply: wrapInList(schema.nodes.bullet_list, {})
+    apply: wrapInList(schema.nodes.bullet_list, {}),
   };
 }
 
@@ -229,7 +264,7 @@ export function ordered_list(schema: any): ProseMirrorTool {
     label: "Ordered List",
     displayIcon: <FormatListNumbered />,
     isEnabled: (state: any) => wrapInList(schema.nodes.ordered_list, {})(state),
-    apply: wrapInList(schema.nodes.ordered_list, {})
+    apply: wrapInList(schema.nodes.ordered_list, {}),
   };
 }
 
@@ -239,7 +274,7 @@ export function blockquote(schema: any): ProseMirrorTool {
     label: "Quote",
     displayIcon: <FormatQuote />,
     isEnabled: (state: any) => wrapInList(schema.nodes.blockquote, {})(state),
-    apply: wrapInList(schema.nodes.blockquote, {})
+    apply: wrapInList(schema.nodes.blockquote, {}),
   };
 }
 
@@ -249,7 +284,9 @@ function getCurrentAlignment(state: any): object {
   }
 
   // Locate the block we're contained in.
-  const parent = findParentNode((x: any): boolean => x.attrs.align)(state.selection);
+  const parent = findParentNode((x: any): boolean => x.attrs.align)(
+    state.selection
+  );
 
   if (parent != null) {
     return { align: parent.node.attrs.align };
@@ -264,12 +301,14 @@ function getCurrentParams(state: any, type: any): Language {
   }
 
   // Locate the block we're contained in.
-  const parent = findParentNode((x: any): boolean => x.attrs.params)(state.selection);
+  const parent = findParentNode((x: any): boolean => x.attrs.params)(
+    state.selection
+  );
 
   if (parent != null) {
-    return { params: parent.node.attrs.params || '' };
+    return { params: parent.node.attrs.params || "" };
   } else {
-    return { params: ''};
+    return { params: "" };
   }
 }
 
@@ -286,9 +325,12 @@ export function heading(schema: any, level: number): ProseMirrorTool {
       { style: { margin: 0 } },
       `Heading ${level}`
     ),
-    apply: (state: any, dispatch: any, view: any) => blockTypeCommand(state, schema.nodes.heading, { level })(state, dispatch, view),
-    isEnabled: (state: any) => blockTypeCommand(state, schema.nodes.heading, { level })(state),
-    isActive: (state: any, view: any) => !blockTypeCommand(state, schema.nodes.heading, { level })(state, null, view)
+    apply: (state: any, dispatch: any) =>
+      blockTypeCommand(state, schema.nodes.heading, { level })(state, dispatch),
+    isEnabled: (state: any) =>
+      blockTypeCommand(state, schema.nodes.heading, { level })(state),
+    isActive: (state: any, view: any) =>
+      !blockTypeCommand(state, schema.nodes.heading, { level })(state, null),
   };
 }
 
@@ -300,24 +342,32 @@ export function paragraph(schema: any): ProseMirrorTool {
     displayLabel: (
       <p style={{ margin: 0, padding: 0, display: "inline" }}>Normal text</p>
     ),
-    apply: (state: any, dispatch: any, view: any) => blockTypeCommand(state, schema.nodes.paragraph)(state, dispatch, view),
-    isEnabled: (state: any) => blockTypeCommand(state, schema.nodes.paragraph)(state),
-    isActive: (state: any, view: any) => !blockTypeCommand(state, schema.nodes.paragraph)(state, null, view)
+    apply: (state: any, dispatch: any) =>
+      blockTypeCommand(state, schema.nodes.paragraph)(state, dispatch),
+    isEnabled: (state: any) =>
+      blockTypeCommand(state, schema.nodes.paragraph)(state),
+    isActive: (state: any) =>
+      !blockTypeCommand(state, schema.nodes.paragraph)(state, null),
   };
 }
 
-export function code_block(schema: any, dialog?: (value?: string) => Promise<string>
-): ProseMirrorTool {
+export function code_block(schema: any): ProseMirrorTool {
   return {
     name: "code_block",
     label: "Code Block",
     displayLabel: <code>Code Block</code>,
     displayIcon: <Code />,
-    apply: editCode(schema.nodes.code_block, dialog),
-    isActive: (state: any, view: any) => {
-      const params: Language | undefined = getCurrentParams(state, schema.nodes.code_block);
-      return !setBlockType(schema.nodes.code_block, { ...params})(state, null, view)
-    }
+    apply: editCode(schema.nodes.code_block),
+    isActive: (
+      state: any,
+      richTextEditorContext: RichTextEditorContextProps
+    ) => {
+      const params: Language | undefined = getCurrentParams(
+        state,
+        schema.nodes.code_block
+      );
+      return !setBlockType(schema.nodes.code_block, { ...params })(state, null);
+    },
   };
 }
 
@@ -331,7 +381,7 @@ export function horizontal_rule(schema: any): ProseMirrorTool {
         state.tr.replaceSelectionWith(schema.nodes.horizontal_rule.create())
       );
     },
-    isEnabled: (state: any) => canInsert(state, schema.nodes.horizontal_rule)
+    isEnabled: (state: any) => canInsert(state, schema.nodes.horizontal_rule),
   };
 }
 
@@ -344,7 +394,34 @@ export function clear_formatting(): ProseMirrorTool {
     isEnabled: (state: any) => {
       // are there any marks?
       return true;
-    }
+    },
+  };
+}
+
+export function ai_generate(): ProseMirrorTool {
+  return {
+    name: "ai",
+    label: "AI Assistant",
+    displayIcon: (
+      <Badge variant="dot" badgeContent="NEW" color="error" overlap="rectangle">
+        <Assistant color="primary" />
+      </Badge>
+    ),
+    apply: async (
+      state: any,
+      dispatch: any,
+      richTextEditorContext: RichTextEditorContextProps
+    ) => {
+      try {
+        const prompt = await richTextEditorContext.dialogs.getAIPrompt({
+          variant: "generate",
+        });
+        await richTextEditorContext.actions.insertAIContent(prompt);
+      } catch {}
+    },
+    isEnabled: (state: any) => {
+      return true;
+    },
   };
 }
 
@@ -354,70 +431,77 @@ export function createStandardTools(
 ): ProseMirrorTool[] {
   const tools: ProseMirrorTool[] = [];
 
-  if (isToolEnabled('undo', options)) {
+  if (isToolEnabled("undo", options)) {
     tools.push(undo());
   }
 
-  if (isToolEnabled('redo', options)) {
+  if (isToolEnabled("redo", options)) {
     tools.push(redo());
   }
 
-  if (isToolEnabled('strong', options) && schema.marks.strong) {
+  if (isToolEnabled("strong", options) && schema.marks.strong) {
     tools.push(strong(schema));
   }
 
-  if (isToolEnabled('em', options) && schema.marks.em) {
+  if (isToolEnabled("em", options) && schema.marks.em) {
     tools.push(em(schema));
   }
 
-  if (isToolEnabled('code', options) && schema.marks.code) {
+  if (isToolEnabled("code", options) && schema.marks.code) {
     tools.push(code(schema));
   }
 
-  if (isToolEnabled('link', options) && schema.marks.link) {
-    tools.push(link(schema, options.dialogs ? options.dialogs.getHyperlink : undefined));
+  if (isToolEnabled("link", options) && schema.marks.link) {
+    tools.push(link(schema));
   }
-  
-  if (isToolEnabled('lift', options)) {
+
+  if (isToolEnabled("lift", options)) {
     tools.push(lift_tool(schema));
   }
 
-  if (isToolEnabled('bullet_list', options) && schema.nodes.bullet_list) {
+  if (isToolEnabled("bullet_list", options) && schema.nodes.bullet_list) {
     tools.push(bullet_list(schema));
   }
 
-  if (isToolEnabled('ordered_list', options) && schema.nodes.ordered_list) {
+  if (isToolEnabled("ordered_list", options) && schema.nodes.ordered_list) {
     tools.push(ordered_list(schema));
   }
 
-  if (isToolEnabled('image', options) && schema.nodes.image) {
-    tools.push(image(schema, options.dialogs ? options.dialogs.getImage : undefined));
+  if (isToolEnabled("image", options) && schema.nodes.image) {
+    tools.push(image(schema));
   }
 
-  if (isToolEnabled('blockquote', options) && schema.nodes.blockquote) {
+  if (isToolEnabled("blockquote", options) && schema.nodes.blockquote) {
     tools.push(blockquote(schema));
   }
 
-  if (isToolEnabled('heading', options) && schema.nodes.heading) {
+  if (isToolEnabled("heading", options) && schema.nodes.heading) {
     for (let i = 1; i < 7; i++) {
       tools.push(heading(schema, i));
     }
   }
 
-  if (isToolEnabled('paragraph', options) && schema.nodes.paragraph) {
+  if (isToolEnabled("paragraph", options) && schema.nodes.paragraph) {
     tools.push(paragraph(schema));
   }
 
-  if (isToolEnabled('code_block', options) && schema.nodes.code_block) {
-    tools.push(code_block(schema, options.dialogs ? options.dialogs.getCode : undefined));
+  if (isToolEnabled("code_block", options) && schema.nodes.code_block) {
+    tools.push(code_block(schema));
   }
 
-  if (isToolEnabled('horizontal_rule', options) && schema.nodes.horizontal_rule) {
+  if (
+    isToolEnabled("horizontal_rule", options) &&
+    schema.nodes.horizontal_rule
+  ) {
     tools.push(horizontal_rule(schema));
   }
 
-  if (isToolEnabled('clear_formatting', options)) {
+  if (isToolEnabled("clear_formatting", options)) {
     tools.push(clear_formatting());
+  }
+
+  if (isToolEnabled("ai", options)) {
+    tools.push(ai_generate());
   }
 
   return tools;

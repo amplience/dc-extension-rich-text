@@ -1,10 +1,6 @@
-import { RichTextDialogs } from "../dialogs";
-
 export interface StandardToolOptions {
   useClasses?: boolean;
   classOverride?: { [originalName: string]: string };
-
-  dialogs?: RichTextDialogs;
 
   tools?: {
     whitelist?: string[];
@@ -43,7 +39,7 @@ export function getCustomClass(
 ): string {
   if (options && options.classOverride) {
     const name = options.classOverride[defaultName];
-    return (name && classNameRegex.test(name)) ? name : defaultName;
+    return name && classNameRegex.test(name) ? name : defaultName;
   }
 
   return defaultName;
@@ -61,4 +57,3 @@ export function getDefaultClass(
 
   return customName;
 }
-

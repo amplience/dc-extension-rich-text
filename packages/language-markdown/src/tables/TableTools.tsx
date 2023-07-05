@@ -1,6 +1,5 @@
 import { canInsert, ProseMirrorTool } from "@dc-extension-rich-text/common";
-import { BorderClear, FirstPage, LastPage, VerticalAlignBottom, VerticalAlignTop } from "@material-ui/icons";
-import TableChart from "@material-ui/icons/TableChart";
+import { BorderClear, FirstPage, LastPage, TableChart, VerticalAlignBottom, VerticalAlignTop } from "@material-ui/icons";
 import {
   addColumnAfter,
   addRowAfter,

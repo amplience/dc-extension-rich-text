@@ -8,7 +8,10 @@ import {
 // tslint:disable-next-line
 const { Schema } = require("prosemirror-model");
 
-export function createSchema(options: StandardToolOptions, isInlineStylesEnabled: boolean): any {
+export function createSchema(
+  options: StandardToolOptions,
+  isInlineStylesEnabled: boolean
+): any {
   const schema = createMarkdownSchema(options, isInlineStylesEnabled);
   return new Schema({
     nodes: schema.spec.nodes
