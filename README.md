@@ -1,5 +1,3 @@
-[![Amplience Dynamic Content](media/header.png)](https://amplience.com/dynamic-content)
-
 ![Amplience Dynamic Content Rich Text Extension](media/screenshot.png)
 
 # dc-extension-rich-text
