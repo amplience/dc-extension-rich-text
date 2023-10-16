@@ -11,13 +11,9 @@ import {
   TextField,
   Typography,
   withStyles,
-  WithStyles
+  WithStyles,
 } from "@material-ui/core";
-import {
-  Assistant as AssistantIcon,
-  Clear as ClearIcon,
-  Settings as SettingsIcon
-} from "@material-ui/icons";
+import { Assistant as AssistantIcon } from "@material-ui/icons";
 import clsx from "clsx";
 import React, { useState } from "react";
 import { AIConfiguration } from "./AIConfiguration";
@@ -31,42 +27,42 @@ const styles = {
       backgroundColor: "#002C42",
       color: "white",
       paddingLeft: 30,
-      paddingRight: 30
+      paddingRight: 30,
     },
     "& .MuiDialog-paper": {
       height: 290,
-      overflow: "hidden"
+      overflow: "hidden",
     },
     "& .MuiDialogActions-root": {
       justifyContent: "flex-start",
-      paddingBottom: 30
+      paddingBottom: 30,
     },
     "& .MuiDialogTitle-root": {
-      paddingTop: 30
-    }
+      paddingTop: 30,
+    },
   },
   configureContent: {
-    maxWidth: "50%"
+    maxWidth: "50%",
   },
   configureGraphic: {
     width: 550,
     position: "absolute" as "absolute",
     right: 0,
-    top: -60
+    top: -60,
   },
   betaBadge: {
     "& .MuiBadge-badge": {
-      backgroundColor: "#f78a8b"
-    }
+      backgroundColor: "#f78a8b",
+    },
   },
   getStartedAction: {
     backgroundColor: "rgba(255,255,255,0.9)",
     borderRadius: 20,
-    padding: "5px 15px"
+    padding: "5px 15px",
   },
   cancelAction: {
-    color: "white"
-  }
+    color: "white",
+  },
 };
 
 interface AIPromptDialogProps
@@ -85,12 +81,12 @@ const AIPromptDialogContent: React.SFC<any> = (props: AIPromptDialogProps) => {
   const strings = {
     generate: {
       placeholder: "Write a blog post about...",
-      button: "Generate"
+      button: "Generate",
     },
     rewrite: {
       placeholder: "Rewrite this content in the style of...",
-      button: "Rewrite"
-    }
+      button: "Rewrite",
+    },
   }[variant];
 
   const handlePromptChange = (event: any) => {
@@ -127,6 +123,8 @@ const AIPromptDialogContent: React.SFC<any> = (props: AIPromptDialogProps) => {
           placeholder={strings.placeholder}
           onChange={handlePromptChange}
           onKeyUp={handleKeyUp}
+          multiline
+          rowsMax={9}
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
@@ -137,7 +135,7 @@ const AIPromptDialogContent: React.SFC<any> = (props: AIPromptDialogProps) => {
               <InputAdornment position="end">
                 <Button onClick={handleSubmit}>{strings.button}</Button>
               </InputAdornment>
-            )
+            ),
           }}
           fullWidth={true}
           variant="outlined"
@@ -213,7 +211,7 @@ const AIPromptDialog: React.SFC<AIPromptDialogProps> = (
         classes.root,
         {
           prompt: classes.prompt,
-          configure: classes.configure
+          configure: classes.configure,
         }[view]
       )}
     >
