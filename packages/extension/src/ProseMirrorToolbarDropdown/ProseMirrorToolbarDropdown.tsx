@@ -79,7 +79,8 @@ const ProseMirrorToolbarDropdown: React.SFC<ProseMirrorToolbarButtonProps> = (
       }
       return toolState.label;
     },
-    [classes.value, getToolState, label]
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [getToolState]
   );
 
   if (toolStates.length === 0) {

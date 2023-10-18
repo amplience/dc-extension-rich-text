@@ -55,11 +55,14 @@ export default class App extends React.Component<{}, AppState> {
     const sdk = await init<ContentFieldExtension>();
     sdk.frame.startAutoResizer();
 
-    sdk.contentItem.getCurrent().then((item) => {
-      datadogRum.setGlobalContext({
-        deliveryId: item.deliveryId,
-      });
-    });
+    sdk.contentItem
+      .getCurrent()
+      .then((item) => {
+        datadogRum.setGlobalContext({
+          deliveryId: item.deliveryId,
+        });
+      })
+      .catch(() => {});
 
     const params = {
       ...sdk.field?.schema?.["ui:extension"]?.params,

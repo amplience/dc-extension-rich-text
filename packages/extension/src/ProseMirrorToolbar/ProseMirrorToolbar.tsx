@@ -3,7 +3,7 @@ import React from "react";
 import {
   Toolbar as MaterialToolbar,
   WithStyles,
-  withStyles
+  withStyles,
 } from "@material-ui/core";
 
 import { ProseMirrorToolbarContext } from ".";
@@ -17,8 +17,8 @@ import { ProseMirrorToolbarState } from "./ProseMirrorToolbarState";
 const styles = {
   root: {
     minHeight: 35,
-    borderBottom: "1px solid rgb(218, 220, 224)"
-  }
+    borderBottom: "1px solid rgb(218, 220, 224)",
+  },
 };
 
 export interface ToolbarButton {
@@ -51,13 +51,14 @@ const ProseMirrorToolbar: React.SFC<ProseMirrorToolbarProps> = (
   const { classes, layout, toolbarState } = props;
   const richTextEditorContext = useRichTextEditorContext();
 
-  const renderToolbarElement = (element: ToolbarElement) => {
+  const renderToolbarElement = (idx: number, element: ToolbarElement) => {
     switch (element.type) {
       case "button":
         return (
           <ProseMirrorToolbarIconButton
             toolName={element.toolName}
             isLocked={props.isLocked}
+            key={idx}
           />
         );
       case "dropdown":
@@ -66,6 +67,7 @@ const ProseMirrorToolbar: React.SFC<ProseMirrorToolbarProps> = (
             toolNames={element.toolNames}
             label={element.label}
             isLocked={props.isLocked}
+            key={idx}
           />
         );
       case "group":
@@ -79,11 +81,13 @@ const ProseMirrorToolbar: React.SFC<ProseMirrorToolbarProps> = (
 
         const anyVisible =
           element.children.findIndex(
-            child => child.type !== "button" || toolVisible(child)
+            (child) => child.type !== "button" || toolVisible(child)
           ) !== -1;
         return anyVisible ? (
-          <ProseMirrorToolbarGroup>
-            {element.children.map(child => renderToolbarElement(child))}
+          <ProseMirrorToolbarGroup key={idx}>
+            {element.children.map((child, idx) =>
+              renderToolbarElement(idx, child)
+            )}
           </ProseMirrorToolbarGroup>
         ) : null;
       default:
@@ -99,7 +103,7 @@ const ProseMirrorToolbar: React.SFC<ProseMirrorToolbarProps> = (
             return;
           }
 
-          const tool = toolbarState.tools.find(x => x.name === toolName);
+          const tool = toolbarState.tools.find((x) => x.name === toolName);
           const areInlineStyles = Object.keys(toolbarState.toolStates).filter(
             (x: any) =>
               /inline_styles/.test(x) && toolbarState.toolStates[x].active
@@ -110,7 +114,7 @@ const ProseMirrorToolbar: React.SFC<ProseMirrorToolbarProps> = (
 
           if (areInlineStyles && areInlineStyles.length) {
             const clearFormatting = toolbarState.tools.find(
-              x => x.name === "clear_formatting"
+              (x) => x.name === "clear_formatting"
             );
 
             if (clearFormatting) {
@@ -134,12 +138,12 @@ const ProseMirrorToolbar: React.SFC<ProseMirrorToolbarProps> = (
           }
 
           return toolbarState.toolStates[toolName];
-        }
+        },
       }}
     >
       <MaterialToolbar className={classes.root} disableGutters={true}>
-        {layout.map(value => {
-          return renderToolbarElement(value);
+        {layout.map((value, idx) => {
+          return renderToolbarElement(idx, value);
         })}
       </MaterialToolbar>
     </ProseMirrorToolbarContext.Provider>
