@@ -11,4 +11,5 @@ export interface RichTextEditorContextProps {
   languages: RichTextLanguageMap;
   language: RichLanguage;
   setIsLocked(locked: boolean): void;
+  sdk: any;
 }

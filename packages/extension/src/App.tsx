@@ -5,6 +5,7 @@ import { ContentFieldExtension, init } from "dc-extensions-sdk";
 import { SdkContext, withTheme } from "unofficial-dynamic-content-ui";
 import EditorRichTextField from "./EditorRichTextField/EditorRichTextField";
 import { RichTextDialogsContainer } from "./RichTextDialogs";
+import AIBanner from "./AIBanner/AIBanner";
 
 interface AppState {
   connected: boolean;
@@ -98,6 +99,7 @@ export default class App extends React.Component<{}, AppState> {
           <div>
             {withTheme(
               <SdkContext.Provider value={{ sdk }}>
+                <AIBanner></AIBanner>
                 <RichTextDialogsContainer params={this.state.params}>
                   <EditorRichTextField
                     onChange={this.handleValueChange}

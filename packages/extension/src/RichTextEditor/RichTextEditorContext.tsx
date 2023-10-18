@@ -1,5 +1,5 @@
 import { RichTextEditorContextProps } from "@dc-extension-rich-text/common";
-import React, { useContext, useReducer } from "react";
+import React, { useContext } from "react";
 
 const context = React.createContext<RichTextEditorContextProps>({
   params: {},
@@ -9,7 +9,8 @@ const context = React.createContext<RichTextEditorContextProps>({
   dialogs: {} as any,
   actions: {} as any,
   languages: {},
-  language: {} as any
+  language: {} as any,
+  sdk: {} as any,
 });
 export default context;
 

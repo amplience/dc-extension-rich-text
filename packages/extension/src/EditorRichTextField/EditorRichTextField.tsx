@@ -11,21 +11,21 @@ import { SdkContext } from "unofficial-dynamic-content-ui";
 
 import {
   RichLanguage,
-  RichLanguageConfiguration
+  RichLanguageConfiguration,
 } from "@dc-extension-rich-text/common";
 import {
   ContentTypeExtensionSettings,
   DcContentLinkView,
   DcImageLinkView,
   DynamicContentToolOptions,
-  OldContentTypeExtensionSettings
+  OldContentTypeExtensionSettings,
 } from "@dc-extension-rich-text/prosemirror-dynamic-content";
 import { RichTextActionsImpl } from "../RichTextActions";
 import { RichTextDialogsContext } from "../RichTextDialogs";
 
 export const styles = {
   root: {
-    width: "100%"
+    width: "100%",
   },
   title: {
     padding: "7px 0",
@@ -34,8 +34,8 @@ export const styles = {
     fontSize: "13px",
     boxSizing: "border-box" as "border-box",
     "-webkit-font-smoothing": "auto",
-    fontFamily: "roboto,sans-serif!important"
-  }
+    fontFamily: "roboto,sans-serif!important",
+  },
 };
 
 export interface EditorRichTextFieldProps extends WithStyles<typeof styles> {
@@ -77,6 +77,8 @@ export interface EditorRichTextFieldParams {
         | OldContentTypeExtensionSettings;
     };
   };
+
+  sdk?: any;
 }
 
 const EditorRichTextField: React.SFC<EditorRichTextFieldProps> = (
@@ -91,7 +93,7 @@ const EditorRichTextField: React.SFC<EditorRichTextFieldProps> = (
   const { dialogs } = React.useContext(RichTextDialogsContext);
 
   params = sdk
-    ? { ...params, ...sdk.params?.installation, ...sdk.params?.instance }
+    ? { ...params, ...sdk.params?.installation, ...sdk.params?.instance, sdk }
     : params;
 
   const toolOptions = React.useMemo<DynamicContentToolOptions>(() => {
@@ -101,9 +103,9 @@ const EditorRichTextField: React.SFC<EditorRichTextFieldProps> = (
       dialogs,
       actions: new RichTextActionsImpl(),
       dynamicContent: {
-        stagingEnvironment: sdk ? sdk.stagingEnvironment : undefined
+        stagingEnvironment: sdk ? sdk.stagingEnvironment : undefined,
       },
-      tools: params.tools
+      tools: params.tools,
     };
 
     if (settings.tools && !settings.tools.blacklist) {
@@ -119,11 +121,9 @@ const EditorRichTextField: React.SFC<EditorRichTextFieldProps> = (
   }>(() => {
     return {
       markdown: MarkdownLanguage(toolOptions),
-      json: JSONLanguage(toolOptions)
+      json: JSONLanguage(toolOptions),
     };
-  }, []);
-
-  const language = params.language || "markdown";
+  }, [toolOptions]);
 
   const editorViewOptions = React.useMemo(() => {
     return {
@@ -131,10 +131,10 @@ const EditorRichTextField: React.SFC<EditorRichTextFieldProps> = (
         "dc-image-link": (node: any, view: any, getPos: any) =>
           new DcImageLinkView(node, view, getPos, toolOptions),
         "dc-content-link": (node: any, view: any, getPos: any) =>
-          new DcContentLinkView(node, view, getPos, toolOptions)
-      }
+          new DcContentLinkView(node, view, getPos, toolOptions),
+      },
     };
-  }, [sdk, toolOptions]);
+  }, [toolOptions]);
 
   return (
     <div className={classes.root}>
