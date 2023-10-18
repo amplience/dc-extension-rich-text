@@ -369,6 +369,8 @@ Do not converse with the user.
 
     let alert: Alert | undefined;
 
+    this.context!.setShowCreditsError(false);
+
     try {
       await invokeChatCompletions(
         this.context?.sdk as any,
@@ -424,7 +426,7 @@ Do not converse with the user.
         },
         (err) => {
           if (err?.errors[0]?.extensions?.code === "INSUFFICIENT_CREDITS") {
-            //
+            this.context!.setShowCreditsError(true);
           }
           if (err?.error?.message) {
             this.context!.dialogs.alert({

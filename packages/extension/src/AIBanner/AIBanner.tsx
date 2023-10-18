@@ -1,31 +1,26 @@
-import React, { useContext, useEffect, useState } from "react";
+import React from "react";
 
-function ErrorMessage() {
-  // const [visible, setVisible] = useState(false);
-  // useEffect(() => {
-  //   console.log("am I called????");
-  //   // @ts-ignore
-  //   setVisible(creditsError?.visible);
-  // }, [creditsError]);
-  const visible = false;
-
-  if (visible) {
+function ErrorMessage({ showCreditsError }: { showCreditsError: boolean }) {
+  if (showCreditsError) {
     return (
       <span>
-        You're out of Amplience Credits. You can still use the eidtor to compose
+        You're out of Amplience Credits. You can still use the editor to compose
         your own text. <a href="https://amplience.com">Get more credits</a>
       </span>
     );
   }
-  console.log("am I viisble?", visible);
+
   return <></>;
 }
 
-export default function AIBanner() {
+export default function AIBanner({
+  showCreditsError,
+}: {
+  showCreditsError: boolean;
+}) {
   return (
     <div>
-      Just some text so we know this is actually on screen
-      <ErrorMessage></ErrorMessage>
+      <ErrorMessage showCreditsError={showCreditsError}></ErrorMessage>
     </div>
   );
 }

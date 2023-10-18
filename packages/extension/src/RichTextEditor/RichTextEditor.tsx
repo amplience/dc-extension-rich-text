@@ -24,6 +24,7 @@ import { RichTextDialogsContext } from "../RichTextDialogs";
 import RichTextEditorAIActionsBar from "../RichTextEditorAIActionsBar/RichTextEditorAIActionsBar";
 import RichtextEditorContext from "./RichTextEditorContext";
 import { SdkContext } from "unofficial-dynamic-content-ui";
+import AIBanner from "../AIBanner/AIBanner";
 
 const styles = {
   root: {
@@ -72,6 +73,7 @@ const RichTextEditor: React.SFC<RichTextEditorProps> = (
   } = props;
 
   const [isLocked, setIsLocked] = useState(false);
+  const [showCreditsError, setShowCreditsError] = useState(false);
   const [proseMirrorEditorView, setProseMirrorEditorView] = useState<
     any | undefined
   >(undefined);
@@ -99,6 +101,7 @@ const RichTextEditor: React.SFC<RichTextEditorProps> = (
     languages,
     language,
     sdk,
+    setShowCreditsError,
   };
 
   actions.setRichTextEditorContext(editorContext);
@@ -202,6 +205,7 @@ const RichTextEditor: React.SFC<RichTextEditorProps> = (
 
   return (
     <RichtextEditorContext.Provider value={editorContext}>
+      <AIBanner showCreditsError={showCreditsError}></AIBanner>
       <div className={classes.root}>
         <div className={classes.frame}>
           <ViewSwitcher

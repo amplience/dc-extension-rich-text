@@ -11,6 +11,7 @@ const context = React.createContext<RichTextEditorContextProps>({
   languages: {},
   language: {} as any,
   sdk: {} as any,
+  setShowCreditsError: (show: boolean) => {},
 });
 export default context;
 
