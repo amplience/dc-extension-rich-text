@@ -24,7 +24,7 @@ import Link from "@material-ui/icons/Link";
 import Redo from "@material-ui/icons/Redo";
 import Undo from "@material-ui/icons/Undo";
 
-import { Code as Language, Hyperlink, Image } from "../dialogs";
+import { Code as Language, Hyperlink } from "../dialogs";
 import { RichTextEditorContextProps } from "../editor";
 import { ProseMirrorTool } from "./ProseMirrorTool";
 import { isToolEnabled, StandardToolOptions } from "./StandardToolOptions";
@@ -416,6 +416,7 @@ export function ai_generate(): ProseMirrorTool {
         const prompt = await richTextEditorContext.dialogs.getAIPrompt({
           variant: "generate",
         });
+
         await richTextEditorContext.actions.insertAIContent(prompt);
       } catch {}
     },

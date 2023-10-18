@@ -1,7 +1,6 @@
 import { AIPromptDialogOptions } from "@dc-extension-rich-text/common";
 import {
   Badge,
-  Box,
   Button,
   Dialog,
   DialogActions,

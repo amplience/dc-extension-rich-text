@@ -6,7 +6,7 @@ import {
   DialogTitle,
   FormControl,
   FormHelperText,
-  TextField
+  TextField,
 } from "@material-ui/core";
 import React from "react";
 
@@ -17,7 +17,7 @@ interface CodeDialogProps {
   onSubmit: (value: string) => void;
 }
 
-const htmlIdRegex = /^[a-zA-Z]?[\w:.\-\/]*$/;
+const htmlIdRegex = /^[a-zA-Z]?[\w:.\-/]*$/;
 
 const validate = (checkValue: string) =>
   !htmlIdRegex.test(checkValue) ? "Value contains invalid characters" : "";
@@ -37,12 +37,13 @@ const CodeDialog: React.SFC<CodeDialogProps> = (props: CodeDialogProps) => {
   }
 
   const handleInputChanged = React.useCallback(
-    val => {
+    (val) => {
       setValue(val || "");
 
       const error = validate(val);
       setValidError(error);
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [value, setValue, setValidError]
   );
 
@@ -53,11 +54,13 @@ const CodeDialog: React.SFC<CodeDialogProps> = (props: CodeDialogProps) => {
   const handleCancel = React.useCallback(() => {
     reset();
     onClose();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [setValue, onClose]);
 
   const handleSubmit = React.useCallback(() => {
     reset();
     onSubmit(value);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value, setValue, onSubmit]);
 
   return (
@@ -80,7 +83,7 @@ const CodeDialog: React.SFC<CodeDialogProps> = (props: CodeDialogProps) => {
             type="input"
             fullWidth={true}
             value={value}
-            onChange={event => handleInputChanged(event.target.value || "")}
+            onChange={(event) => handleInputChanged(event.target.value || "")}
           />
           <FormHelperText>
             The language to use for syntax highlighting, e.g. javascript or html

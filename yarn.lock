@@ -6405,6 +6405,13 @@ dc-extensions-sdk@^1.0.1:
   dependencies:
     message-event-channel "^1.1.0"
 
+dc-extensions-sdk@^2.2.1:
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/dc-extensions-sdk/-/dc-extensions-sdk-2.2.1.tgz#48f87062791f20ca3661aa41c1888fac0bc1f35f"
+  integrity sha512-V3evt+YbFTms/Dqx44/r0jJjbDzHDJt+nU4pm2MDgIOaT+5WF+nt7AiCGtM9Nxg+eLldvUraRdGEEy00pEI5AQ==
+  dependencies:
+    message-event-channel "^1.1.0"
+
 debug@2.6.9, debug@^2.2.0, debug@^2.3.3, debug@^2.6.0, debug@^2.6.9:
   version "2.6.9"
   resolved "https://registry.npmjs.org/debug/-/debug-2.6.9.tgz"

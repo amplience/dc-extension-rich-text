@@ -14,14 +14,14 @@ const styles = (theme: Theme) => ({
     background: "white",
     paddingTop: "10px",
     width: "100%",
-    bottom: 0
+    bottom: 0,
   },
   chip: {
     background: theme.palette.background.paper,
     "& .MuiChip-icon": {
-      color: theme.palette.primary.main
-    }
-  }
+      color: theme.palette.primary.main,
+    },
+  },
 });
 
 export interface RichTextEditorAIActionsBarProps
@@ -35,7 +35,7 @@ const RichTextEditorAIActionsBar: React.SFC<RichTextEditorAIActionsBarProps> = (
     params,
     actions,
     dialogs,
-    proseMirrorEditorView
+    proseMirrorEditorView,
   } = useRichTextEditorContext();
 
   const configuration = new AIConfiguration(params);
@@ -56,7 +56,9 @@ const RichTextEditorAIActionsBar: React.SFC<RichTextEditorAIActionsBarProps> = (
     <div
       className={classes.root}
       style={{
-        display: proseMirrorEditorView?.state.selection.empty ? "none" : "block"
+        display: proseMirrorEditorView?.state.selection.empty
+          ? "none"
+          : "block",
       }}
     >
       <Grid direction="row" spacing={1} container={true}>

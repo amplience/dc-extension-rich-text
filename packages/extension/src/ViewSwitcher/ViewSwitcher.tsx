@@ -4,7 +4,7 @@ import React from "react";
 
 const styles = {
   root: {
-    display: "flex"
+    display: "flex",
   },
   button: {
     outline: "none" as "none",
@@ -18,12 +18,12 @@ const styles = {
     fontSize: 13,
     padding: "0 15px",
     color: "#999999",
-    fontWeight: "bold" as "bold"
+    fontWeight: "bold" as "bold",
   },
   selected: {
     color: "#1EA7FD",
-    borderBottomColor: "#1EA7FD"
-  }
+    borderBottomColor: "#1EA7FD",
+  },
 };
 
 export interface ViewSwitcherProps extends WithStyles<typeof styles> {
@@ -36,7 +36,7 @@ export interface ViewSwitcherProps extends WithStyles<typeof styles> {
 
 export enum EditorView {
   EDIT = "edit",
-  CODE = "code"
+  CODE = "code",
 }
 
 const ViewSwitcher = (props: ViewSwitcherProps) => {
@@ -45,7 +45,7 @@ const ViewSwitcher = (props: ViewSwitcherProps) => {
     onChange,
     language,
     disableCodeView,
-    disableEditView
+    disableEditView,
   } = props;
 
   const [selectedView, setSelectedView] = React.useState(
@@ -59,6 +59,7 @@ const ViewSwitcher = (props: ViewSwitcherProps) => {
         onChange(view);
       }
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [setSelectedView]
   );
 
@@ -68,7 +69,7 @@ const ViewSwitcher = (props: ViewSwitcherProps) => {
         <button
           onClick={() => handleChange(view)}
           className={clsx(classes.button, {
-            [classes.selected]: selectedView === view
+            [classes.selected]: selectedView === view,
           })}
           type="button"
           role="tab"
@@ -77,6 +78,7 @@ const ViewSwitcher = (props: ViewSwitcherProps) => {
         </button>
       );
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [selectedView, handleChange]
   );
 
