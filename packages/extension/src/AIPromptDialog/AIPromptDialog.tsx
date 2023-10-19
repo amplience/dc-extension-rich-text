@@ -1,23 +1,24 @@
 import { AIPromptDialogOptions } from "@dc-extension-rich-text/common";
 import {
   Badge,
-  Box,
   Button,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
+  IconButton,
   InputAdornment,
   TextField,
   Typography,
   withStyles,
   WithStyles,
 } from "@material-ui/core";
-import { Assistant as AssistantIcon } from "@material-ui/icons";
+import { Assistant as AssistantIcon, Close } from "@material-ui/icons";
 import clsx from "clsx";
 import React, { useState } from "react";
 import { AIConfiguration } from "./AIConfiguration";
 import AIPromptDialogGraphic from "./AIPromptDialogGraphic";
+import { SparklesIcon } from "../SparklesIcon/SparklesIcon";
 
 const styles = {
   root: {},
@@ -50,11 +51,6 @@ const styles = {
     right: 0,
     top: -60,
   },
-  betaBadge: {
-    "& .MuiBadge-badge": {
-      backgroundColor: "#f78a8b",
-    },
-  },
   getStartedAction: {
     backgroundColor: "rgba(255,255,255,0.9)",
     borderRadius: 20,
@@ -74,17 +70,48 @@ interface AIPromptDialogProps
   params: any;
 }
 
+function CloseButton(props: any) {
+  return (
+    <IconButton
+      aria-label="Close"
+      {...props}
+      style={{ marginLeft: "auto" }}
+      disableFocusRipple={true}
+      disableRipple={true}
+    >
+      <Close></Close>
+    </IconButton>
+  );
+}
+
+function DialogHeader(props: any) {
+  const { onClose, title } = props;
+  return (
+    <DialogTitle style={{ paddingBottom: 0 }}>
+      <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+        <SparklesIcon></SparklesIcon>
+        <span style={{ fontSize: "16px", fontWeight: 500 }}>{title}</span>
+        <CloseButton onClick={onClose}></CloseButton>
+      </div>
+    </DialogTitle>
+  );
+}
+
 const AIPromptDialogContent: React.SFC<any> = (props: AIPromptDialogProps) => {
-  const { variant = "generate", onSubmit, classes } = props;
+  const { variant = "generate", onSubmit, classes, onClose } = props;
   const [prompt, setPrompt] = useState("");
 
   const strings = {
     generate: {
-      placeholder: "Write a blog post about...",
+      title: "What do you want to write about?",
+      placeholder:
+        "For the best results, be as specific and detailed as possible",
       button: "Generate",
     },
     rewrite: {
-      placeholder: "Rewrite this content in the style of...",
+      title: "Tell us how to rewrite the text",
+      placeholder:
+        "For the best results, be as specific and detailed as possible",
       button: "Rewrite",
     },
   }[variant];
@@ -105,18 +132,11 @@ const AIPromptDialogContent: React.SFC<any> = (props: AIPromptDialogProps) => {
 
   return (
     <>
-      <DialogTitle style={{ paddingBottom: 0 }}>
-        AI Assistant
-        <Badge
-          style={{ marginLeft: "20px", lineHeight: "16px" }}
-          badgeContent="BETA"
-          color="error"
-          anchorOrigin={{ horizontal: "right", vertical: "top" }}
-          className={classes.betaBadge}
-        >
-          &nbsp;
-        </Badge>
-      </DialogTitle>
+      <DialogHeader
+        classes={classes}
+        onClose={onClose}
+        title={strings.title}
+      ></DialogHeader>
       <DialogContent>
         <TextField
           value={prompt}
@@ -124,7 +144,7 @@ const AIPromptDialogContent: React.SFC<any> = (props: AIPromptDialogProps) => {
           onChange={handlePromptChange}
           onKeyUp={handleKeyUp}
           multiline
-          rowsMax={9}
+          maxRows={9}
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
@@ -133,14 +153,34 @@ const AIPromptDialogContent: React.SFC<any> = (props: AIPromptDialogProps) => {
             ),
             endAdornment: (
               <InputAdornment position="end">
-                <Button onClick={handleSubmit}>{strings.button}</Button>
+                <Button
+                  onClick={handleSubmit}
+                  variant="contained"
+                  color="primary"
+                  disableElevation={true}
+                  disabled={!prompt.length}
+                >
+                  {strings.button}
+                </Button>
               </InputAdornment>
             ),
           }}
           fullWidth={true}
           variant="outlined"
         />
-        <Typography variant="caption">Powered by ChatGPT API</Typography>
+        <Typography variant="caption">
+          <a
+            href="https://amplience.com/developers/docs/knowledge-center/amplience-labs"
+            target="_blank"
+            style={{
+              fontSize: "11px",
+              textDecoration: "none",
+              color: "#039be5",
+            }}
+          >
+            Amplience Labs preview
+          </a>
+        </Typography>
       </DialogContent>
       <DialogActions />
     </>
@@ -154,18 +194,12 @@ const ConfigureAIDialogContent: React.SFC<any> = (
 
   return (
     <>
-      <DialogTitle style={{ paddingBottom: 0 }}>
-        AI Assistant
-        <Badge
-          style={{ marginLeft: "20px", lineHeight: "16px" }}
-          badgeContent="BETA"
-          color="error"
-          anchorOrigin={{ horizontal: "right", vertical: "top" }}
-          className={classes.betaBadge}
-        >
-          &nbsp;
-        </Badge>
-      </DialogTitle>
+      <DialogHeader
+        classes={classes}
+        onClose={onClose}
+        title="What do you want to write about?"
+      ></DialogHeader>
+
       <DialogContent>
         <Typography variant="body2" className={classes.configureContent}>
           Our AI assistant, powered by ChatGPT, is designed to simplify and

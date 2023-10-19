@@ -1,10 +1,12 @@
 import React from "react";
 
 import { datadogRum } from "@datadog/browser-rum";
+import { ThemeProvider } from "@material-ui/core/styles";
 import { init, SDK } from "dc-extensions-sdk";
 import { SdkContext, withTheme } from "unofficial-dynamic-content-ui";
 import EditorRichTextField from "./EditorRichTextField/EditorRichTextField";
 import { RichTextDialogsContainer } from "./RichTextDialogs";
+import theme from "./theme";
 
 interface AppState {
   connected: boolean;
@@ -44,7 +46,7 @@ export default class App extends React.Component<{}, AppState> {
         trackUserInteractions: true,
         defaultPrivacyLevel: "allow",
         sampleRate: 100,
-        useCrossSiteSessionCookie: true
+        useCrossSiteSessionCookie: true,
       });
 
       datadogRum.startSessionReplayRecording();
@@ -55,16 +57,16 @@ export default class App extends React.Component<{}, AppState> {
     const sdk: SDK = await init();
     sdk.frame.startAutoResizer();
 
-    sdk.contentItem.getCurrent().then(item => {
+    sdk.contentItem.getCurrent().then((item) => {
       datadogRum.setGlobalContext({
-        deliveryId: item.deliveryId
+        deliveryId: item.deliveryId,
       });
     });
 
     const params = {
       ...sdk.field?.schema?.["ui:extension"]?.params,
       ...sdk.params?.installation,
-      ...sdk.params?.instance
+      ...sdk.params?.instance,
     };
 
     const value: any = await sdk.field.getValue();
@@ -72,7 +74,7 @@ export default class App extends React.Component<{}, AppState> {
       sdk,
       connected: true,
       value,
-      params
+      params,
     });
   }
 
@@ -94,15 +96,17 @@ export default class App extends React.Component<{}, AppState> {
         {connected && sdk ? (
           <div>
             {withTheme(
-              <SdkContext.Provider value={{ sdk }}>
-                <RichTextDialogsContainer params={this.state.params}>
-                  <EditorRichTextField
-                    onChange={this.handleValueChange}
-                    value={value}
-                    schema={sdk.field.schema}
-                  />
-                </RichTextDialogsContainer>
-              </SdkContext.Provider>
+              <ThemeProvider theme={theme}>
+                <SdkContext.Provider value={{ sdk }}>
+                  <RichTextDialogsContainer params={this.state.params}>
+                    <EditorRichTextField
+                      onChange={this.handleValueChange}
+                      value={value}
+                      schema={sdk.field.schema}
+                    />
+                  </RichTextDialogsContainer>
+                </SdkContext.Provider>
+              </ThemeProvider>
             )}
           </div>
         ) : (
