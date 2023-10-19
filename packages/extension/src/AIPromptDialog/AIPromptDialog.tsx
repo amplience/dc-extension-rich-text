@@ -144,7 +144,7 @@ const AIPromptDialogContent: React.SFC<any> = (props: AIPromptDialogProps) => {
           onChange={handlePromptChange}
           onKeyUp={handleKeyUp}
           multiline
-          maxRows={9}
+          rowsMax={9}
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
