@@ -1,5 +1,5 @@
 import { WithStyles, withStyles } from "@material-ui/core";
-import React, { ChangeEvent, useReducer, useState } from "react";
+import React, { useState } from "react";
 import CodeTextArea from "../CodeTextArea/CodeTextArea";
 import ProseMirror from "../ProseMirror/ProseMirror";
 import { EditorView, ViewSwitcher } from "../ViewSwitcher";
@@ -7,28 +7,29 @@ import { EditorView, ViewSwitcher } from "../ViewSwitcher";
 import {
   RichLanguageFormat,
   RichTextEditorContextProps,
-  RichTextLanguageMap
+  RichTextLanguageMap,
 } from "@dc-extension-rich-text/common";
 import MarkdownLanguage from "@dc-extension-rich-text/language-markdown";
 import ProseMirrorToolbar, {
-  ToolbarElement
+  ToolbarElement,
 } from "../ProseMirrorToolbar/ProseMirrorToolbar";
 import DefaultToolbar from "./DefaultToolbar";
 
 import {
   computeToolbarState,
-  ProseMirrorToolbarState
+  ProseMirrorToolbarState,
 } from "../ProseMirrorToolbar/ProseMirrorToolbarState";
 import { RichTextActionsImpl } from "../RichTextActions";
 import { RichTextDialogsContext } from "../RichTextDialogs";
 import RichTextEditorAIActionsBar from "../RichTextEditorAIActionsBar/RichTextEditorAIActionsBar";
 import RichtextEditorContext from "./RichTextEditorContext";
+import AIBanner from "../AIBanner/AIBanner";
 
 const styles = {
   root: {
     width: "100%",
     height: "100%",
-    display: "flex"
+    display: "flex",
   },
   frame: {
     flex: 1,
@@ -36,8 +37,8 @@ const styles = {
     flexDirection: "column" as "column",
     border: "1px solid rgba(157,162,162,.3)",
     borderRadius: 5,
-    padding: "0 10px 10px 10px"
-  }
+    padding: "12px 20px",
+  },
 };
 
 export interface RichTextEditorProps extends WithStyles<typeof styles> {
@@ -67,7 +68,7 @@ const RichTextEditor: React.SFC<RichTextEditorProps> = (
     editorViewOptions,
     value: valueProp,
     onChange,
-    params
+    params,
   } = props;
 
   const [isLocked, setIsLocked] = useState(false);
@@ -78,7 +79,7 @@ const RichTextEditor: React.SFC<RichTextEditorProps> = (
   const [actions] = useState(new RichTextActionsImpl());
 
   const languages: RichTextLanguageMap = languagesProp || {
-    markdown: MarkdownLanguage({})
+    markdown: MarkdownLanguage({}),
   };
 
   if (!languages[languageProp]) {
@@ -95,7 +96,7 @@ const RichTextEditor: React.SFC<RichTextEditorProps> = (
     actions,
     params,
     languages,
-    language
+    language,
   };
 
   actions.setRichTextEditorContext(editorContext);
@@ -198,11 +199,17 @@ const RichTextEditor: React.SFC<RichTextEditorProps> = (
               {disableToolbar ? (
                 false
               ) : (
-                <ProseMirrorToolbar
-                  toolbarState={toolbarState}
-                  layout={toolbarLayout}
-                  isLocked={editorContext.isLocked}
-                />
+                <>
+                  <AIBanner
+                    showCreditsError={false}
+                    loading={isLocked}
+                  ></AIBanner>
+                  <ProseMirrorToolbar
+                    toolbarState={toolbarState}
+                    layout={toolbarLayout}
+                    isLocked={editorContext.isLocked}
+                  />
+                </>
               )}
               <div style={{ position: "relative" }}>
                 <ProseMirror

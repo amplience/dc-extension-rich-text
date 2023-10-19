@@ -4,8 +4,6 @@ import "./ProseMirror.scss";
 
 import { WithStyles, withStyles } from "@material-ui/core";
 
-import RichTextEditorContext from "../RichTextEditor/RichTextEditorContext";
-
 // tslint:disable-next-line
 const EditorState = require("prosemirror-state").EditorState;
 // tslint:disable-next-line
@@ -24,8 +22,8 @@ const styles = {
     width: "100%",
     minHeight: 250,
     maxHeight: 600,
-    overflowY: "scroll" as "scroll"
-  }
+    overflowY: "scroll" as "scroll",
+  },
 };
 
 export interface ProseMirrorProps extends WithStyles<typeof styles> {
@@ -45,7 +43,7 @@ interface ProseMirrorState {
 
 function getKeys(schema: any): any {
   return {
-    Tab: sinkListItem(schema.nodes.list_item)
+    Tab: sinkListItem(schema.nodes.list_item),
   };
 }
 
@@ -70,8 +68,8 @@ class ProseMirror extends React.Component<ProseMirrorProps, ProseMirrorState> {
       plugins: [
         ...tablePlugins,
         keymap(getKeys(schema)),
-        ...exampleSetup({ schema, menuBar: false }) // can pass mapkeys to suppress some bindings
-      ]
+        ...exampleSetup({ schema, menuBar: false }), // can pass mapkeys to suppress some bindings
+      ],
     });
   }
 
@@ -106,7 +104,7 @@ class ProseMirror extends React.Component<ProseMirrorProps, ProseMirrorState> {
       },
       editable(): boolean {
         return !self.state.isLocked;
-      }
+      },
     });
 
     if (onUpdateState) {

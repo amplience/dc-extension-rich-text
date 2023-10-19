@@ -4,7 +4,7 @@ import React from "react";
 
 const styles = {
   root: {
-    display: "flex"
+    display: "flex",
   },
   button: {
     outline: "none" as "none",
@@ -15,15 +15,16 @@ const styles = {
     border: "0 solid transparent",
     borderTop: "3px solid transparent",
     borderBottom: "3px solid transparent",
-    fontSize: 13,
+    fontSize: 11,
     padding: "0 15px",
-    color: "#999999",
-    fontWeight: "bold" as "bold"
+    color: "#333",
+    fontWeight: "bold" as "bold",
+    fontFamily: "'IBM Plex Sans', sans-serif",
   },
   selected: {
     color: "#1EA7FD",
-    borderBottomColor: "#1EA7FD"
-  }
+    borderBottomColor: "#1EA7FD",
+  },
 };
 
 export interface ViewSwitcherProps extends WithStyles<typeof styles> {
@@ -36,7 +37,7 @@ export interface ViewSwitcherProps extends WithStyles<typeof styles> {
 
 export enum EditorView {
   EDIT = "edit",
-  CODE = "code"
+  CODE = "code",
 }
 
 const ViewSwitcher = (props: ViewSwitcherProps) => {
@@ -45,7 +46,7 @@ const ViewSwitcher = (props: ViewSwitcherProps) => {
     onChange,
     language,
     disableCodeView,
-    disableEditView
+    disableEditView,
   } = props;
 
   const [selectedView, setSelectedView] = React.useState(
@@ -68,7 +69,7 @@ const ViewSwitcher = (props: ViewSwitcherProps) => {
         <button
           onClick={() => handleChange(view)}
           className={clsx(classes.button, {
-            [classes.selected]: selectedView === view
+            [classes.selected]: selectedView === view,
           })}
           type="button"
           role="tab"
@@ -82,7 +83,7 @@ const ViewSwitcher = (props: ViewSwitcherProps) => {
 
   return (
     <div className={classes.root}>
-      {disableEditView ? false : renderButton("Edit", EditorView.EDIT)}
+      {disableEditView ? false : renderButton("Editor", EditorView.EDIT)}
       {disableCodeView
         ? false
         : renderButton(language || "Code", EditorView.CODE)}
