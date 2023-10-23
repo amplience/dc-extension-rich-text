@@ -1,9 +1,10 @@
 import { storiesOf } from "@storybook/react";
 import { ContentFieldExtension, init } from "dc-extensions-sdk";
 import React from "react";
-import { SdkContext, withTheme } from "unofficial-dynamic-content-ui";
+import { withTheme } from "unofficial-dynamic-content-ui";
 import { RichTextDialogsContainer } from "../RichTextDialogs";
 import EditorRichTextField from "./EditorRichTextField";
+import SdkContext from "../SdkContext/SdkContext";
 
 async function initStories() {
   const imageValue = {

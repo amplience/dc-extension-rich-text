@@ -4,13 +4,13 @@ import React, { useContext } from "react";
 const context = React.createContext<RichTextEditorContextProps>({
   params: {},
   isLocked: false,
-  setIsLocked: (locked: boolean) => {},
   proseMirrorEditorView: undefined,
   dialogs: {} as any,
   actions: {} as any,
   languages: {},
   language: {} as any,
   sdk: {} as any,
+  setIsLocked: (locked: boolean) => {},
   setShowCreditsError: (show: boolean) => {},
 });
 export default context;

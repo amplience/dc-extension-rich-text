@@ -2,9 +2,10 @@ import React from "react";
 
 import { datadogRum } from "@datadog/browser-rum";
 import { ContentFieldExtension, init } from "dc-extensions-sdk";
-import { SdkContext, withTheme } from "unofficial-dynamic-content-ui";
+import { withTheme } from "unofficial-dynamic-content-ui";
 import EditorRichTextField from "./EditorRichTextField/EditorRichTextField";
 import { RichTextDialogsContainer } from "./RichTextDialogs";
+import SdkContext from "./SdkContext/SdkContext";
 
 interface AppState {
   connected: boolean;

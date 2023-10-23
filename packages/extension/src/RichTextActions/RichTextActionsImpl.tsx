@@ -65,46 +65,34 @@ async function getCompletionUrl(
   configuration: AIConfiguration,
   prompts: any
 ): Promise<string> {
-  const err = new Error("Insufficient credits");
-  // @ts-ignore
-  err.errors = [
+  const hasKey = configuration.getKey();
+
+  if (hasKey) {
+    return CHAT_COMPLETIONS_URL;
+  }
+
+  const { data } = await sdk.connection.request(
+    "dc-management-sdk-js:graphql-mutation",
     {
-      message: "Insufficient credits",
-      extensions: {
-        code: "INSUFFICIENT_CREDITS",
+      query: `mutation getCompletionUrl($orgId: ID!, $prompts:[RichTextPrompt!]!) {
+      generateRichText({
+        input: {
+         organizationId: $orgId,
+         prompts: $prompts
+       }
+      }) {
+        url
+      }
+
+    }`,
+      vars: {
+        orgId: btoa(`Organization:${sdk.hub.organizationId}`),
+        prompts,
       },
-    },
-  ];
-  throw err;
+    }
+  );
 
-  // const hasKey = configuration.getKey();
-
-  // if (hasKey) {
-  //   return CHAT_COMPLETIONS_URL;
-  // }
-
-  // const { data } = await sdk.connection.request(
-  //   "dc-management-sdk-js:graphql-query",
-  //   {
-  //     query: `mutation getCompletionUrl($orgId: ID!, $prompts:[RichTextPrompt!]!) {
-  //     generateRichText({
-  //       input: {
-  //        organizationId: $orgId,
-  //        prompts: $prompts
-  //      }
-  //     }) {
-  //       url
-  //     }
-
-  //   }`,
-  //     vars: {
-  //       orgId: btoa(`Organization:${sdk.hub.organizationId}`),
-  //       prompts,
-  //     },
-  //   }
-  // );
-
-  // return data.getCompletionUrl.url;
+  return data.getCompletionUrl.url;
 }
 
 async function invokeChatCompletions(
@@ -124,12 +112,14 @@ async function invokeChatCompletions(
   let markdownBuffer = "";
   try {
     const completionUrl = await getCompletionUrl(sdk, configuration, body);
+    const key = configuration.getKey();
+    const headers = {
+      "Content-Type": "application/json",
+      ...(key ? { Authorization: `Bearer ${key}` } : {}),
+    };
 
     await fetchEventSource(completionUrl, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${configuration.getKey()}`,
-      },
+      headers,
       method: "POST",
       body: JSON.stringify({
         model: getSuitableModel(

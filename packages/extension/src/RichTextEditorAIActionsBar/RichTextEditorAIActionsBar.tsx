@@ -40,7 +40,6 @@ const RichTextEditorAIActionsBar: React.SFC<RichTextEditorAIActionsBarProps> = (
 
   const configuration = new AIConfiguration(params);
   const isAiToolEnabled = isToolEnabled("ai", params);
-  const hasKey = Boolean(configuration.getKey());
   const editPrompts = configuration.getEditPrompts();
 
   const handleEditPrompt = async (prompt: any) => {
@@ -52,7 +51,7 @@ const RichTextEditorAIActionsBar: React.SFC<RichTextEditorAIActionsBarProps> = (
     await actions.rewriteSelectedContentUsingAI(prompt);
   };
 
-  return isAiToolEnabled && hasKey ? (
+  return isAiToolEnabled ? (
     <div
       className={classes.root}
       style={{

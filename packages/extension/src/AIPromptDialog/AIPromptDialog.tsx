@@ -16,30 +16,9 @@ import { Assistant as AssistantIcon } from "@material-ui/icons";
 import clsx from "clsx";
 import React, { useState } from "react";
 import { AIConfiguration } from "./AIConfiguration";
-import AIPromptDialogGraphic from "./AIPromptDialogGraphic";
 
 const styles = {
   root: {},
-  prompt: {},
-  configure: {
-    "& .MuiDialogContent-root, & .MuiDialogTitle-root, & .MuiDialogActions-root": {
-      backgroundColor: "#002C42",
-      color: "white",
-      paddingLeft: 30,
-      paddingRight: 30,
-    },
-    "& .MuiDialog-paper": {
-      height: 290,
-      overflow: "hidden",
-    },
-    "& .MuiDialogActions-root": {
-      justifyContent: "flex-start",
-      paddingBottom: 30,
-    },
-    "& .MuiDialogTitle-root": {
-      paddingTop: 30,
-    },
-  },
   configureContent: {
     maxWidth: "50%",
   },
@@ -146,58 +125,11 @@ const AIPromptDialogContent: React.SFC<any> = (props: AIPromptDialogProps) => {
   );
 };
 
-const ConfigureAIDialogContent: React.SFC<any> = (
-  props: AIPromptDialogProps & { configuration: AIConfiguration }
-) => {
-  const { onClose, classes } = props;
-
-  return (
-    <>
-      <DialogTitle style={{ paddingBottom: 0 }}>
-        AI Assistant
-        <Badge
-          style={{ marginLeft: "20px", lineHeight: "16px" }}
-          badgeContent="BETA"
-          color="error"
-          anchorOrigin={{ horizontal: "right", vertical: "top" }}
-          className={classes.betaBadge}
-        >
-          &nbsp;
-        </Badge>
-      </DialogTitle>
-      <DialogContent>
-        <Typography variant="body2" className={classes.configureContent}>
-          Our AI assistant, powered by ChatGPT, is designed to simplify and
-          improve your content production and editing workflow. It offers a
-          user-friendly interface to help generate and edit content using
-          natural language.
-          <br />
-          <br />
-          Visit the link below to find out how to enable the AI assistant.
-        </Typography>
-        <AIPromptDialogGraphic className={classes.configureGraphic} />
-      </DialogContent>
-      <DialogActions>
-        <TextField
-          className={classes.getStartedAction}
-          value={
-            "https://github.com/amplience/dc-extension-rich-text#ai-assistant"
-          }
-        />
-        <Button className={classes.cancelAction} onClick={onClose}>
-          Not at the moment
-        </Button>
-      </DialogActions>
-    </>
-  );
-};
-
 const AIPromptDialog: React.SFC<AIPromptDialogProps> = (
   props: AIPromptDialogProps
 ) => {
   const { open, onClose, classes } = props;
   const configuration = new AIConfiguration(props.params);
-  const view = configuration.getKey() ? "prompt" : "configure";
 
   return (
     <Dialog
@@ -206,24 +138,9 @@ const AIPromptDialog: React.SFC<AIPromptDialogProps> = (
       open={open}
       onClose={onClose}
       aria-labelledby="form-dialog-title"
-      className={clsx(
-        classes.root,
-        {
-          prompt: classes.prompt,
-          configure: classes.configure,
-        }[view]
-      )}
+      className={clsx(classes.root)}
     >
-      {view === "prompt" && (
-        <AIPromptDialogContent {...props} configuration={configuration} />
-      )}
-      {view === "configure" && (
-        <ConfigureAIDialogContent
-          {...props}
-          configuration={configuration}
-          onClose={onClose}
-        />
-      )}
+      <AIPromptDialogContent {...props} configuration={configuration} />
     </Dialog>
   );
 };
