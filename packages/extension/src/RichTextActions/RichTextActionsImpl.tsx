@@ -62,10 +62,15 @@ function getSuitableModel(
 
 async function getCompletionUrl(
   sdk: any,
+  hub: any,
   configuration: AIConfiguration,
   prompts: any
 ): Promise<string> {
   const hasKey = configuration.getKey();
+  const formattedPrompts = prompts.map(({ role, content }: any) => ({
+    role: role.toUpperCase(),
+    content,
+  }));
 
   if (hasKey) {
     return CHAT_COMPLETIONS_URL;
@@ -74,20 +79,19 @@ async function getCompletionUrl(
   const { data } = await sdk.connection.request(
     "dc-management-sdk-js:graphql-mutation",
     {
-      query: `mutation getCompletionUrl($orgId: ID!, $prompts:[RichTextPrompt!]!) {
-      generateRichText({
-        input: {
-         organizationId: $orgId,
-         prompts: $prompts
-       }
-      }) {
-        url
-      }
-
-    }`,
+      mutation: `mutation checkRemainingTokens($orgId: ID!, $prompts:[RichTextGenerationPrompt!]!) {
+        generateRichText(
+          input: {
+           organizationId: $orgId,
+           prompts: $prompts
+         }
+        ) {
+          url
+        }
+      }`,
       vars: {
-        orgId: btoa(`Organization:${sdk.hub.organizationId}`),
-        prompts,
+        orgId: btoa(`Organization:${hub.organizationId}`),
+        prompts: formattedPrompts,
       },
     }
   );
@@ -97,6 +101,7 @@ async function getCompletionUrl(
 
 async function invokeChatCompletions(
   sdk: any,
+  hub: any,
   configuration: AIConfiguration,
   body: any,
   onMessage: (buffer: string, complete: boolean) => void,
@@ -111,7 +116,12 @@ async function invokeChatCompletions(
   const estimatedConsumedTokens = maxOutputTokens + estimatedInputTokens;
   let markdownBuffer = "";
   try {
-    const completionUrl = await getCompletionUrl(sdk, configuration, body);
+    const completionUrl = await getCompletionUrl(
+      sdk,
+      hub,
+      configuration,
+      body.messages
+    );
     const key = configuration.getKey();
     const headers = {
       "Content-Type": "application/json",
@@ -364,6 +374,7 @@ Do not converse with the user.
     try {
       await invokeChatCompletions(
         this.context?.sdk as any,
+        this.context?.hub as any,
         configuration,
         payload,
         (buffer, complete) => {
@@ -415,7 +426,9 @@ Do not converse with the user.
           );
         },
         (err) => {
-          if (err?.errors[0]?.extensions?.code === "INSUFFICIENT_CREDITS") {
+          if (
+            err?.data?.errors?.[0]?.extensions?.code === "INSUFFICIENT_CREDITS"
+          ) {
             this.context!.setShowCreditsError(true);
           }
           if (err?.error?.message) {

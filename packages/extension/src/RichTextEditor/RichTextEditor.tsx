@@ -25,6 +25,7 @@ import RichTextEditorAIActionsBar from "../RichTextEditorAIActionsBar/RichTextEd
 import RichtextEditorContext from "./RichTextEditorContext";
 import { SdkContext } from "unofficial-dynamic-content-ui";
 import AIBanner from "../AIBanner/AIBanner";
+import HubContext from "../HubContext/HubContext";
 
 const styles = {
   root: {
@@ -90,6 +91,7 @@ const RichTextEditor: React.SFC<RichTextEditorProps> = (
 
   const { language, conf: languageConfiguration } = languages[languageProp];
   const { sdk } = React.useContext(SdkContext);
+  const { hub } = React.useContext(HubContext);
 
   const editorContext: RichTextEditorContextProps = {
     isLocked,
@@ -101,6 +103,7 @@ const RichTextEditor: React.SFC<RichTextEditorProps> = (
     languages,
     language,
     sdk,
+    hub,
     setShowCreditsError,
   };
 

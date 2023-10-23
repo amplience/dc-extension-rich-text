@@ -10,6 +10,7 @@ const context = React.createContext<RichTextEditorContextProps>({
   languages: {},
   language: {} as any,
   sdk: {} as any,
+  hub: {} as any,
   setIsLocked: (locked: boolean) => {},
   setShowCreditsError: (show: boolean) => {},
 });

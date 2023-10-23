@@ -11,6 +11,7 @@ export interface RichTextEditorContextProps {
   languages: RichTextLanguageMap;
   language: RichLanguage;
   sdk: any;
+  hub: any;
   setIsLocked(locked: boolean): void;
   setShowCreditsError(show: boolean): void;
 }

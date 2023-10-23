@@ -1,15 +1,16 @@
 import React from "react";
 
 import { datadogRum } from "@datadog/browser-rum";
-import { ContentFieldExtension, init } from "dc-extensions-sdk";
-import { withTheme } from "unofficial-dynamic-content-ui";
+import { SDK, init } from "dc-extensions-sdk";
+import { SdkContext, withTheme } from "unofficial-dynamic-content-ui";
 import EditorRichTextField from "./EditorRichTextField/EditorRichTextField";
 import { RichTextDialogsContainer } from "./RichTextDialogs";
-import SdkContext from "./SdkContext/SdkContext";
+import HubContext from "./HubContext/HubContext";
 
 interface AppState {
   connected: boolean;
-  sdk?: ContentFieldExtension;
+  sdk?: SDK;
+  hub?: any;
   value?: string;
   params?: any;
 }
@@ -53,7 +54,7 @@ export default class App extends React.Component<{}, AppState> {
   }
 
   public async handleConnect(): Promise<void> {
-    const sdk = await init<ContentFieldExtension>();
+    const sdk = await init();
     sdk.frame.startAutoResizer();
 
     sdk.contentItem
@@ -64,6 +65,11 @@ export default class App extends React.Component<{}, AppState> {
         });
       })
       .catch(() => {});
+
+    const hub = await sdk.connection
+      .request("context-get")
+      .then(({ hub }) => hub)
+      .catch(() => ({}));
 
     const params = {
       ...sdk.field?.schema?.["ui:extension"]?.params,
@@ -77,6 +83,7 @@ export default class App extends React.Component<{}, AppState> {
       connected: true,
       value,
       params,
+      hub,
     });
   }
 
@@ -91,7 +98,7 @@ export default class App extends React.Component<{}, AppState> {
   }
 
   public render(): React.ReactElement {
-    const { connected, value, sdk } = this.state;
+    const { connected, value, sdk, hub } = this.state;
 
     return (
       <div className="App">
@@ -99,13 +106,15 @@ export default class App extends React.Component<{}, AppState> {
           <div>
             {withTheme(
               <SdkContext.Provider value={{ sdk }}>
-                <RichTextDialogsContainer params={this.state.params}>
-                  <EditorRichTextField
-                    onChange={this.handleValueChange}
-                    value={value}
-                    schema={sdk.field.schema}
-                  />
-                </RichTextDialogsContainer>
+                <HubContext.Provider value={{ hub }}>
+                  <RichTextDialogsContainer params={this.state.params}>
+                    <EditorRichTextField
+                      onChange={this.handleValueChange}
+                      value={value}
+                      schema={sdk.field.schema}
+                    />
+                  </RichTextDialogsContainer>
+                </HubContext.Provider>
               </SdkContext.Provider>
             )}
           </div>

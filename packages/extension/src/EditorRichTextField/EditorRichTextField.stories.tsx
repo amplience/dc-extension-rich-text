@@ -1,10 +1,9 @@
 import { storiesOf } from "@storybook/react";
-import { ContentFieldExtension, init } from "dc-extensions-sdk";
+import { init } from "dc-extensions-sdk";
 import React from "react";
-import { withTheme } from "unofficial-dynamic-content-ui";
+import { SdkContext, withTheme } from "unofficial-dynamic-content-ui";
 import { RichTextDialogsContainer } from "../RichTextDialogs";
 import EditorRichTextField from "./EditorRichTextField";
-import SdkContext from "../SdkContext/SdkContext";
 
 async function initStories() {
   const imageValue = {
@@ -17,7 +16,7 @@ async function initStories() {
     defaultHost: "cdn.media.amplience.net",
   };
 
-  const mockSdk = await init<ContentFieldExtension>();
+  const mockSdk = await init();
   mockSdk.stagingEnvironment =
     "8d0nfe8p86q314k885enoody0.staging.bigcontent.io";
   mockSdk.mediaLink.getImage = () => {
