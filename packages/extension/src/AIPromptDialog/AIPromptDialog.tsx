@@ -146,11 +146,6 @@ const AIPromptDialogContent: React.SFC<any> = (props: AIPromptDialogProps) => {
           multiline
           rowsMax={9}
           InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <AssistantIcon color="primary" fontSize="large" />
-              </InputAdornment>
-            ),
             endAdornment: (
               <InputAdornment position="end">
                 <Button
