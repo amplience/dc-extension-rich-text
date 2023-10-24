@@ -76,7 +76,9 @@ export default function AIBanner({
         <ErrorMessage showCreditsError={showCreditsError}></ErrorMessage>
       </div>
       {loading ? (
-        <Loader></Loader>
+        <div style={{ marginLeft: "auto" }}>
+          <Loader></Loader>
+        </div>
       ) : (
         <Button
           variant="outlined"
