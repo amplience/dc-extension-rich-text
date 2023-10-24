@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useContext } from "react";
 import { SparklesIcon } from "../SparklesIcon/SparklesIcon";
 import { Loader } from "../Loader/Loader";
 import { Button, Link } from "@material-ui/core";
+import RichtextEditorContext from "../RichTextEditor/RichTextEditorContext";
 
 function ErrorMessage({ showCreditsError }: { showCreditsError: boolean }) {
   if (showCreditsError) {
@@ -23,6 +24,17 @@ export default function AIBanner({
   showCreditsError: boolean;
   loading: boolean;
 }) {
+  const { dialogs, actions } = useContext(RichtextEditorContext);
+
+  const showDialog = async () => {
+    try {
+      const prompt = await dialogs.getAIPrompt({
+        variant: "generate",
+      });
+      await actions.insertAIContent(prompt);
+    } catch {}
+  };
+
   return (
     <div
       style={{
@@ -70,6 +82,7 @@ export default function AIBanner({
           variant="outlined"
           color="primary"
           style={{ marginLeft: "auto" }}
+          onClick={showDialog}
         >
           Show prompt
         </Button>
