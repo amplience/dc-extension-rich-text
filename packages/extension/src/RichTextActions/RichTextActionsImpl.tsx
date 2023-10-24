@@ -67,10 +67,10 @@ async function getCompletionUrl(
   prompts: any
 ): Promise<string> {
   const hasKey = configuration.getKey();
-  const formattedPrompts = prompts.map(({ role, content }: any) => ({
+  const convertRolesToUppercase = ({ role, content }: any) => ({
     role: role.toUpperCase(),
     content,
-  }));
+  });
 
   if (hasKey) {
     return CHAT_COMPLETIONS_URL;
@@ -79,7 +79,7 @@ async function getCompletionUrl(
   const { data } = await sdk.connection.request(
     "dc-management-sdk-js:graphql-mutation",
     {
-      mutation: `mutation checkRemainingTokens($orgId: ID!, $prompts:[RichTextGenerationPrompt!]!) {
+      mutation: `mutation generateRichText($orgId: ID!, $prompts:[RichTextGenerationPrompt!]!) {
         generateRichText(
           input: {
            organizationId: $orgId,
@@ -91,12 +91,12 @@ async function getCompletionUrl(
       }`,
       vars: {
         orgId: btoa(`Organization:${hub.organizationId}`),
-        prompts: formattedPrompts,
+        prompts: prompts.map(convertRolesToUppercase),
       },
     }
   );
 
-  return data.getCompletionUrl.url;
+  return data.generateRichText.url;
 }
 
 async function invokeChatCompletions(
@@ -130,16 +130,21 @@ async function invokeChatCompletions(
 
     await fetchEventSource(completionUrl, {
       headers,
-      method: "POST",
-      body: JSON.stringify({
-        model: getSuitableModel(
-          configuration.getModel(),
-          estimatedConsumedTokens
-        ),
-        max_tokens: maxOutputTokens,
-        stream: true,
-        ...body,
-      }),
+      mode: "no-cors",
+      method: key ? "POST" : "GET",
+      ...(key
+        ? {
+            body: JSON.stringify({
+              model: getSuitableModel(
+                configuration.getModel(),
+                estimatedConsumedTokens
+              ),
+              max_tokens: maxOutputTokens,
+              stream: true,
+              ...body,
+            }),
+          }
+        : {}),
       onmessage: (e) => {
         try {
           if (e.data === "[DONE]") {
