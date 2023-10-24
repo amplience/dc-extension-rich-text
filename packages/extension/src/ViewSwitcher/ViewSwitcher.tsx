@@ -15,10 +15,11 @@ const styles = {
     border: "0 solid transparent",
     borderTop: "3px solid transparent",
     borderBottom: "3px solid transparent",
-    fontSize: 13,
+    fontSize: 11,
     padding: "0 15px",
-    color: "#999999",
-    fontWeight: "bold" as "bold",
+    color: "#333",
+    fontWeight: 500,
+    fontFamily: "'IBM Plex Sans', sans-serif",
   },
   selected: {
     color: "#1EA7FD",
@@ -84,7 +85,7 @@ const ViewSwitcher = (props: ViewSwitcherProps) => {
 
   return (
     <div className={classes.root}>
-      {disableEditView ? false : renderButton("Edit", EditorView.EDIT)}
+      {disableEditView ? false : renderButton("Editor", EditorView.EDIT)}
       {disableCodeView
         ? false
         : renderButton(language || "Code", EditorView.CODE)}

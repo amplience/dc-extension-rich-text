@@ -39,7 +39,7 @@ const styles = {
     flexDirection: "column" as "column",
     border: "1px solid rgba(157,162,162,.3)",
     borderRadius: 5,
-    padding: "0 10px 10px 10px",
+    padding: "12px 20px",
   },
 };
 
@@ -208,7 +208,6 @@ const RichTextEditor: React.SFC<RichTextEditorProps> = (
 
   return (
     <RichtextEditorContext.Provider value={editorContext}>
-      <AIBanner showCreditsError={showCreditsError}></AIBanner>
       <div className={classes.root}>
         <div className={classes.frame}>
           <ViewSwitcher
@@ -221,11 +220,17 @@ const RichTextEditor: React.SFC<RichTextEditorProps> = (
               {disableToolbar ? (
                 false
               ) : (
-                <ProseMirrorToolbar
-                  toolbarState={toolbarState}
-                  layout={toolbarLayout}
-                  isLocked={editorContext.isLocked}
-                />
+                <>
+                  <AIBanner
+                    showCreditsError={false}
+                    loading={isLocked}
+                  ></AIBanner>
+                  <ProseMirrorToolbar
+                    toolbarState={toolbarState}
+                    layout={toolbarLayout}
+                    isLocked={editorContext.isLocked}
+                  />
+                </>
               )}
               <div style={{ position: "relative" }}>
                 <ProseMirror

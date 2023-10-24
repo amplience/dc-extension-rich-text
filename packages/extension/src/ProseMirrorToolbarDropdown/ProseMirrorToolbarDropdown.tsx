@@ -6,7 +6,7 @@ import { ProseMirrorToolbarContext } from "../ProseMirrorToolbar";
 
 const styles = {
   value: {
-    fontSize: 14,
+    fontSize: 13,
     paddingLeft: 6,
     paddingRight: 6,
     fontWeight: "unset" as "unset",

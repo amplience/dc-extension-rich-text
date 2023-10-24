@@ -1,10 +1,12 @@
 import React from "react";
 
 import { datadogRum } from "@datadog/browser-rum";
-import { SDK, init } from "dc-extensions-sdk";
+import { ThemeProvider } from "@material-ui/core/styles";
+import { init, SDK } from "dc-extensions-sdk";
 import { SdkContext, withTheme } from "unofficial-dynamic-content-ui";
 import EditorRichTextField from "./EditorRichTextField/EditorRichTextField";
 import { RichTextDialogsContainer } from "./RichTextDialogs";
+import theme from "./theme";
 import HubContext from "./HubContext/HubContext";
 
 interface AppState {
@@ -105,17 +107,19 @@ export default class App extends React.Component<{}, AppState> {
         {connected && sdk ? (
           <div>
             {withTheme(
-              <SdkContext.Provider value={{ sdk }}>
-                <HubContext.Provider value={{ hub }}>
-                  <RichTextDialogsContainer params={this.state.params}>
-                    <EditorRichTextField
-                      onChange={this.handleValueChange}
-                      value={value}
-                      schema={sdk.field.schema}
-                    />
-                  </RichTextDialogsContainer>
-                </HubContext.Provider>
-              </SdkContext.Provider>
+              <ThemeProvider theme={theme}>
+                <SdkContext.Provider value={{ sdk }}>
+                  <HubContext.Provider value={{ hub }}>
+                    <RichTextDialogsContainer params={this.state.params}>
+                      <EditorRichTextField
+                        onChange={this.handleValueChange}
+                        value={value}
+                        schema={sdk.field.schema}
+                      />
+                    </RichTextDialogsContainer>
+                  </HubContext.Provider>
+                </SdkContext.Provider>
+              </ThemeProvider>
             )}
           </div>
         ) : (

@@ -7,6 +7,7 @@
 This extension is designed to replace the built in rich text editor with additional features and customization options including generative content from [ChatGPT](https://openai.com/chatgpt).
 
 ## Features
+
 - AI
   - [Generative AI assistant](#generative-ai-assistant)
 - Markdown output
@@ -70,6 +71,7 @@ _As this is an open source project you're welcome to host your own "fork" of thi
 Sandbox permissions:
 
 - Allow same origin
+- Allow pop-ups
 
 ### Assign the extension to schema
 
@@ -235,14 +237,10 @@ When text is selected, preset edit prompts are displayed which save users needin
 ```json
 {
   "toolbar": {
-    "layout": [
-      { "type": "button", "toolName": "ai" }
-    ]
+    "layout": [{ "type": "button", "toolName": "ai" }]
   }
 }
 ```
-
-
 
 ### Enable or disable tools
 
@@ -447,8 +445,6 @@ When using multiple of these properties, use them on the same object:
   ]
 }
 ```
-
-
 
 ### Experimental: Inline Styles
 
