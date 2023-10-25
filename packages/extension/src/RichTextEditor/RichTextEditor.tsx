@@ -154,13 +154,7 @@ const RichTextEditor: React.SFC<RichTextEditorProps> = (
         // tslint:disable-next-line
       } catch (err) {}
     },
-    [
-      languageConfiguration,
-      setRawValue,
-      setProseMirrorDocument,
-      onChange,
-      language,
-    ]
+    [languageConfiguration, setRawValue, setProseMirrorDocument, onChange]
   );
 
   const handleEditorChange = React.useCallback(
@@ -181,13 +175,7 @@ const RichTextEditor: React.SFC<RichTextEditorProps> = (
         // tslint:disable-next-line
       } catch (err) {}
     },
-    [
-      languageConfiguration,
-      setProseMirrorDocument,
-      setRawValue,
-      language,
-      onChange,
-    ]
+    [languageConfiguration, setProseMirrorDocument, setRawValue]
   );
 
   const [toolbarState, setToolbarState] = React.useState<
@@ -222,7 +210,7 @@ const RichTextEditor: React.SFC<RichTextEditorProps> = (
               ) : (
                 <>
                   <AIBanner
-                    showCreditsError={false}
+                    showCreditsError={showCreditsError}
                     loading={isLocked}
                   ></AIBanner>
                   <ProseMirrorToolbar

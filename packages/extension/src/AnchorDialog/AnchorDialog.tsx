@@ -99,7 +99,7 @@ const AnchorDialog: React.SFC<AnchorDialogProps> = (
   const handleSubmit = React.useCallback(() => {
     reset();
     onSubmit(value);
-  }, [value, onSubmit]);
+  }, [value, setValue, onSubmit]);
 
   return (
     <Dialog

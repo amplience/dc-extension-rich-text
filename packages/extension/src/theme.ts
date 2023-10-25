@@ -17,7 +17,7 @@ export default (outerTheme: any) => {
     "overline",
   ];
   typography.fontFamily = fontFamily;
-  elements.map((element) => {
+  elements.forEach((element) => {
     typography[element].fontFamily = fontFamily;
   });
 

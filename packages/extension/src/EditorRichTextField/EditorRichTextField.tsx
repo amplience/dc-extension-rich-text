@@ -123,7 +123,7 @@ const EditorRichTextField: React.SFC<EditorRichTextFieldProps> = (
       markdown: MarkdownLanguage(toolOptions),
       json: JSONLanguage(toolOptions),
     };
-  }, [toolOptions]);
+  }, []);
 
   const editorViewOptions = React.useMemo(() => {
     return {
@@ -134,7 +134,7 @@ const EditorRichTextField: React.SFC<EditorRichTextFieldProps> = (
           new DcContentLinkView(node, view, getPos, toolOptions),
       },
     };
-  }, [toolOptions]);
+  }, [sdk, toolOptions]);
 
   return (
     <div className={classes.root}>
