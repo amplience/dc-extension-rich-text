@@ -60,6 +60,15 @@ function getSuitableModel(
   }
 }
 
+function getDelta(key: any, data: string) {
+  if (!key) {
+    return data;
+  }
+
+  const payload = JSON.parse(data);
+  return payload?.choices?.[0]?.delta?.content;
+}
+
 async function getCompletionUrl(
   sdk: any,
   hub: any,
@@ -130,7 +139,6 @@ async function invokeChatCompletions(
 
     await fetchEventSource(completionUrl, {
       headers,
-      mode: "no-cors",
       method: key ? "POST" : "GET",
       ...(key
         ? {
@@ -151,8 +159,8 @@ async function invokeChatCompletions(
             onMessage(markdownBuffer, true);
             return;
           }
-          const payload = JSON.parse(e.data);
-          const delta = payload.choices[0].delta.content;
+
+          const delta = getDelta(key, e.data);
           if (delta !== undefined) {
             markdownBuffer += delta;
             onMessage(markdownBuffer, false);
