@@ -7,10 +7,22 @@ import RichtextEditorContext from "../RichTextEditor/RichTextEditorContext";
 function ErrorMessage({ showCreditsError }: { showCreditsError: boolean }) {
   if (showCreditsError) {
     return (
-      <span>
+      <p
+        style={{
+          fontSize: "11px",
+          color: "#FF3366",
+          fontFamily: "'IBM Plex Sans', sans-serif",
+        }}
+      >
         You're out of Amplience Credits. You can still use the editor to compose
-        your own text. <a href="https://amplience.com">Get more credits</a>
-      </span>
+        your own text.{" "}
+        <a
+          href="https://amplience.com"
+          style={{ color: "#039BE5", textDecoration: "none" }}
+        >
+          Get more credits
+        </a>
+      </p>
     );
   }
 
