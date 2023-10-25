@@ -17,8 +17,10 @@ function ErrorMessage({ showCreditsError }: { showCreditsError: boolean }) {
         You're out of Amplience Credits. You can still use the editor to compose
         your own text.{" "}
         <a
-          href="https://amplience.com"
+          href="https://amplience.com/developers/docs/ai-services/credits"
           style={{ color: "#039BE5", textDecoration: "none" }}
+          target="_blank"
+          rel="noopener noreferrer"
         >
           Get more credits
         </a>
