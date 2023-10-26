@@ -61,11 +61,11 @@ function getSuitableModel(
 }
 
 function getDelta(key: any, data: string) {
+  const payload = JSON.parse(data);
   if (!key) {
-    return data;
+    return payload?.content;
   }
 
-  const payload = JSON.parse(data);
   return payload?.choices?.[0]?.delta?.content;
 }
 
@@ -154,8 +154,9 @@ async function invokeChatCompletions(
           }
         : {}),
       onmessage: (e) => {
+        // check for key, if key check event, if blank, replace with '\n', if buffer empty, ignore
         try {
-          if (e.data === "[DONE]") {
+          if (e.data === "[DONE]" || e?.event === "end") {
             onMessage(markdownBuffer, true);
             return;
           }
