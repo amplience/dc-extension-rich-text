@@ -92,7 +92,7 @@ function AIBanner(props: any) {
             API.{" "}
             <Link
               underline="none"
-              href="http://amplience.com/docs/ai-services"
+              href="https://amplience.com/developers/docs/ai-services"
               target="_blank"
             >
               Learn more
