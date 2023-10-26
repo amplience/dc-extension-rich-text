@@ -57,7 +57,7 @@ function CloseButton(props: any) {
       disableFocusRipple={true}
       disableRipple={true}
     >
-      <Close></Close>
+      <Close style={{ width: 24, height: 24 }}></Close>
     </IconButton>
   );
 }
