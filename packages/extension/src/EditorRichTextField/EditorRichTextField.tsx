@@ -26,6 +26,7 @@ import { RichTextDialogsContext } from "../RichTextDialogs";
 export const styles = {
   root: {
     width: "100%",
+    minWidth: 440,
   },
   title: {
     padding: "7px 0",

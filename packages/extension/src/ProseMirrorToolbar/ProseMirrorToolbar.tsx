@@ -3,6 +3,7 @@ import React from "react";
 import {
   Toolbar as MaterialToolbar,
   WithStyles,
+  createStyles,
   withStyles,
 } from "@material-ui/core";
 
@@ -14,12 +15,16 @@ import { ProseMirrorToolbarGroup } from "../ProseMirrorToolbarGroup";
 import { useRichTextEditorContext } from "../RichTextEditor/RichTextEditorContext";
 import { ProseMirrorToolbarState } from "./ProseMirrorToolbarState";
 
-const styles = {
+const styles = createStyles({
   root: {
     minHeight: 35,
     borderBottom: "1px solid rgb(218, 220, 224)",
+    flexWrap: "wrap",
   },
-};
+  group: {
+    display: "flex",
+  },
+});
 
 export interface ToolbarButton {
   type: "button";
@@ -50,6 +55,8 @@ const ProseMirrorToolbar: React.SFC<ProseMirrorToolbarProps> = (
 ) => {
   const { classes, layout, toolbarState } = props;
   const richTextEditorContext = useRichTextEditorContext();
+  const group1 = layout.slice(0, 3);
+  const group2 = layout.slice(3);
 
   const renderToolbarElement = (idx: number, element: ToolbarElement) => {
     switch (element.type) {
@@ -142,9 +149,12 @@ const ProseMirrorToolbar: React.SFC<ProseMirrorToolbarProps> = (
       }}
     >
       <MaterialToolbar className={classes.root} disableGutters={true}>
-        {layout.map((value, idx) => {
-          return renderToolbarElement(idx, value);
-        })}
+        <div className={classes.group}>
+          {group1.map((value, idx) => renderToolbarElement(idx, value))}
+        </div>
+        <div className={classes.group}>
+          {group2.map((value, idx) => renderToolbarElement(idx, value))}
+        </div>
       </MaterialToolbar>
     </ProseMirrorToolbarContext.Provider>
   );

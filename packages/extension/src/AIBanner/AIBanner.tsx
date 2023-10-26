@@ -35,6 +35,7 @@ const styles = createStyles({
   button: {
     marginLeft: "auto",
     textTransform: "none",
+    flex: "0 0 auto",
     "&:hover": {
       backgroundColor: "#1ab0f9",
       color: "#fff",
