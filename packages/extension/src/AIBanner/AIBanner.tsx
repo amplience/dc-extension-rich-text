@@ -14,7 +14,7 @@ function ErrorMessage({ showCreditsError }: { showCreditsError: boolean }) {
           fontFamily: "'IBM Plex Sans', sans-serif",
         }}
       >
-        You're out of Amplience credits.You can still use the Editor to compose text yourself.{" "}
+        You're out of Amplience credits. You can still use the Editor to compose text yourself.{" "}
         <a
           href="https://amplience.com/developers/docs/ai-services/credits"
           style={{ color: "#039BE5", textDecoration: "none" }}
