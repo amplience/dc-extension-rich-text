@@ -9,7 +9,7 @@ const styles = {
   button: {
     outline: "none" as "none",
     transition: "color 0.2s linear,border-bottom-color 0.2s linear",
-    height: 40,
+    height: 42,
     cursor: "pointer" as "pointer",
     background: "transparent" as "transparent",
     border: "0 solid transparent",
