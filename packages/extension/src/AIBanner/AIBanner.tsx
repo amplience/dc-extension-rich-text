@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { SparklesIcon } from "../SparklesIcon/SparklesIcon";
 import { Loader } from "../Loader/Loader";
-import { Button, Link } from "@material-ui/core";
+import { Button, Link, createStyles, withStyles } from "@material-ui/core";
 import RichtextEditorContext from "../RichTextEditor/RichTextEditorContext";
 
 function ErrorMessage({ showCreditsError }: { showCreditsError: boolean }) {
@@ -17,13 +17,19 @@ function ErrorMessage({ showCreditsError }: { showCreditsError: boolean }) {
   return <></>;
 }
 
-export default function AIBanner({
-  showCreditsError,
-  loading,
-}: {
-  showCreditsError: boolean;
-  loading: boolean;
-}) {
+const styles = createStyles({
+  button: {
+    marginLeft: "auto",
+    textTransform: "none",
+    "&:hover": {
+      backgroundColor: "#1ab0f9",
+      color: "#fff",
+    },
+  },
+});
+
+function AIBanner(props: any) {
+  const { showCreditsError, loading, classes } = props;
   const { dialogs, actions } = useContext(RichtextEditorContext);
 
   const showDialog = async () => {
@@ -83,7 +89,7 @@ export default function AIBanner({
         <Button
           variant="outlined"
           color="primary"
-          style={{ marginLeft: "auto" }}
+          className={classes.button}
           onClick={showDialog}
         >
           Show prompt
@@ -92,3 +98,5 @@ export default function AIBanner({
     </div>
   );
 }
+
+export default withStyles(styles)(AIBanner);
