@@ -15,7 +15,7 @@ const styles = {
     border: "0 solid transparent",
     borderTop: "3px solid transparent",
     borderBottom: "3px solid transparent",
-    fontSize: 11,
+    fontSize: 13,
     padding: "0 15px",
     color: "#333",
     fontWeight: 500,
