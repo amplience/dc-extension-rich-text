@@ -16,16 +16,15 @@ const styles = (theme: Theme) => ({
     bottom: 0,
   },
   chip: {
-    background: "#e5e5e5",
-    color: "#333",
+    color: "#039be5",
+    border: "1px solid rgba(3, 155, 229, 0.5)",
     borderRadius: "3px",
     fontSize: "13px",
-    border: "none",
     padding: "0 5px",
-    height: "24px",
+    height: "30px",
     "&:hover": {
-      background: "#1ab0f9 !important",
-      color: "#fff",
+      border: "1px solid rgba(3, 155, 229, 1)",
+      backgroundColor: "#fff !important",
     },
   },
 });
