@@ -64,36 +64,39 @@ function AIBanner(props: any) {
         marginTop: "8px",
       }}
     >
-      <SparklesIcon></SparklesIcon>
+      <SparklesIcon readOnly={showCreditsError ? true : false}></SparklesIcon>
       <div>
         <h1
           style={{
             fontSize: "13px",
             fontWeight: 400,
-            color: "#333",
+            color: showCreditsError ? "#BFBFBF" : "#333",
             fontFamily: "'IBM Plex Sans', sans-serif",
           }}
         >
           Generative Rich Text Editor
         </h1>
-        <p
-          style={{
-            fontSize: "11px",
-            color: "#666",
-            fontFamily: "'IBM Plex Sans', sans-serif",
-          }}
-        >
-          Tell the AI Assistant what content to generate. Powered by ChatGPT
-          API.{" "}
-          <Link
-            underline="none"
-            href="http://amplience.com/docs/ai-services"
-            target="_blank"
+        {showCreditsError ? (
+          <ErrorMessage showCreditsError={showCreditsError}></ErrorMessage>
+        ) : (
+          <p
+            style={{
+              fontSize: "11px",
+              color: "#666",
+              fontFamily: "'IBM Plex Sans', sans-serif",
+            }}
           >
-            Learn more
-          </Link>
-        </p>
-        <ErrorMessage showCreditsError={showCreditsError}></ErrorMessage>
+            Tell the AI Assistant what content to generate. Powered by ChatGPT
+            API.{" "}
+            <Link
+              underline="none"
+              href="http://amplience.com/docs/ai-services"
+              target="_blank"
+            >
+              Learn more
+            </Link>
+          </p>
+        )}
       </div>
       {loading ? (
         <div style={{ marginLeft: "auto" }}>
@@ -105,6 +108,7 @@ function AIBanner(props: any) {
           color="primary"
           className={classes.button}
           onClick={showDialog}
+          disabled={showCreditsError ? true : false}
         >
           Show prompt
         </Button>
