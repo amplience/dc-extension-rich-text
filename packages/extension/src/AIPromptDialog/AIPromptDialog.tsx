@@ -68,7 +68,9 @@ function DialogHeader(props: any) {
     <DialogTitle style={{ paddingBottom: 0 }}>
       <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
         <SparklesIcon></SparklesIcon>
-        <span style={{ fontSize: "16px", fontWeight: 500 }}>{title}</span>
+        <span style={{ fontSize: "16px", fontWeight: 500, color: "#333" }}>
+          {title}
+        </span>
         <CloseButton onClick={onClose}></CloseButton>
       </div>
     </DialogTitle>
