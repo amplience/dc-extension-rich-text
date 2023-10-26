@@ -1,6 +1,7 @@
 import { AIPromptDialogOptions } from "@dc-extension-rich-text/common";
 import {
   Button,
+  createStyles,
   Dialog,
   DialogActions,
   DialogContent,
@@ -18,7 +19,7 @@ import React, { useState } from "react";
 import { AIConfiguration } from "./AIConfiguration";
 import { SparklesIcon } from "../SparklesIcon/SparklesIcon";
 
-const styles = {
+const styles = createStyles({
   root: {},
   configureContent: {
     maxWidth: "50%",
@@ -37,7 +38,15 @@ const styles = {
   cancelAction: {
     color: "white",
   },
-};
+  button: {
+    marginLeft: "auto",
+    textTransform: "none",
+    "&:hover": {
+      backgroundColor: "#1ab0f9",
+      color: "#fff",
+    },
+  },
+});
 
 interface AIPromptDialogProps
   extends AIPromptDialogOptions,
@@ -130,8 +139,9 @@ const AIPromptDialogContent: React.SFC<any> = (props: AIPromptDialogProps) => {
               <InputAdornment position="end">
                 <Button
                   onClick={handleSubmit}
-                  variant="contained"
+                  variant="outlined"
                   color="primary"
+                  className={classes.button}
                   disableElevation={true}
                   disabled={!prompt.length}
                 >
