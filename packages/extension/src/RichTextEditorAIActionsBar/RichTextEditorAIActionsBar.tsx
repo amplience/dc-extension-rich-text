@@ -26,6 +26,9 @@ const styles = (theme: Theme) => ({
       border: "1px solid rgba(3, 155, 229, 1)",
       backgroundColor: "#fff !important",
     },
+    "&:focus": {
+      backgroundColor: "#fff !important",
+    },
   },
 });
 
