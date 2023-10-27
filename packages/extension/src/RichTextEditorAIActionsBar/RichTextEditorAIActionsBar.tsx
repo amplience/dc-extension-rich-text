@@ -33,12 +33,14 @@ const styles = (theme: Theme) => ({
 });
 
 export interface RichTextEditorAIActionsBarProps
-  extends WithStyles<typeof styles> {}
+  extends WithStyles<typeof styles> {
+  showCreditsError: any;
+}
 
 const RichTextEditorAIActionsBar: React.SFC<RichTextEditorAIActionsBarProps> = (
   props: RichTextEditorAIActionsBarProps
 ) => {
-  const { classes } = props;
+  const { classes, showCreditsError } = props;
   const {
     params,
     actions,
@@ -70,6 +72,7 @@ const RichTextEditorAIActionsBar: React.SFC<RichTextEditorAIActionsBarProps> = (
                 label={prompt.label}
                 variant="outlined"
                 onClick={() => handleEditPrompt(prompt)}
+                disabled={showCreditsError}
                 style={{
                   visibility: proseMirrorEditorView?.state.selection.empty
                     ? "hidden"
@@ -85,6 +88,7 @@ const RichTextEditorAIActionsBar: React.SFC<RichTextEditorAIActionsBarProps> = (
             label="Custom rewrite"
             variant="outlined"
             onClick={() => handleCustomAiRewrite()}
+            disabled={showCreditsError}
             style={{
               visibility: proseMirrorEditorView?.state.selection.empty
                 ? "hidden"
