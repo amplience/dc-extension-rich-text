@@ -14,15 +14,15 @@ function ErrorMessage({ showCreditsError }: { showCreditsError: boolean }) {
           fontFamily: "'IBM Plex Sans', sans-serif",
         }}
       >
-        You're out of Amplience Credits. You can still use the editor to compose
-        your own text.{" "}
+        You're out of Amplience credits. You can still use the Editor to compose
+        text yourself.{" "}
         <a
           href="https://amplience.com/developers/docs/ai-services/credits"
           style={{ color: "#039BE5", textDecoration: "none" }}
           target="_blank"
           rel="noopener noreferrer"
         >
-          Get more credits
+          Top up your credits
         </a>
       </p>
     );
@@ -36,6 +36,8 @@ const styles = createStyles({
     marginLeft: "auto",
     textTransform: "none",
     flex: "0 0 auto",
+    fontSize: 13,
+    fontWeight: 500,
     "&:hover": {
       backgroundColor: "#1ab0f9",
       color: "#fff",
@@ -65,36 +67,39 @@ function AIBanner(props: any) {
         marginTop: "8px",
       }}
     >
-      <SparklesIcon></SparklesIcon>
+      <SparklesIcon readOnly={showCreditsError ? true : false}></SparklesIcon>
       <div>
         <h1
           style={{
             fontSize: "13px",
             fontWeight: 400,
-            color: "#333",
+            color: showCreditsError ? "#BFBFBF" : "#333",
             fontFamily: "'IBM Plex Sans', sans-serif",
           }}
         >
           Generative Rich Text Editor
         </h1>
-        <p
-          style={{
-            fontSize: "11px",
-            color: "#666",
-            fontFamily: "'IBM Plex Sans', sans-serif",
-          }}
-        >
-          Tell the AI Assistant what content to generate. Powered by ChatGPT
-          API.{" "}
-          <Link
-            underline="none"
-            href="http://amplience.com/docs/ai-services"
-            target="_blank"
+        {showCreditsError ? (
+          <ErrorMessage showCreditsError={showCreditsError}></ErrorMessage>
+        ) : (
+          <p
+            style={{
+              fontSize: "11px",
+              color: "#666",
+              fontFamily: "'IBM Plex Sans', sans-serif",
+            }}
           >
-            Learn more
-          </Link>
-        </p>
-        <ErrorMessage showCreditsError={showCreditsError}></ErrorMessage>
+            Tell the AI Assistant what content to generate. Powered by ChatGPT
+            API.{" "}
+            <Link
+              underline="none"
+              href="https://amplience.com/developers/docs/ai-services"
+              target="_blank"
+            >
+              Learn more
+            </Link>
+          </p>
+        )}
       </div>
       {loading ? (
         <div style={{ marginLeft: "auto" }}>
@@ -106,6 +111,7 @@ function AIBanner(props: any) {
           color="primary"
           className={classes.button}
           onClick={showDialog}
+          disabled={showCreditsError ? true : false}
         >
           Show prompt
         </Button>
