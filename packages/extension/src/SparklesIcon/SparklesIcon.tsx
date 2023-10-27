@@ -6,6 +6,7 @@ export const SparklesIcon = (props: { readOnly?: boolean }) => {
       xmlns="http://www.w3.org/2000/svg"
       width="32"
       height="32"
+      style={{ flex: "0 0 auto" }}
       fill={props.readOnly ? "#D9D9D9" : "#F88B8B"}
       viewBox="5.34 5.34 21.33 21.33"
     >
