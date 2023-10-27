@@ -9,6 +9,7 @@ import { Assistant as AssistantIcon } from "@material-ui/icons";
 import { fetchEventSource } from "@microsoft/fetch-event-source";
 import React from "react";
 import { AIConfiguration } from "../AIPromptDialog";
+import { track } from "../gainsight";
 
 interface ChatModel {
   name: string;
@@ -167,6 +168,12 @@ async function invokeChatCompletions(
         } catch (err) {}
       },
       async onopen(response): Promise<void> {
+        if (key) {
+          track(window, "AI Credits used", {
+            name: "dc-extension-rich-text",
+            category: "Extension",
+          });
+        }
         const contentType = response.headers.get("content-type");
         if (contentType?.startsWith("application/json")) {
           onError(await response.json());
@@ -441,6 +448,10 @@ Do not converse with the user.
           if (
             err?.data?.errors?.[0]?.extensions?.code === "INSUFFICIENT_CREDITS"
           ) {
+            track(window, "AI Credits Limit reached", {
+              name: "dc-extension-rich-text",
+              category: "Extension",
+            });
             this.context!.setShowCreditsError(true);
           }
           if (err?.error?.message) {
