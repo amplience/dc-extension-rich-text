@@ -20,7 +20,9 @@ import { AIConfiguration } from "./AIConfiguration";
 import { SparklesIcon } from "../SparklesIcon/SparklesIcon";
 
 const styles = createStyles({
-  root: {},
+  root: {
+    minWidth: 440,
+  },
   configureContent: {
     maxWidth: "50%",
   },

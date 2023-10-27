@@ -35,6 +35,7 @@ const styles = createStyles({
   button: {
     marginLeft: "auto",
     textTransform: "none",
+    flex: "0 0 auto",
     fontSize: 13,
     fontWeight: 500,
     "&:hover": {
