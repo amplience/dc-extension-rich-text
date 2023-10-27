@@ -229,7 +229,9 @@ const RichTextEditor: React.SFC<RichTextEditorProps> = (
                   doc={proseMirrorDocument}
                   isLocked={editorContext.isLocked}
                 />
-                <RichTextEditorAIActionsBar />
+                <RichTextEditorAIActionsBar
+                  showCreditsError={showCreditsError}
+                />
               </div>
             </div>
           ) : (
