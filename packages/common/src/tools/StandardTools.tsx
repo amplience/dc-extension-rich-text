@@ -24,7 +24,7 @@ import Link from "@material-ui/icons/Link";
 import Redo from "@material-ui/icons/Redo";
 import Undo from "@material-ui/icons/Undo";
 
-import { Code as Language, Hyperlink, Image } from "../dialogs";
+import { Code as Language, Hyperlink } from "../dialogs";
 import { RichTextEditorContextProps } from "../editor";
 import { ProseMirrorTool } from "./ProseMirrorTool";
 import { isToolEnabled, StandardToolOptions } from "./StandardToolOptions";
@@ -398,33 +398,6 @@ export function clear_formatting(): ProseMirrorTool {
   };
 }
 
-export function ai_generate(): ProseMirrorTool {
-  return {
-    name: "ai",
-    label: "AI Assistant",
-    displayIcon: (
-      <Badge variant="dot" badgeContent="NEW" color="error" overlap="rectangle">
-        <Assistant color="primary" />
-      </Badge>
-    ),
-    apply: async (
-      state: any,
-      dispatch: any,
-      richTextEditorContext: RichTextEditorContextProps
-    ) => {
-      try {
-        const prompt = await richTextEditorContext.dialogs.getAIPrompt({
-          variant: "generate",
-        });
-        await richTextEditorContext.actions.insertAIContent(prompt);
-      } catch {}
-    },
-    isEnabled: (state: any) => {
-      return true;
-    },
-  };
-}
-
 export function createStandardTools(
   schema: any,
   options: StandardToolOptions
@@ -498,10 +471,6 @@ export function createStandardTools(
 
   if (isToolEnabled("clear_formatting", options)) {
     tools.push(clear_formatting());
-  }
-
-  if (isToolEnabled("ai", options)) {
-    tools.push(ai_generate());
   }
 
   return tools;

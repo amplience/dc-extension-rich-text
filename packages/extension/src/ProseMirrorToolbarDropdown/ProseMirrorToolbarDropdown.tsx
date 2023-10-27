@@ -6,11 +6,11 @@ import { ProseMirrorToolbarContext } from "../ProseMirrorToolbar";
 
 const styles = {
   value: {
-    fontSize: 14,
+    fontSize: 13,
     paddingLeft: 6,
     paddingRight: 6,
-    fontWeight: "unset" as "unset"
-  }
+    fontWeight: "unset" as "unset",
+  },
 };
 
 export interface ProseMirrorToolbarButtonProps
@@ -30,21 +30,21 @@ const ProseMirrorToolbarDropdown: React.SFC<ProseMirrorToolbarButtonProps> = (
   );
 
   const toolStates = toolNames
-    .map(toolName => {
+    .map((toolName) => {
       const toolState = getToolState ? getToolState(toolName) : null;
       return toolState;
     })
-    .filter(x => x != null) as ProseMirrorToolState[];
+    .filter((x) => x != null) as ProseMirrorToolState[];
 
   const selectedItems: ProseMirrorToolState[] = toolStates.filter(
-    x => x.active
+    (x) => x.active
   );
 
   const selected =
     selectedItems && selectedItems.length > 1
-      ? selectedItems.find(x => /inline_styles/.test(x.name)) ||
+      ? selectedItems.find((x) => /inline_styles/.test(x.name)) ||
         selectedItems[0]
-      : selectedItems.find(x => x.active);
+      : selectedItems.find((x) => x.active);
 
   const value = selected ? selected.name : "";
 
@@ -74,11 +74,12 @@ const ProseMirrorToolbarDropdown: React.SFC<ProseMirrorToolbarButtonProps> = (
 
       if (toolState.displayLabel) {
         return React.cloneElement(toolState.displayLabel, {
-          className: classes.value
+          className: classes.value,
         });
       }
       return toolState.label;
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [getToolState]
   );
 
@@ -92,15 +93,15 @@ const ProseMirrorToolbarDropdown: React.SFC<ProseMirrorToolbarButtonProps> = (
       onChange={handleChange}
       renderValue={renderValue}
       displayEmpty={true}
-      onMouseDown={e => e.preventDefault()}
+      onMouseDown={(e) => e.preventDefault()}
       disabled={props.isLocked}
     >
-      {toolStates.map(toolState => {
+      {toolStates.map((toolState) => {
         return (
           <MenuItem
             value={toolState.name}
             key={toolState.name}
-            onMouseDown={e => e.preventDefault()}
+            onMouseDown={(e) => e.preventDefault()}
           >
             {toolState.displayLabel ? (
               toolState.displayLabel
