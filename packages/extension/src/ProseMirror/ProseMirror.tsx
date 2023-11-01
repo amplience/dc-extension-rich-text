@@ -87,6 +87,8 @@ class ProseMirror extends React.Component<ProseMirrorProps, ProseMirrorState> {
         const { state, transactions } = view.state.applyTransaction(
           transaction
         );
+        const prevScrollHeight = this.state.ref.current.scrollHeight;
+
         view.updateState(state);
 
         if (onUpdateState) {
@@ -96,6 +98,15 @@ class ProseMirror extends React.Component<ProseMirrorProps, ProseMirrorState> {
         if (transactions.some((tr: any) => tr.docChanged)) {
           if (onChange) {
             onChange(state.doc);
+            if (
+              this.state.isLocked &&
+              this.state.ref.current.scrollHeight !== prevScrollHeight
+            ) {
+              const newState = { ...this.state };
+              newState.ref.current.scrollTop =
+                newState.ref.current.scrollHeight;
+              this.setState(newState);
+            }
           }
         }
 
