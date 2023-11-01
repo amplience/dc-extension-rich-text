@@ -3,7 +3,6 @@ import React from "react";
 import { Chip, Grid, Theme, WithStyles, withStyles } from "@material-ui/core";
 
 import { isToolEnabled } from "@dc-extension-rich-text/common";
-import { Assistant as AssistantIcon } from "@material-ui/icons";
 import { AIConfiguration } from "../AIPromptDialog";
 import { useRichTextEditorContext } from "../RichTextEditor/RichTextEditorContext";
 
@@ -14,33 +13,43 @@ const styles = (theme: Theme) => ({
     background: "white",
     paddingTop: "10px",
     width: "100%",
-    bottom: 0
+    bottom: 0,
   },
   chip: {
-    background: theme.palette.background.paper,
-    "& .MuiChip-icon": {
-      color: theme.palette.primary.main
-    }
-  }
+    color: "#039be5",
+    border: "1px solid rgba(3, 155, 229, 0.5)",
+    borderRadius: "3px",
+    fontSize: "13px",
+    padding: "0 5px",
+    height: "30px",
+    "&:hover": {
+      border: "1px solid rgba(3, 155, 229, 1)",
+      backgroundColor: "#fff !important",
+    },
+    "&:focus": {
+      backgroundColor: "#fff !important",
+    },
+  },
 });
 
 export interface RichTextEditorAIActionsBarProps
-  extends WithStyles<typeof styles> {}
+  extends WithStyles<typeof styles> {
+  showCreditsError: any;
+}
 
 const RichTextEditorAIActionsBar: React.SFC<RichTextEditorAIActionsBarProps> = (
   props: RichTextEditorAIActionsBarProps
 ) => {
-  const { classes } = props;
+  const { classes, showCreditsError } = props;
   const {
     params,
     actions,
     dialogs,
-    proseMirrorEditorView
+    proseMirrorEditorView,
   } = useRichTextEditorContext();
 
   const configuration = new AIConfiguration(params);
   const isAiToolEnabled = isToolEnabled("ai", params);
-  const hasKey = Boolean(configuration.getKey());
   const editPrompts = configuration.getEditPrompts();
 
   const handleEditPrompt = async (prompt: any) => {
@@ -52,23 +61,23 @@ const RichTextEditorAIActionsBar: React.SFC<RichTextEditorAIActionsBarProps> = (
     await actions.rewriteSelectedContentUsingAI(prompt);
   };
 
-  return isAiToolEnabled && hasKey ? (
-    <div
-      className={classes.root}
-      style={{
-        display: proseMirrorEditorView?.state.selection.empty ? "none" : "block"
-      }}
-    >
-      <Grid direction="row" spacing={1} container={true}>
+  return isAiToolEnabled ? (
+    <div className={classes.root}>
+      <Grid direction="row" spacing={1} container={true} style={{ gap: 12 }}>
         {editPrompts.map((prompt: any) => {
           return (
             <Grid key={prompt.label} item={true}>
               <Chip
                 className={classes.chip}
-                icon={<AssistantIcon color="primary" />}
                 label={prompt.label}
                 variant="outlined"
                 onClick={() => handleEditPrompt(prompt)}
+                disabled={showCreditsError}
+                style={{
+                  visibility: proseMirrorEditorView?.state.selection.empty
+                    ? "hidden"
+                    : "visible",
+                }}
               />
             </Grid>
           );
@@ -76,10 +85,15 @@ const RichTextEditorAIActionsBar: React.SFC<RichTextEditorAIActionsBarProps> = (
         <Grid item={true}>
           <Chip
             className={classes.chip}
-            icon={<AssistantIcon color="primary" />}
-            label="Custom..."
+            label="Custom rewrite"
             variant="outlined"
             onClick={() => handleCustomAiRewrite()}
+            disabled={showCreditsError}
+            style={{
+              visibility: proseMirrorEditorView?.state.selection.empty
+                ? "hidden"
+                : "visible",
+            }}
           />
         </Grid>
       </Grid>

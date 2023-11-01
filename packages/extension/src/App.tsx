@@ -1,14 +1,18 @@
 import React from "react";
 
 import { datadogRum } from "@datadog/browser-rum";
+import { ThemeProvider } from "@material-ui/core/styles";
 import { init, SDK } from "dc-extensions-sdk";
 import { SdkContext, withTheme } from "unofficial-dynamic-content-ui";
 import EditorRichTextField from "./EditorRichTextField/EditorRichTextField";
 import { RichTextDialogsContainer } from "./RichTextDialogs";
+import theme from "./theme";
+import HubContext from "./HubContext/HubContext";
 
 interface AppState {
   connected: boolean;
   sdk?: SDK;
+  hub?: any;
   value?: string;
   params?: any;
 }
@@ -44,7 +48,8 @@ export default class App extends React.Component<{}, AppState> {
         trackUserInteractions: true,
         defaultPrivacyLevel: "allow",
         sampleRate: 100,
-        useCrossSiteSessionCookie: true
+        useCrossSiteSessionCookie: true,
+        proxy: "https://dd-proxy.amplience.net",
       });
 
       datadogRum.startSessionReplayRecording();
@@ -52,19 +57,27 @@ export default class App extends React.Component<{}, AppState> {
   }
 
   public async handleConnect(): Promise<void> {
-    const sdk: SDK = await init();
+    const sdk = await init();
     sdk.frame.startAutoResizer();
 
-    sdk.contentItem.getCurrent().then(item => {
-      datadogRum.setGlobalContext({
-        deliveryId: item.deliveryId
-      });
-    });
+    sdk.contentItem
+      .getCurrent()
+      .then((item) => {
+        datadogRum.setGlobalContext({
+          deliveryId: item.deliveryId,
+        });
+      })
+      .catch(() => {});
+
+    const hub = await sdk.connection
+      .request("context-get")
+      .then(({ hub }) => hub)
+      .catch(() => ({}));
 
     const params = {
       ...sdk.field?.schema?.["ui:extension"]?.params,
       ...sdk.params?.installation,
-      ...sdk.params?.instance
+      ...sdk.params?.instance,
     };
 
     const value: any = await sdk.field.getValue();
@@ -72,7 +85,8 @@ export default class App extends React.Component<{}, AppState> {
       sdk,
       connected: true,
       value,
-      params
+      params,
+      hub,
     });
   }
 
@@ -87,22 +101,26 @@ export default class App extends React.Component<{}, AppState> {
   }
 
   public render(): React.ReactElement {
-    const { connected, value, sdk } = this.state;
+    const { connected, value, sdk, hub } = this.state;
 
     return (
       <div className="App">
         {connected && sdk ? (
           <div>
             {withTheme(
-              <SdkContext.Provider value={{ sdk }}>
-                <RichTextDialogsContainer params={this.state.params}>
-                  <EditorRichTextField
-                    onChange={this.handleValueChange}
-                    value={value}
-                    schema={sdk.field.schema}
-                  />
-                </RichTextDialogsContainer>
-              </SdkContext.Provider>
+              <ThemeProvider theme={theme}>
+                <SdkContext.Provider value={{ sdk }}>
+                  <HubContext.Provider value={{ hub }}>
+                    <RichTextDialogsContainer params={this.state.params}>
+                      <EditorRichTextField
+                        onChange={this.handleValueChange}
+                        value={value}
+                        schema={sdk.field.schema}
+                      />
+                    </RichTextDialogsContainer>
+                  </HubContext.Provider>
+                </SdkContext.Provider>
+              </ThemeProvider>
             )}
           </div>
         ) : (

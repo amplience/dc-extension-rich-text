@@ -2,13 +2,14 @@ import { datadogRum } from "@datadog/browser-rum";
 import {
   Alert,
   RichTextActions,
-  RichTextEditorContextProps
+  RichTextEditorContextProps,
 } from "@dc-extension-rich-text/common";
 import { MarkdownLanguage } from "@dc-extension-rich-text/language-markdown";
 import { Assistant as AssistantIcon } from "@material-ui/icons";
 import { fetchEventSource } from "@microsoft/fetch-event-source";
 import React from "react";
 import { AIConfiguration } from "../AIPromptDialog";
+import { track } from "../gainsight";
 
 interface ChatModel {
   name: string;
@@ -22,23 +23,23 @@ const CHAT_MODELS: ChatModel[] = [
   {
     name: "gpt-3.5-turbo",
     version: "gpt-3.5",
-    maxTokens: 4096
+    maxTokens: 4096,
   },
   {
     name: "gpt-3.5-turbo-16k",
     version: "gpt-3.5",
-    maxTokens: 16384
+    maxTokens: 16384,
   },
   {
     name: "gpt-4",
     version: "gpt-4",
-    maxTokens: 8192
+    maxTokens: 8192,
   },
   {
     name: "gpt-4-32k",
     version: "gpt-4",
-    maxTokens: 32768
-  }
+    maxTokens: 32768,
+  },
 ];
 const DIALOG_PREFIX = "[DIALOG]";
 
@@ -46,11 +47,11 @@ function getSuitableModel(
   desiredModelName: string,
   estimatedConsumedTokens: number
 ): string {
-  const desiredModel = CHAT_MODELS.find(x => x.name === desiredModelName);
+  const desiredModel = CHAT_MODELS.find((x) => x.name === desiredModelName);
 
   if (desiredModel && estimatedConsumedTokens > desiredModel.maxTokens) {
     const rightSizeModel = CHAT_MODELS.find(
-      x =>
+      (x) =>
         x.version === desiredModel.version &&
         x.maxTokens > estimatedConsumedTokens
     );
@@ -60,7 +61,56 @@ function getSuitableModel(
   }
 }
 
+function getDelta(usesKey: any, data: string) {
+  const payload = JSON.parse(data);
+  if (usesKey) {
+    return payload?.choices?.[0]?.delta?.content;
+  }
+  return payload?.content;
+}
+
+async function getCompletionUrl(
+  sdk: any,
+  hub: any,
+  configuration: AIConfiguration,
+  prompts: any
+): Promise<string> {
+  const hasKey = configuration.getKey();
+  const convertRolesToUppercase = ({ role, content }: any) => ({
+    role: role.toUpperCase(),
+    content,
+  });
+
+  if (hasKey) {
+    return CHAT_COMPLETIONS_URL;
+  }
+
+  const { data } = await sdk.connection.request(
+    "dc-management-sdk-js:graphql-mutation",
+    {
+      mutation: `mutation generateRichText($orgId: ID!, $prompts:[RichTextGenerationPrompt!]!) {
+        generateRichText(
+          input: {
+           organizationId: $orgId,
+           prompts: $prompts
+         }
+        ) {
+          url
+        }
+      }`,
+      vars: {
+        orgId: btoa(`Organization:${hub.organizationId}`),
+        prompts: prompts.map(convertRolesToUppercase),
+      },
+    }
+  );
+
+  return data.generateRichText.url;
+}
+
 async function invokeChatCompletions(
+  sdk: any,
+  hub: any,
   configuration: AIConfiguration,
   body: any,
   onMessage: (buffer: string, complete: boolean) => void,
@@ -74,53 +124,76 @@ async function invokeChatCompletions(
     CHAT_ESTIMATED_CHARS_PER_TOKEN;
   const estimatedConsumedTokens = maxOutputTokens + estimatedInputTokens;
   let markdownBuffer = "";
-  await fetchEventSource(CHAT_COMPLETIONS_URL, {
-    headers: {
+  try {
+    const completionUrl = await getCompletionUrl(
+      sdk,
+      hub,
+      configuration,
+      body.messages
+    );
+    const key = configuration.getKey();
+    const headers = {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${configuration.getKey()}`
-    },
-    method: "POST",
-    body: JSON.stringify({
-      model: getSuitableModel(
-        configuration.getModel(),
-        estimatedConsumedTokens
-      ),
-      max_tokens: maxOutputTokens,
-      stream: true,
-      ...body
-    }),
-    onmessage: e => {
-      try {
-        if (e.data === "[DONE]") {
-          onMessage(markdownBuffer, true);
+      ...(key ? { Authorization: `Bearer ${key}` } : {}),
+    };
+
+    await fetchEventSource(completionUrl, {
+      headers,
+      method: key ? "POST" : "GET",
+      ...(key
+        ? {
+            body: JSON.stringify({
+              model: getSuitableModel(
+                configuration.getModel(),
+                estimatedConsumedTokens
+              ),
+              max_tokens: maxOutputTokens,
+              stream: true,
+              ...body,
+            }),
+          }
+        : {}),
+      onmessage: (e) => {
+        try {
+          if (e.data === "[DONE]" || e?.event === "end") {
+            onMessage(markdownBuffer, true);
+            return;
+          }
+
+          const delta = getDelta(key, e.data);
+          if (delta !== undefined) {
+            markdownBuffer += delta;
+            onMessage(markdownBuffer, false);
+          }
+        } catch (err) {}
+      },
+      async onopen(response): Promise<void> {
+        if (key) {
+          track(window, "AI Credits used", {
+            name: "dc-extension-rich-text",
+            category: "Extension",
+          });
+        }
+        const contentType = response.headers.get("content-type");
+        if (contentType?.startsWith("application/json")) {
+          onError(await response.json());
           return;
         }
-        const payload = JSON.parse(e.data);
-        const delta = payload.choices[0].delta.content;
-        if (delta !== undefined) {
-          markdownBuffer += delta;
-          onMessage(markdownBuffer, false);
+        if (
+          !(contentType === null || contentType.startsWith("text/event-stream"))
+        ) {
+          throw new Error(
+            `Expected content-type to be 'text/event-stream', Actual: ${contentType}`
+          );
         }
-      } catch (err) {}
-    },
-    async onopen(response): Promise<void> {
-      const contentType = response.headers.get("content-type");
-      if (contentType?.startsWith("application/json")) {
-        onError(await response.json());
-        return;
-      }
-      if (
-        !(contentType === null || contentType.startsWith("text/event-stream"))
-      ) {
-        throw new Error(
-          `Expected content-type to be 'text/event-stream', Actual: ${contentType}`
-        );
-      }
-    },
-    onerror(err): void {
-      throw err;
-    }
-  });
+      },
+      onerror(err): void {
+        throw err;
+      },
+    });
+  } catch (e) {
+    return onError(e);
+  }
 }
 
 export class RichTextActionsImpl implements RichTextActions {
@@ -224,7 +297,7 @@ If the user requests a change that you cannot produce a reasonable replacement f
 
 Do not converse with the user. 
   - Do not ask clarifying questions. 
-  - Do not add conversational preamble such as \`Sure, I can do that\`, or \`Ok, here's the change\`.`
+  - Do not add conversational preamble such as \`Sure, I can do that\`, or \`Ok, here's the change\`.`,
         },
         {
           role: "user",
@@ -232,11 +305,11 @@ Do not converse with the user.
             sampleDocument,
             sampleSelection,
             `Shorten this`
-          )
+          ),
         },
         {
           role: "assistant",
-          content: sampleResponse
+          content: sampleResponse,
         },
         {
           role: "user",
@@ -244,9 +317,9 @@ Do not converse with the user.
             bodyMarkdown,
             selectionMarkdown,
             prompt
-          )
-        }
-      ]
+          ),
+        },
+      ],
     });
   }
 
@@ -277,13 +350,13 @@ If the user provides a prompt that you cannot produce a document for, you should
 Do not converse with the user.
   - Do not ask clarifying questions.
   - Do not add conversational preamble such as \`Sure, I can do that\`, or \`Ok, here's the change\`.
-  - Do not include [DIALOG] if you've successfully produced a document.`
+  - Do not include [DIALOG] if you've successfully produced a document.`,
         },
         {
           role: "user",
-          content: prompt
-        }
-      ]
+          content: prompt,
+        },
+      ],
     });
   }
 
@@ -292,7 +365,7 @@ Do not converse with the user.
       proseMirrorEditorView,
       setIsLocked,
       params,
-      language
+      language,
     } = this.context!;
     const configuration = new AIConfiguration(params);
 
@@ -315,8 +388,12 @@ Do not converse with the user.
 
     let alert: Alert | undefined;
 
+    this.context!.setShowCreditsError(false);
+
     try {
       await invokeChatCompletions(
+        this.context?.sdk as any,
+        this.context?.hub as any,
         configuration,
         payload,
         (buffer, complete) => {
@@ -334,7 +411,7 @@ Do not converse with the user.
                 title: "AI Assistant",
                 icon: <AssistantIcon />,
                 severity: "info",
-                content
+                content,
               });
             } else {
               alert.updateContent(content);
@@ -367,13 +444,22 @@ Do not converse with the user.
             startPosition + fragment.size
           );
         },
-        err => {
+        (err) => {
+          if (
+            err?.data?.errors?.[0]?.extensions?.code === "INSUFFICIENT_CREDITS"
+          ) {
+            track(window, "AI Credits Limit reached", {
+              name: "dc-extension-rich-text",
+              category: "Extension",
+            });
+            this.context!.setShowCreditsError(true);
+          }
           if (err?.error?.message) {
             this.context!.dialogs.alert({
               title: "AI Assistant",
               icon: <AssistantIcon />,
               severity: "error",
-              content: err?.error?.message
+              content: err?.error?.message,
             });
           }
         }

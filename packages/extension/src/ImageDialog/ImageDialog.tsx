@@ -3,11 +3,10 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  DialogContentText,
   DialogTitle,
   FormControl,
   FormHelperText,
-  TextField
+  TextField,
 } from "@material-ui/core";
 import React from "react";
 
@@ -29,7 +28,7 @@ const ImageDialog: React.SFC<ImageDialogProps> = (props: ImageDialogProps) => {
   const [value, setValue] = React.useState<Image>({
     src: "",
     alt: "",
-    title: ""
+    title: "",
   });
 
   const [isValid, setIsValid] = React.useState(false);
@@ -38,7 +37,7 @@ const ImageDialog: React.SFC<ImageDialogProps> = (props: ImageDialogProps) => {
     (name: string, fieldValue: string) => {
       const newValue = {
         ...value,
-        [name]: fieldValue
+        [name]: fieldValue,
       };
 
       setValue(newValue);
@@ -51,18 +50,20 @@ const ImageDialog: React.SFC<ImageDialogProps> = (props: ImageDialogProps) => {
     setValue({
       src: "",
       alt: "",
-      title: ""
+      title: "",
     });
   };
 
   const handleCancel = React.useCallback(() => {
     reset();
     onClose();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [setValue, onClose]);
 
   const handleSubmit = React.useCallback(() => {
     reset();
     onSubmit(value);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value, setValue, onSubmit]);
 
   return (
@@ -84,7 +85,7 @@ const ImageDialog: React.SFC<ImageDialogProps> = (props: ImageDialogProps) => {
             required={true}
             fullWidth={true}
             value={value.src}
-            onChange={event => handleInputChanged("src", event.target.value)}
+            onChange={(event) => handleInputChanged("src", event.target.value)}
           />
           <FormHelperText>
             Example: https://cdn.storefront.com/image.jpg
@@ -98,7 +99,9 @@ const ImageDialog: React.SFC<ImageDialogProps> = (props: ImageDialogProps) => {
             type="input"
             fullWidth={true}
             value={value.title}
-            onChange={event => handleInputChanged("title", event.target.value)}
+            onChange={(event) =>
+              handleInputChanged("title", event.target.value)
+            }
           />
           <FormHelperText>Example: Black Friday Sale</FormHelperText>
         </FormControl>
@@ -110,7 +113,7 @@ const ImageDialog: React.SFC<ImageDialogProps> = (props: ImageDialogProps) => {
             type="input"
             fullWidth={true}
             value={value.alt}
-            onChange={event => handleInputChanged("alt", event.target.value)}
+            onChange={(event) => handleInputChanged("alt", event.target.value)}
           />
           <FormHelperText>Example: Black Friday Sale</FormHelperText>
         </FormControl>

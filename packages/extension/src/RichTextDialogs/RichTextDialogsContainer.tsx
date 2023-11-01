@@ -7,17 +7,16 @@ import {
   Anchor,
   Hyperlink,
   Image,
-  RichTextDialogs
+  RichTextDialogs,
 } from "@dc-extension-rich-text/common";
 
-import { ContentItemLink, MediaImageLink } from "dc-extensions-sdk";
 import AnchorDialog from "../AnchorDialog/AnchorDialog";
 import CodeDialog from "../CodeDialog/CodeDialog";
 import HyperlinkDialog from "../HyperlinkDialog/HyperlinkDialog";
 import ImageDialog from "../ImageDialog/ImageDialog";
 import RichTextDialogsContext from "./RichTextDialogsContext";
 
-import { Snackbar, Typography } from "@material-ui/core";
+import { Snackbar } from "@material-ui/core";
 import { SdkContext } from "unofficial-dynamic-content-ui";
 import { AIPromptDialog } from "../AIPromptDialog";
 import RichTextAlert from "./RichTextAlert";
@@ -48,13 +47,13 @@ const RichTextDialogsContainer: React.SFC<EditorDialogsProps> = (
         case "ADD_ALERT":
           return [...state, action.alert];
         case "REMOVE_ALERT":
-          const alertIndex = state.findIndex(x => x.id === action.id);
+          const alertIndex = state.findIndex((x) => x.id === action.id);
           if (alertIndex !== -1) {
             state.splice(alertIndex, 1);
           }
           return [...state];
         case "UPDATE_ALERT_CONTENT":
-          const alert = state.find(x => x.id === action.id);
+          const alert = state.find((x) => x.id === action.id);
           if (alert) {
             alert.content = action.content;
           }
@@ -90,7 +89,7 @@ const RichTextDialogsContainer: React.SFC<EditorDialogsProps> = (
           resolve,
           reject,
           value,
-          options
+          options,
         });
       });
     },
@@ -104,17 +103,17 @@ const RichTextDialogsContainer: React.SFC<EditorDialogsProps> = (
       dispatchAlertEvent({
         type: "UPDATE_ALERT_CONTENT",
         id,
-        content
+        content,
       });
     },
     [dispatchAlertEvent]
   );
 
   const handleCloseAlert = React.useCallback(
-    id => {
+    (id) => {
       dispatchAlertEvent({
         type: "REMOVE_ALERT",
-        id
+        id,
       });
     },
     [dispatchAlertEvent]
@@ -133,17 +132,14 @@ const RichTextDialogsContainer: React.SFC<EditorDialogsProps> = (
     getImage: (value?: Image): Promise<Image> => {
       return handleOpenDialog("image") as Promise<Image>;
     },
-    getDcImageLink: (value?: MediaImageLink): Promise<MediaImageLink> => {
+    getDcImageLink: (value?: any): Promise<any> => {
       if (!sdk) {
         return Promise.reject();
       } else {
         return sdk.mediaLink.getImage();
       }
     },
-    getDcContentLink: (
-      contentTypeIds: string[],
-      value?: ContentItemLink
-    ): Promise<ContentItemLink> => {
+    getDcContentLink: (contentTypeIds: string[], value?: any): Promise<any> => {
       if (!sdk) {
         return Promise.reject();
       } else {
@@ -158,17 +154,17 @@ const RichTextDialogsContainer: React.SFC<EditorDialogsProps> = (
     alert(alertProps: AlertOptions): Alert {
       const alert: any = {
         id: `${alertId++}`,
-        ...alertProps
+        ...alertProps,
       };
       alert.updateContent = (content: string | React.ReactElement) => {
         handleUpdateAlertContent(alert.id, content);
       };
       dispatchAlertEvent({
         type: "ADD_ALERT",
-        alert
+        alert,
       });
       return alert;
-    }
+    },
   };
 
   return (
