@@ -87,25 +87,24 @@ class ProseMirror extends React.Component<ProseMirrorProps, ProseMirrorState> {
         const { state, transactions } = view.state.applyTransaction(
           transaction
         );
-        const prevScrollHeight = this.state.ref.current.scrollHeight;
 
         view.updateState(state);
 
         if (onUpdateState) {
           onUpdateState(state, view);
         }
+        view.scrollToSelection = () => {
+          const { node } = view.domAtPos(state.selection.anchor);
+          if (node) {
+            (node as any).scrollIntoView?.(false);
+          }
+        };
 
         if (transactions.some((tr: any) => tr.docChanged)) {
           if (onChange) {
             onChange(state.doc);
-            if (
-              this.state.isLocked &&
-              this.state.ref.current.scrollHeight !== prevScrollHeight
-            ) {
-              const newState = { ...this.state };
-              newState.ref.current.scrollTop =
-                newState.ref.current.scrollHeight;
-              this.setState(newState);
+            if (this.state.isLocked) {
+              view.scrollToSelection();
             }
           }
         }
