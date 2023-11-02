@@ -9,7 +9,7 @@ import { useRichTextEditorContext } from "../RichTextEditor/RichTextEditorContex
 const styles = (theme: Theme) => ({
   root: {
     borderTop: "1px solid rgb(218, 220, 224)",
-    position: "absolute" as "absolute",
+    position: "relative" as "relative",
     background: "white",
     paddingTop: "10px",
     width: "100%",

@@ -1,6 +1,7 @@
 import React from "react";
 
 import {
+  Button,
   Toolbar as MaterialToolbar,
   WithStyles,
   createStyles,
@@ -14,6 +15,8 @@ import ProseMirrorToolbarDropdown from "../ProseMirrorToolbarDropdown/ProseMirro
 import { ProseMirrorToolbarGroup } from "../ProseMirrorToolbarGroup";
 import { useRichTextEditorContext } from "../RichTextEditor/RichTextEditorContext";
 import { ProseMirrorToolbarState } from "./ProseMirrorToolbarState";
+import { SparklesIcon } from "../SparklesIcon/SparklesIcon";
+import { Loader } from "../Loader/Loader";
 
 const styles = createStyles({
   root: {
@@ -23,6 +26,20 @@ const styles = createStyles({
   },
   group: {
     display: "flex",
+  },
+  button: {
+    color: "#333",
+    height: 26,
+    alignSelf: "center",
+    textTransform: "none",
+    width: 104,
+    fontSize: 13,
+    textAlign: "center",
+  },
+  divider: {
+    borderRight: "1px solid rgb(218, 220, 224)",
+    height: 13,
+    margin: "9px 4px",
   },
 });
 
@@ -102,6 +119,15 @@ const ProseMirrorToolbar: React.SFC<ProseMirrorToolbarProps> = (
     }
   };
 
+  const showAIGenerateDialog = async () => {
+    try {
+      const prompt = await richTextEditorContext.dialogs.getAIPrompt({
+        variant: "generate",
+      });
+      await richTextEditorContext.actions.insertAIContent(prompt);
+    } catch {}
+  };
+
   return (
     <ProseMirrorToolbarContext.Provider
       value={{
@@ -150,6 +176,24 @@ const ProseMirrorToolbar: React.SFC<ProseMirrorToolbarProps> = (
     >
       <MaterialToolbar className={classes.root} disableGutters={true}>
         <div className={classes.group}>
+          <Button
+            disabled={richTextEditorContext.isLocked}
+            onClick={showAIGenerateDialog}
+            className={classes.button}
+            size="small"
+            startIcon={
+              !richTextEditorContext.isLocked && (
+                <SparklesIcon style={{ width: 15, height: 15 }}></SparklesIcon>
+              )
+            }
+          >
+            {richTextEditorContext.isLocked ? (
+              <Loader></Loader>
+            ) : (
+              "AI Assistant"
+            )}
+          </Button>
+          <div className={classes.divider}></div>
           {group1.map((value, idx) => renderToolbarElement(idx, value))}
         </div>
         <div className={classes.group}>
