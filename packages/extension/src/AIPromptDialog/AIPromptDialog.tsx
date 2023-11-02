@@ -157,8 +157,7 @@ const AIPromptDialogContent: React.SFC<any> = (props: AIPromptDialogProps) => {
           variant="outlined"
         />
         <Typography variant="caption">
-          Tell the AI Assistant what content to generate. Powered by ChatGPT
-          API.{" "}
+          Powered by ChatGPT API.{" "}
           <Link
             underline="none"
             href="https://amplience.com/developers/docs/ai-services/generative-rich-text-editor"
