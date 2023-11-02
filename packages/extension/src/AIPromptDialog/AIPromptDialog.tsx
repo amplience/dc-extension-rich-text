@@ -8,6 +8,7 @@ import {
   DialogTitle,
   IconButton,
   InputAdornment,
+  Link,
   TextField,
   Typography,
   withStyles,
@@ -156,17 +157,14 @@ const AIPromptDialogContent: React.SFC<any> = (props: AIPromptDialogProps) => {
           variant="outlined"
         />
         <Typography variant="caption">
-          <a
-            href="https://amplience.com/developers/docs/knowledge-center/amplience-labs"
+          Powered by ChatGPT API.{" "}
+          <Link
+            underline="none"
+            href="https://amplience.com/developers/docs/ai-services/generative-rich-text-editor"
             target="_blank"
-            style={{
-              fontSize: "11px",
-              textDecoration: "none",
-              color: "#039be5",
-            }}
           >
-            Amplience Labs preview
-          </a>
+            Learn more
+          </Link>
         </Typography>
       </DialogContent>
       <DialogActions />

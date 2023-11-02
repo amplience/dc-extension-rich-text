@@ -24,7 +24,7 @@ import { RichTextDialogsContext } from "../RichTextDialogs";
 import RichTextEditorAIActionsBar from "../RichTextEditorAIActionsBar/RichTextEditorAIActionsBar";
 import RichtextEditorContext from "./RichTextEditorContext";
 import { SdkContext } from "unofficial-dynamic-content-ui";
-import AIBanner from "../AIBanner/AIBanner";
+import CreditsError from "../CreditsError/CreditsError";
 import HubContext from "../HubContext/HubContext";
 
 const styles = {
@@ -209,10 +209,10 @@ const RichTextEditor: React.SFC<RichTextEditorProps> = (
                 false
               ) : (
                 <>
-                  <AIBanner
+                  <CreditsError
                     showCreditsError={showCreditsError}
                     loading={isLocked}
-                  ></AIBanner>
+                  ></CreditsError>
                   <ProseMirrorToolbar
                     toolbarState={toolbarState}
                     layout={toolbarLayout}
