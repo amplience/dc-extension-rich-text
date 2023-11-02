@@ -5,6 +5,7 @@ import React from "react";
 const styles = {
   root: {
     display: "flex",
+    marginBottom: 5,
   },
   button: {
     outline: "none" as "none",
