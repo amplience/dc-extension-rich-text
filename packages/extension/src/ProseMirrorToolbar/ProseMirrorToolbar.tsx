@@ -1,6 +1,7 @@
 import React from "react";
 
 import {
+  Button,
   Toolbar as MaterialToolbar,
   WithStyles,
   createStyles,
@@ -102,6 +103,15 @@ const ProseMirrorToolbar: React.SFC<ProseMirrorToolbarProps> = (
     }
   };
 
+  const showAIGenerateDialog = async () => {
+    try {
+      const prompt = await richTextEditorContext.dialogs.getAIPrompt({
+        variant: "generate",
+      });
+      await richTextEditorContext.actions.insertAIContent(prompt);
+    } catch {}
+  };
+
   return (
     <ProseMirrorToolbarContext.Provider
       value={{
@@ -150,6 +160,13 @@ const ProseMirrorToolbar: React.SFC<ProseMirrorToolbarProps> = (
     >
       <MaterialToolbar className={classes.root} disableGutters={true}>
         <div className={classes.group}>
+          <Button
+            variant="outlined"
+            color="primary"
+            onClick={showAIGenerateDialog}
+          >
+            AI Generate
+          </Button>
           {group1.map((value, idx) => renderToolbarElement(idx, value))}
         </div>
         <div className={classes.group}>
