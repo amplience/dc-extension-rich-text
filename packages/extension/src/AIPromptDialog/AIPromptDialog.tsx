@@ -1,73 +1,55 @@
 import { AIPromptDialogOptions } from "@dc-extension-rich-text/common";
 import {
-  Badge,
-  Box,
   Button,
+  createStyles,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
+  IconButton,
   InputAdornment,
+  Link,
   TextField,
   Typography,
   withStyles,
-  WithStyles
+  WithStyles,
 } from "@material-ui/core";
-import {
-  Assistant as AssistantIcon,
-  Clear as ClearIcon,
-  Settings as SettingsIcon
-} from "@material-ui/icons";
+import { Close } from "@material-ui/icons";
 import clsx from "clsx";
 import React, { useState } from "react";
 import { AIConfiguration } from "./AIConfiguration";
-import AIPromptDialogGraphic from "./AIPromptDialogGraphic";
+import { SparklesIcon } from "../SparklesIcon/SparklesIcon";
 
-const styles = {
-  root: {},
-  prompt: {},
-  configure: {
-    "& .MuiDialogContent-root, & .MuiDialogTitle-root, & .MuiDialogActions-root": {
-      backgroundColor: "#002C42",
-      color: "white",
-      paddingLeft: 30,
-      paddingRight: 30
-    },
-    "& .MuiDialog-paper": {
-      height: 290,
-      overflow: "hidden"
-    },
-    "& .MuiDialogActions-root": {
-      justifyContent: "flex-start",
-      paddingBottom: 30
-    },
-    "& .MuiDialogTitle-root": {
-      paddingTop: 30
-    }
+const styles = createStyles({
+  root: {
+    minWidth: 440,
   },
   configureContent: {
-    maxWidth: "50%"
+    maxWidth: "50%",
   },
   configureGraphic: {
     width: 550,
     position: "absolute" as "absolute",
     right: 0,
-    top: -60
-  },
-  betaBadge: {
-    "& .MuiBadge-badge": {
-      backgroundColor: "#f78a8b"
-    }
+    top: -60,
   },
   getStartedAction: {
     backgroundColor: "rgba(255,255,255,0.9)",
     borderRadius: 20,
-    padding: "5px 15px"
+    padding: "5px 15px",
   },
   cancelAction: {
-    color: "white"
-  }
-};
+    color: "white",
+  },
+  button: {
+    marginLeft: "auto",
+    textTransform: "none",
+    "&:hover": {
+      backgroundColor: "#1ab0f9",
+      color: "#fff",
+    },
+  },
+});
 
 interface AIPromptDialogProps
   extends AIPromptDialogOptions,
@@ -78,19 +60,52 @@ interface AIPromptDialogProps
   params: any;
 }
 
+function CloseButton(props: any) {
+  return (
+    <IconButton
+      aria-label="Close"
+      {...props}
+      style={{ marginLeft: "auto" }}
+      disableFocusRipple={true}
+      disableRipple={true}
+    >
+      <Close style={{ width: 24, height: 24 }}></Close>
+    </IconButton>
+  );
+}
+
+function DialogHeader(props: any) {
+  const { onClose, title } = props;
+  return (
+    <DialogTitle style={{ paddingBottom: 0 }}>
+      <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+        <SparklesIcon></SparklesIcon>
+        <span style={{ fontSize: "16px", fontWeight: 500, color: "#333" }}>
+          {title}
+        </span>
+        <CloseButton onClick={onClose}></CloseButton>
+      </div>
+    </DialogTitle>
+  );
+}
+
 const AIPromptDialogContent: React.SFC<any> = (props: AIPromptDialogProps) => {
-  const { variant = "generate", onSubmit, classes } = props;
+  const { variant = "generate", onSubmit, classes, onClose } = props;
   const [prompt, setPrompt] = useState("");
 
   const strings = {
     generate: {
-      placeholder: "Write a blog post about...",
-      button: "Generate"
+      title: "What do you want to write about?",
+      placeholder:
+        "For the best results, be as specific and detailed as possible",
+      button: "Generate",
     },
     rewrite: {
-      placeholder: "Rewrite this content in the style of...",
-      button: "Rewrite"
-    }
+      title: "Tell us how to rewrite the text",
+      placeholder:
+        "For the best results, be as specific and detailed as possible",
+      button: "Rewrite",
+    },
   }[variant];
 
   const handlePromptChange = (event: any) => {
@@ -109,88 +124,50 @@ const AIPromptDialogContent: React.SFC<any> = (props: AIPromptDialogProps) => {
 
   return (
     <>
-      <DialogTitle style={{ paddingBottom: 0 }}>
-        AI Assistant
-        <Badge
-          style={{ marginLeft: "20px", lineHeight: "16px" }}
-          badgeContent="BETA"
-          color="error"
-          anchorOrigin={{ horizontal: "right", vertical: "top" }}
-          className={classes.betaBadge}
-        >
-          &nbsp;
-        </Badge>
-      </DialogTitle>
+      <DialogHeader
+        classes={classes}
+        onClose={onClose}
+        title={strings.title}
+      ></DialogHeader>
       <DialogContent>
         <TextField
           value={prompt}
           placeholder={strings.placeholder}
           onChange={handlePromptChange}
           onKeyUp={handleKeyUp}
+          multiline
+          rowsMax={9}
           InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <AssistantIcon color="primary" fontSize="large" />
-              </InputAdornment>
-            ),
             endAdornment: (
               <InputAdornment position="end">
-                <Button onClick={handleSubmit}>{strings.button}</Button>
+                <Button
+                  onClick={handleSubmit}
+                  variant="outlined"
+                  color="primary"
+                  className={classes.button}
+                  disableElevation={true}
+                  disabled={!prompt.length}
+                >
+                  {strings.button}
+                </Button>
               </InputAdornment>
-            )
+            ),
           }}
           fullWidth={true}
           variant="outlined"
         />
-        <Typography variant="caption">Powered by ChatGPT API</Typography>
+        <Typography variant="caption">
+          Powered by ChatGPT API.{" "}
+          <Link
+            underline="none"
+            href="https://amplience.com/developers/docs/ai-services/generative-rich-text-editor"
+            target="_blank"
+          >
+            Learn more
+          </Link>
+        </Typography>
       </DialogContent>
       <DialogActions />
-    </>
-  );
-};
-
-const ConfigureAIDialogContent: React.SFC<any> = (
-  props: AIPromptDialogProps & { configuration: AIConfiguration }
-) => {
-  const { onClose, classes } = props;
-
-  return (
-    <>
-      <DialogTitle style={{ paddingBottom: 0 }}>
-        AI Assistant
-        <Badge
-          style={{ marginLeft: "20px", lineHeight: "16px" }}
-          badgeContent="BETA"
-          color="error"
-          anchorOrigin={{ horizontal: "right", vertical: "top" }}
-          className={classes.betaBadge}
-        >
-          &nbsp;
-        </Badge>
-      </DialogTitle>
-      <DialogContent>
-        <Typography variant="body2" className={classes.configureContent}>
-          Our AI assistant, powered by ChatGPT, is designed to simplify and
-          improve your content production and editing workflow. It offers a
-          user-friendly interface to help generate and edit content using
-          natural language.
-          <br />
-          <br />
-          Visit the link below to find out how to enable the AI assistant.
-        </Typography>
-        <AIPromptDialogGraphic className={classes.configureGraphic} />
-      </DialogContent>
-      <DialogActions>
-        <TextField
-          className={classes.getStartedAction}
-          value={
-            "https://github.com/amplience/dc-extension-rich-text#ai-assistant"
-          }
-        />
-        <Button className={classes.cancelAction} onClick={onClose}>
-          Not at the moment
-        </Button>
-      </DialogActions>
     </>
   );
 };
@@ -200,7 +177,6 @@ const AIPromptDialog: React.SFC<AIPromptDialogProps> = (
 ) => {
   const { open, onClose, classes } = props;
   const configuration = new AIConfiguration(props.params);
-  const view = configuration.getKey() ? "prompt" : "configure";
 
   return (
     <Dialog
@@ -209,24 +185,9 @@ const AIPromptDialog: React.SFC<AIPromptDialogProps> = (
       open={open}
       onClose={onClose}
       aria-labelledby="form-dialog-title"
-      className={clsx(
-        classes.root,
-        {
-          prompt: classes.prompt,
-          configure: classes.configure
-        }[view]
-      )}
+      className={clsx(classes.root)}
     >
-      {view === "prompt" && (
-        <AIPromptDialogContent {...props} configuration={configuration} />
-      )}
-      {view === "configure" && (
-        <ConfigureAIDialogContent
-          {...props}
-          configuration={configuration}
-          onClose={onClose}
-        />
-      )}
+      <AIPromptDialogContent {...props} configuration={configuration} />
     </Dialog>
   );
 };

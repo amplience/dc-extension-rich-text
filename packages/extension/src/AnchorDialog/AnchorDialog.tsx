@@ -3,11 +3,10 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  DialogContentText,
   DialogTitle,
   FormControl,
   FormHelperText,
-  TextField
+  TextField,
 } from "@material-ui/core";
 import React from "react";
 
@@ -23,7 +22,7 @@ interface AnchorDialogProps {
   };
 }
 
-const htmlIdRegex = /^[a-zA-Z][\w:.\-]*$/;
+const htmlIdRegex = /^[a-zA-Z][\w:.-]*$/;
 
 function validateId(value: string, existing: Set<string>): string | undefined {
   if (value == null || value.length === 0) {
@@ -48,7 +47,7 @@ const AnchorDialog: React.SFC<AnchorDialogProps> = (
   const existing = props.value ? props.value.existing : new Set<string>();
 
   const [value, setValue] = React.useState<Anchor>({
-    value: ""
+    value: "",
   });
 
   const [lastValue, setLastValue] = React.useState<Anchor>();
@@ -74,25 +73,27 @@ const AnchorDialog: React.SFC<AnchorDialogProps> = (
     (name: string, fieldValue: string) => {
       const newValue = {
         ...value,
-        [name]: fieldValue
+        [name]: fieldValue,
       };
 
       setValue(newValue);
       const error = validate(newValue.value);
       setValidError(error);
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [value, setValue, setValidError]
   );
 
   const reset = () => {
     setValue({
-      value: ""
+      value: "",
     });
   };
 
   const handleCancel = React.useCallback(() => {
     reset();
     onClose();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [setValue, onClose]);
 
   const handleSubmit = React.useCallback(() => {
@@ -120,7 +121,9 @@ const AnchorDialog: React.SFC<AnchorDialogProps> = (
             required={true}
             fullWidth={true}
             value={value.value}
-            onChange={event => handleInputChanged("value", event.target.value)}
+            onChange={(event) =>
+              handleInputChanged("value", event.target.value)
+            }
             helperText={validError}
           />
           <FormHelperText>Example: paragraph-4</FormHelperText>

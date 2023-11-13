@@ -4,12 +4,13 @@ import React from "react";
 
 const styles = {
   root: {
-    display: "flex"
+    display: "flex",
+    marginBottom: 5,
   },
   button: {
     outline: "none" as "none",
     transition: "color 0.2s linear,border-bottom-color 0.2s linear",
-    height: 40,
+    height: 42,
     cursor: "pointer" as "pointer",
     background: "transparent" as "transparent",
     border: "0 solid transparent",
@@ -17,13 +18,14 @@ const styles = {
     borderBottom: "3px solid transparent",
     fontSize: 13,
     padding: "0 15px",
-    color: "#999999",
-    fontWeight: "bold" as "bold"
+    color: "#333",
+    fontWeight: 500,
+    fontFamily: "'IBM Plex Sans', sans-serif",
   },
   selected: {
     color: "#1EA7FD",
-    borderBottomColor: "#1EA7FD"
-  }
+    borderBottomColor: "#1EA7FD",
+  },
 };
 
 export interface ViewSwitcherProps extends WithStyles<typeof styles> {
@@ -36,7 +38,7 @@ export interface ViewSwitcherProps extends WithStyles<typeof styles> {
 
 export enum EditorView {
   EDIT = "edit",
-  CODE = "code"
+  CODE = "code",
 }
 
 const ViewSwitcher = (props: ViewSwitcherProps) => {
@@ -45,7 +47,7 @@ const ViewSwitcher = (props: ViewSwitcherProps) => {
     onChange,
     language,
     disableCodeView,
-    disableEditView
+    disableEditView,
   } = props;
 
   const [selectedView, setSelectedView] = React.useState(
@@ -59,6 +61,7 @@ const ViewSwitcher = (props: ViewSwitcherProps) => {
         onChange(view);
       }
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [setSelectedView]
   );
 
@@ -68,7 +71,7 @@ const ViewSwitcher = (props: ViewSwitcherProps) => {
         <button
           onClick={() => handleChange(view)}
           className={clsx(classes.button, {
-            [classes.selected]: selectedView === view
+            [classes.selected]: selectedView === view,
           })}
           type="button"
           role="tab"
@@ -77,12 +80,13 @@ const ViewSwitcher = (props: ViewSwitcherProps) => {
         </button>
       );
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [selectedView, handleChange]
   );
 
   return (
     <div className={classes.root}>
-      {disableEditView ? false : renderButton("Edit", EditorView.EDIT)}
+      {disableEditView ? false : renderButton("Editor", EditorView.EDIT)}
       {disableCodeView
         ? false
         : renderButton(language || "Code", EditorView.CODE)}

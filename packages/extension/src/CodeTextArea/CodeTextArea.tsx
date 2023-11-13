@@ -6,7 +6,7 @@ const styles = {
     flex: 1,
     display: "flex",
     minHeight: 286,
-    maxHeight: 500
+    maxHeight: 500,
   },
   textarea: {
     flex: 1,
@@ -15,9 +15,9 @@ const styles = {
     backgroundColor: "#f0f0f0",
     border: "1px solid rgba(157,162,162,.3)",
     padding: "10px 8px 0",
-    fontFamily: "roboto,monospace!important",
-    fontSize: 13
-  }
+    fontFamily: "'IBM Plex Sans',monospace!important",
+    fontSize: 13,
+  },
 };
 
 export interface CodeTextAreaProps extends WithStyles<typeof styles> {

@@ -1,15 +1,18 @@
 import { RichTextEditorContextProps } from "@dc-extension-rich-text/common";
-import React, { useContext, useReducer } from "react";
+import React, { useContext } from "react";
 
 const context = React.createContext<RichTextEditorContextProps>({
   params: {},
   isLocked: false,
-  setIsLocked: (locked: boolean) => {},
   proseMirrorEditorView: undefined,
   dialogs: {} as any,
   actions: {} as any,
   languages: {},
-  language: {} as any
+  language: {} as any,
+  sdk: {} as any,
+  hub: {} as any,
+  setIsLocked: (locked: boolean) => {},
+  setShowCreditsError: (show: boolean) => {},
 });
 export default context;
 

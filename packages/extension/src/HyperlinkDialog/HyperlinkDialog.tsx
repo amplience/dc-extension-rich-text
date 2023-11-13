@@ -3,11 +3,10 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  DialogContentText,
   DialogTitle,
   FormControl,
   FormHelperText,
-  TextField
+  TextField,
 } from "@material-ui/core";
 import React from "react";
 
@@ -31,7 +30,7 @@ const HyperlinkDialog: React.SFC<HyperlinkDialogProps> = (
 
   const [value, setValue] = React.useState<Hyperlink>({
     href: "",
-    title: ""
+    title: "",
   });
 
   const [lastValue, setLastValue] = React.useState<Hyperlink>();
@@ -47,7 +46,7 @@ const HyperlinkDialog: React.SFC<HyperlinkDialogProps> = (
     (name: string, fieldValue: string) => {
       const newValue = {
         ...value,
-        [name]: fieldValue
+        [name]: fieldValue,
       };
 
       setValue(newValue);
@@ -59,7 +58,7 @@ const HyperlinkDialog: React.SFC<HyperlinkDialogProps> = (
   const reset = () => {
     setValue({
       href: "",
-      title: ""
+      title: "",
     });
     setLastValue(undefined);
   };
@@ -71,16 +70,18 @@ const HyperlinkDialog: React.SFC<HyperlinkDialogProps> = (
     } else {
       onSubmit({ ...lastValue, cancel: true });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lastValue, setLastValue, onSubmit]);
 
   const handleClear = React.useCallback(() => {
     reset();
     onClose();
-  }, [setValue, onClose]);
+  }, [onClose]);
 
   const handleSubmit = React.useCallback(() => {
     reset();
     onSubmit(value);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value, setValue, onSubmit]);
 
   return (
@@ -102,7 +103,7 @@ const HyperlinkDialog: React.SFC<HyperlinkDialogProps> = (
             required={true}
             fullWidth={true}
             value={value.href}
-            onChange={event => handleInputChanged("href", event.target.value)}
+            onChange={(event) => handleInputChanged("href", event.target.value)}
           />
           <FormHelperText>
             Example: https://www.storefront.com/black-friday
@@ -116,7 +117,9 @@ const HyperlinkDialog: React.SFC<HyperlinkDialogProps> = (
             type="input"
             fullWidth={true}
             value={value.title}
-            onChange={event => handleInputChanged("title", event.target.value)}
+            onChange={(event) =>
+              handleInputChanged("title", event.target.value)
+            }
           />
           <FormHelperText>Example: Black Friday Sale</FormHelperText>
         </FormControl>

@@ -1,15 +1,15 @@
-[![Amplience Dynamic Content](media/header.png)](https://amplience.com/dynamic-content)
+![Amplience Dynamic Content Generative Rich Text Editor Extension](media/screenshot.png)
 
-![Amplience Dynamic Content Rich Text Extension](media/screenshot.png)
+# Generative Rich Text Editor
 
-# dc-extension-rich-text
+> Generative Rich text field for use in [Amplience Dynamic Content](https://amplience.com/dynamic-content)
 
-> Rich text field for use in [Amplience Dynamic Content](https://amplience.com/dynamic-content)
-
-This extension is designed to replace the built in rich text editor with additional features and customization options.
+This extension is designed to replace the built in rich text editor with additional features and customization options including generative content from [ChatGPT](https://openai.com/chatgpt).
 
 ## Features
 
+- AI
+  - [Generative AI assistant](#generative-ai-assistant)
 - Markdown output
   - Paragraphs
   - Headings
@@ -71,6 +71,7 @@ _As this is an open source project you're welcome to host your own "fork" of thi
 Sandbox permissions:
 
 - Allow same origin
+- Allow pop-ups
 
 ### Assign the extension to schema
 
@@ -161,6 +162,85 @@ This will output an array of "blocks". Each block has a type and associated data
 ## Configuration
 
 You can customize the rich text editor by providing "params" in your content type schema. The examples below should be added to the "params" object in your "ui:extension".
+
+### Generative AI Assistant
+
+Powered by ChatGPT, the AI Assistant allows users to quickly generate and edit content using natural language prompts.
+
+![Generate content from prompt](media/aiPrompt.png)
+
+To get started, you will need to provide your own OpenAI API key which will be used by the extension to communicate with the ChatGPT API. Note, ChatGPT is not affiliated with Amplience and therefore any impact to ChatGPT services such as updates, busy periods, or outages are outside of Amplience control.
+
+By using this feature, you are solely responsible for ensuring that AI generated content complies with internal company policies, applicable laws and [OpenAI's Terms](https://openai.com/policies).
+
+To create your key, you first need an OpenAI account which you can create [here](https://platform.openai.com/signup). Once you have an account you can create an API key [here](https://platform.openai.com/account/api-keys).
+
+Once you have your API key, you can enable the AI Assistant feature by adding your API key to the extension parameters as follows:
+
+```json
+{
+  "tools": {
+    "ai": {
+      "key": "<OpenAI key>"
+    }
+  }
+}
+```
+
+#### ChatGPT 4
+
+If you have access to ChatGPT 4 or wish to use a different OpenAI model, you can choose the specific model the system should use as follows:
+
+```json
+{
+  "tools": {
+    "ai": {
+      "key": "<OpenAI key>",
+      "model": "gpt-4"
+    }
+  }
+}
+```
+
+A detailed list of avaliable models can be found [here](https://platform.openai.com/docs/models).
+
+#### Custom edit prompts
+
+When text is selected, preset edit prompts are displayed which save users needing to type out common prompts multiple times. These can be customized to add or remove your preferred prompts.
+
+```json
+{
+  "tools": {
+    "ai": {
+      "key": "<OpenAI key>",
+      "editPrompts": [
+        {
+          "label": "Improve this",
+          "prompt": "Improve this"
+        },
+        {
+          "label": "Shorten this",
+          "prompt": "Shorten this"
+        },
+        {
+          "label": "Elaborate on this",
+          "prompt": "Elaborate on this"
+        }
+      ]
+    }
+  }
+}
+```
+
+> Note: If you already have an implementation of this with [Custom Toolbar Layouts](#toolbar-layout) you will need to enable the `ai` button in your toolbar to see the AI assistant button. See below to add the button to your existing layout:
+
+```json
+{
+  "toolbar": {
+    "layout": [{ "type": "button", "toolName": "ai" }]
+  }
+}
+```
 
 ### Enable or disable tools
 
@@ -363,75 +443,6 @@ When using multiple of these properties, use them on the same object:
       "aspectRatio": "3:1"
     }
   ]
-}
-```
-
-### AI Assistant
-
-Powered by ChatGPT, the AI Assistant allows users to quickly generate and edit content using natural language prompts.
-
-![Generate content from prompt](media/aiPrompt.png)
-
-To get started, you will need to provide your own OpenAI API key which will be used by the extension to communicate with the ChatGPT API. Note, ChatGPT is not affiliated with Amplience and therefore any impact to ChatGPT services such as updates, busy periods, or outages are outside of Amplience control.
-
-By using this feature, you are solely responsible for ensuring that AI generated content complies with internal company policies, applicable laws and [OpenAI's Terms](https://openai.com/policies).
-
-To create your key, you first need an OpenAI account which you can create [here](https://platform.openai.com/signup). Once you have an account you can create an API key [here](https://platform.openai.com/account/api-keys).
-
-Once you have your API key, you can enable the AI Assistant feature by adding your API key to the extension parameters as follows:
-
-```json
-{
-  "tools": {
-    "ai": {
-      "key": "<OpenAI key>"
-    }
-  }
-}
-```
-
-#### ChatGPT 4
-
-If you have access to ChatGPT 4 or wish to use a different OpenAI model, you can choose the specific model the system should use as follows:
-
-```json
-{
-  "tools": {
-    "ai": {
-      "key": "<OpenAI key>",
-      "model": "gpt-4"
-    }
-  }
-}
-```
-
-A detailed list of avaliable models can be found [here](https://platform.openai.com/docs/models).
-
-#### Custom edit prompts
-
-When text is selected, preset edit prompts are displayed which save users needing to type out common prompts multiple times. These can be customized to add or remove your preferred prompts.
-
-```json
-{
-  "tools": {
-    "ai": {
-      "key": "<OpenAI key>",
-      "editPrompts": [
-        {
-          "label": "Improve this",
-          "prompt": "Improve this"
-        },
-        {
-          "label": "Shorten this",
-          "prompt": "Shorten this"
-        },
-        {
-          "label": "Elaborate on this",
-          "prompt": "Elaborate on this"
-        }
-      ]
-    }
-  }
 }
 ```
 
