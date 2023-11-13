@@ -83,6 +83,14 @@ export default class App extends React.Component<{}, AppState> {
       .then(({ hub }) => hub)
       .catch(() => ({}));
 
+    if (hub) {
+      datadogRum.setGlobalContext({
+        "amp.hub_id": hub.id,
+        "amp.hub_name": hub.name,
+        "amp.org_id": hub.organizationId,
+      });
+    }
+
     const params = {
       ...sdk.field?.schema?.["ui:extension"]?.params,
       ...sdk.params?.installation,
