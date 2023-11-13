@@ -4,7 +4,7 @@
   "private": true,
   "homepage": "./",
   "dependencies": {
-    "@datadog/browser-rum": "^4.43.0",
+    "@datadog/browser-rum": "5.2.0",
     "@dc-extension-rich-text/common": "0.1.0",
     "@dc-extension-rich-text/language-json": "0.1.0",
     "@dc-extension-rich-text/language-markdown": "0.1.0",

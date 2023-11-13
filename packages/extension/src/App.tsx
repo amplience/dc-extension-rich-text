@@ -43,8 +43,17 @@ export default class App extends React.Component<{}, AppState> {
         trackLongTasks: true,
         trackUserInteractions: true,
         defaultPrivacyLevel: "allow",
-        sampleRate: 100,
-        useCrossSiteSessionCookie: true
+        telemetrySampleRate: 100,
+        sessionSampleRate: 100,
+        traceSampleRate: 100,
+        sessionReplaySampleRate: 100,
+        trackSessionAcrossSubdomains: true,
+        storeContextsAcrossPages: true,
+        useCrossSiteSessionCookie: true,
+        allowedTracingUrls: [
+          /https:\/\/.*\.amplience\.net/,
+          /https:\/\/.*\.amplience-qa\.net/,
+        ],
       });
 
       datadogRum.startSessionReplayRecording();
@@ -55,16 +64,16 @@ export default class App extends React.Component<{}, AppState> {
     const sdk: SDK = await init();
     sdk.frame.startAutoResizer();
 
-    sdk.contentItem.getCurrent().then(item => {
+    sdk.contentItem.getCurrent().then((item) => {
       datadogRum.setGlobalContext({
-        deliveryId: item.deliveryId
+        deliveryId: item.deliveryId,
       });
     });
 
     const params = {
       ...sdk.field?.schema?.["ui:extension"]?.params,
       ...sdk.params?.installation,
-      ...sdk.params?.instance
+      ...sdk.params?.instance,
     };
 
     const value: any = await sdk.field.getValue();
@@ -72,7 +81,7 @@ export default class App extends React.Component<{}, AppState> {
       sdk,
       connected: true,
       value,
-      params
+      params,
     });
   }
 
