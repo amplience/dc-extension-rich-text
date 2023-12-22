@@ -7,6 +7,7 @@ import {
   createStyles,
   withStyles,
 } from "@material-ui/core";
+import { isToolEnabled } from "@dc-extension-rich-text/common";
 
 import { ProseMirrorToolbarContext } from ".";
 import { ProseMirrorToolbarIconButton } from "../ProseMirrorToolbarIconButton";
@@ -65,15 +66,19 @@ export interface ProseMirrorToolbarProps extends WithStyles<typeof styles> {
   toolbarState: ProseMirrorToolbarState | undefined;
   layout: ToolbarElement[];
   isLocked?: boolean;
+  params: Record<string, unknown>;
 }
 
 const ProseMirrorToolbar: React.SFC<ProseMirrorToolbarProps> = (
   props: ProseMirrorToolbarProps
 ) => {
-  const { classes, layout, toolbarState } = props;
+  const { classes, layout, toolbarState, params } = props;
   const richTextEditorContext = useRichTextEditorContext();
   const group1 = layout.slice(0, 3);
   const group2 = layout.slice(3);
+  const isAiToolEnabled =
+    isToolEnabled("ai", params) ||
+    (params?.tools as Record<string, unknown>)?.ai;
 
   const renderToolbarElement = (idx: number, element: ToolbarElement) => {
     switch (element.type) {
@@ -176,24 +181,32 @@ const ProseMirrorToolbar: React.SFC<ProseMirrorToolbarProps> = (
     >
       <MaterialToolbar className={classes.root} disableGutters={true}>
         <div className={classes.group}>
-          <Button
-            disabled={richTextEditorContext.isLocked}
-            onClick={showAIGenerateDialog}
-            className={classes.button}
-            size="small"
-            startIcon={
-              !richTextEditorContext.isLocked && (
-                <SparklesIcon style={{ width: 15, height: 15 }}></SparklesIcon>
-              )
-            }
-          >
-            {richTextEditorContext.isLocked ? (
-              <Loader></Loader>
-            ) : (
-              "AI Assistant"
-            )}
-          </Button>
-          <div className={classes.divider}></div>
+          {isAiToolEnabled ? (
+            <>
+              <Button
+                disabled={richTextEditorContext.isLocked}
+                onClick={showAIGenerateDialog}
+                className={classes.button}
+                size="small"
+                startIcon={
+                  !richTextEditorContext.isLocked && (
+                    <SparklesIcon
+                      style={{ width: 15, height: 15 }}
+                    ></SparklesIcon>
+                  )
+                }
+              >
+                {richTextEditorContext.isLocked ? (
+                  <Loader></Loader>
+                ) : (
+                  "AI Assistant"
+                )}
+              </Button>
+              <div className={classes.divider}></div>
+            </>
+          ) : (
+            ""
+          )}
           {group1.map((value, idx) => renderToolbarElement(idx, value))}
         </div>
         <div className={classes.group}>
