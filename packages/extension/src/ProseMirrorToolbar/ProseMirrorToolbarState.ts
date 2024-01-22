@@ -1,12 +1,13 @@
 import {
   ProseMirrorTool,
   ProseMirrorToolState,
-  RichTextEditorContextProps
+  RichTextEditorContextProps,
 } from "@dc-extension-rich-text/common";
 
 export interface ProseMirrorToolbarState {
   tools: ProseMirrorTool[];
   toolStates: { [toolName: string]: ProseMirrorToolState };
+  params: Record<string, unknown>;
 }
 
 export function computeToolbarState(
@@ -21,7 +22,7 @@ export function computeToolbarState(
       active: false,
       enabled: true,
       visible: true,
-      ...tool
+      ...tool,
     };
 
     if (tool.isActive) {
@@ -41,6 +42,7 @@ export function computeToolbarState(
 
   return {
     tools,
-    toolStates
+    toolStates,
+    params: {},
   };
 }
