@@ -217,7 +217,6 @@ const RichTextEditor: React.SFC<RichTextEditorProps> = (
                     toolbarState={toolbarState}
                     layout={toolbarLayout}
                     isLocked={editorContext.isLocked}
-                    params={params}
                   />
                 </>
               )}
