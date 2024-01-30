@@ -169,51 +169,9 @@ Powered by ChatGPT, the AI Assistant allows users to quickly generate and edit c
 
 ![Generate content from prompt](media/aiPrompt.png)
 
-You can use the Generative AI Assistant with Amplience credits or your own OpenAI account.
+To get started, you will need to provide your own OpenAI API key which will be used by the extension to communicate with the ChatGPT API. Note, ChatGPT is not affiliated with Amplience and therefore any impact to ChatGPT services such as updates, busy periods, or outages are outside of Amplience control.
 
 By using this feature, you are solely responsible for ensuring that AI generated content complies with internal company policies, applicable laws and [OpenAI's Terms](https://openai.com/policies).
-
-#### Using Amplience credits
-
-Amplience credits provide an easy way to start using our AI features without the need for your own OpenAI account. See [Amplience credits](https://amplience.com/developers/docs/ai-services/credits/)
-
-To use Amplience credits with the Generative AI Assistant, add the following to the extension parameters:
-
-```json
-{
-  "tools": {
-    "ai": {}
-  }
-}
-```
-
-For example:
-
-```json
-{
-  "properties": {
-    "text": {
-      "title": "Markdown text",
-      "description": "Markdown text",
-      "type": "string",
-      "minLength": 0,
-      "maxLength": 32000,
-      "ui:extension": {
-        "url": "https://rich-text.extensions.content.amplience.net",
-        "params": {
-          "tools": {
-            "ai": {}
-          }
-        }
-      }
-    }
-  }
-}
-```
-
-#### Using your own Open AI account
-
-To get started, you will need to provide your own OpenAI API key which will be used by the extension to communicate with the ChatGPT API. Note, ChatGPT is not affiliated with Amplience and therefore any impact to ChatGPT services such as updates, busy periods, or outages are outside of Amplience control.
 
 To create your key, you first need an OpenAI account which you can create [here](https://platform.openai.com/signup). Once you have an account you can create an API key [here](https://platform.openai.com/account/api-keys).
 
@@ -229,33 +187,7 @@ Once you have your API key, you can enable the AI Assistant feature by adding yo
 }
 ```
 
-For example:
-
-```json
-{
-  "properties": {
-    "text": {
-      "title": "Markdown text",
-      "description": "Markdown text",
-      "type": "string",
-      "minLength": 0,
-      "maxLength": 32000,
-      "ui:extension": {
-        "url": "https://rich-text.extensions.content.amplience.net",
-        "params": {
-          "tools": {
-            "ai": {
-              "key": "<OpenAI key>"
-            }
-          }
-        }
-      }
-    }
-  }
-}
-```
-
-#### Using ChatGPT 4
+#### ChatGPT 4
 
 If you have access to ChatGPT 4 or wish to use a different OpenAI model, you can choose the specific model the system should use as follows:
 
