@@ -11,7 +11,7 @@ import { ProseMirrorTool } from "@dc-extension-rich-text/common";
 import FormatBold from "@material-ui/icons/FormatBold";
 import {
   computeToolbarState,
-  ProseMirrorToolbarState,
+  ProseMirrorToolbarState
 } from "./ProseMirrorToolbarState";
 
 // tslint:disable-next-line
@@ -25,14 +25,14 @@ const tools: ProseMirrorTool[] = [
     label: "Bold",
     displayIcon: <FormatBold />,
     isActive: (state: any) => isMarkActive(state, schema.marks.strong),
-    apply: toggleMark(schema.marks.strong),
-  },
+    apply: toggleMark(schema.marks.strong)
+  }
 ];
 
 const layout: ToolbarElement[] = [
   {
     type: "button",
-    toolName: "strong",
+    toolName: "strong"
   },
 
   {
@@ -40,19 +40,19 @@ const layout: ToolbarElement[] = [
     children: [
       {
         type: "button",
-        toolName: "strong",
+        toolName: "strong"
       },
       {
         type: "button",
-        toolName: "strong",
-      },
-    ],
+        toolName: "strong"
+      }
+    ]
   },
 
   {
     type: "dropdown",
-    toolNames: ["strong"],
-  },
+    toolNames: ["strong"]
+  }
 ];
 
 const Editor: React.SFC<{}> = (props: any) => {
@@ -70,11 +70,7 @@ const Editor: React.SFC<{}> = (props: any) => {
 
   return (
     <div>
-      <ProseMirrorToolbar
-        toolbarState={toolbarState}
-        layout={layout}
-        params={{}}
-      />
+      <ProseMirrorToolbar toolbarState={toolbarState} layout={layout} />
       <ProseMirror schema={schema} onUpdateState={handleUpdateState} />
     </div>
   );
