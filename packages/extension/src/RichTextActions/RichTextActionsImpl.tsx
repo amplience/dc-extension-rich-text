@@ -169,11 +169,6 @@ async function invokeChatCompletions(
       },
       async onopen(response): Promise<void> {
         if (key) {
-          track(window, "AI Own OpenAI used", {
-            name: "dc-extension-rich-text",
-            category: "Extension",
-          });
-        } else {
           track(window, "AI Credits used", {
             name: "dc-extension-rich-text",
             category: "Extension",
