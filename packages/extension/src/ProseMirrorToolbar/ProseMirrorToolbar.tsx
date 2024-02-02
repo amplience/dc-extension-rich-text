@@ -76,7 +76,8 @@ const ProseMirrorToolbar: React.SFC<ProseMirrorToolbarProps> = (
   const richTextEditorContext = useRichTextEditorContext();
   const group1 = layout.slice(0, 3);
   const group2 = layout.slice(3);
-  const isAiToolEnabled = (params?.tools as Record<string, unknown>)?.ai;
+  const isAiToolEnabled =
+    (params?.tools as { ai: { disabled: boolean } })?.ai?.disabled !== true;
 
   const renderToolbarElement = (idx: number, element: ToolbarElement) => {
     switch (element.type) {

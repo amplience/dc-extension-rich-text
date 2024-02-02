@@ -177,40 +177,6 @@ By using this feature, you are solely responsible for ensuring that AI generated
 
 Amplience credits provide an easy way to start using our AI features without the need for your own OpenAI account. See [Amplience credits](https://amplience.com/developers/docs/ai-services/credits/)
 
-To use Amplience credits with the Generative AI Assistant, add the following to the extension parameters:
-
-```json
-{
-  "tools": {
-    "ai": {}
-  }
-}
-```
-
-For example:
-
-```json
-{
-  "properties": {
-    "text": {
-      "title": "Markdown text",
-      "description": "Markdown text",
-      "type": "string",
-      "minLength": 0,
-      "maxLength": 32000,
-      "ui:extension": {
-        "url": "https://rich-text.extensions.content.amplience.net",
-        "params": {
-          "tools": {
-            "ai": {}
-          }
-        }
-      }
-    }
-  }
-}
-```
-
 #### Using your own Open AI account
 
 To get started, you will need to provide your own OpenAI API key which will be used by the extension to communicate with the ChatGPT API. Note, ChatGPT is not affiliated with Amplience and therefore any impact to ChatGPT services such as updates, busy periods, or outages are outside of Amplience control.
@@ -306,6 +272,46 @@ When text is selected, preset edit prompts are displayed which save users needin
 {
   "toolbar": {
     "layout": [{ "type": "button", "toolName": "ai" }]
+  }
+}
+```
+
+### Disabling the Generative AI Assistant
+
+To Disable the Generative AI Assistant, add the following parameters:
+
+```json
+{
+  "tools": {
+    "ai": {
+      "disabled": true
+    }
+  }
+}
+```
+
+For example:
+
+```json
+{
+  "properties": {
+    "text": {
+      "title": "Markdown text",
+      "description": "Markdown text",
+      "type": "string",
+      "minLength": 0,
+      "maxLength": 32000,
+      "ui:extension": {
+        "url": "https://rich-text.extensions.content.amplience.net",
+        "params": {
+          "tools": {
+            "ai": {
+              "disabled": true
+            }
+          }
+        }
+      }
+    }
   }
 }
 ```
