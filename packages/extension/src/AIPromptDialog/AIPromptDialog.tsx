@@ -15,10 +15,13 @@ import {
   WithStyles,
 } from "@material-ui/core";
 import { Close } from "@material-ui/icons";
+import pointer from "json-pointer";
 import clsx from "clsx";
 import React, { useState } from "react";
 import { AIConfiguration } from "./AIConfiguration";
 import { SparklesIcon } from "../SparklesIcon/SparklesIcon";
+import { SdkContext } from "unofficial-dynamic-content-ui";
+import { SDK } from "dc-extensions-sdk";
 
 const styles = createStyles({
   root: {
@@ -89,9 +92,30 @@ function DialogHeader(props: any) {
   );
 }
 
+async function getKeywords(sdk: SDK) {
+  type Params = {
+    language: string;
+    sources: string[];
+  };
+  const params = {
+    ...sdk.params.installation,
+    ...sdk.params.instance,
+  } as Params;
+  const form = await sdk.form.getValue().catch(() => ({}));
+  return params.sources.map((source) => {
+    try {
+      return pointer.get(form, source);
+    } catch (e) {
+      return "";
+    }
+  });
+}
+
 const AIPromptDialogContent: React.SFC<any> = (props: AIPromptDialogProps) => {
+  const { sdk } = React.useContext(SdkContext);
   const { variant = "generate", onSubmit, classes, onClose } = props;
   const [prompt, setPrompt] = useState("");
+  const [keywords, setKeywords] = useState([""]);
 
   const strings = {
     generate: {
