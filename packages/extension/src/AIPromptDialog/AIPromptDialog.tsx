@@ -1,6 +1,7 @@
 import { AIPromptDialogOptions } from "@dc-extension-rich-text/common";
 import {
   Button,
+  Chip,
   createStyles,
   Dialog,
   DialogActions,
@@ -17,7 +18,7 @@ import {
 import { Close } from "@material-ui/icons";
 import pointer from "json-pointer";
 import clsx from "clsx";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AIConfiguration } from "./AIConfiguration";
 import { SparklesIcon } from "../SparklesIcon/SparklesIcon";
 import { SdkContext } from "unofficial-dynamic-content-ui";
@@ -117,6 +118,12 @@ const AIPromptDialogContent: React.SFC<any> = (props: AIPromptDialogProps) => {
   const [prompt, setPrompt] = useState("");
   const [keywords, setKeywords] = useState([""]);
 
+  useEffect(() => {
+    getKeywords(sdk as SDK).then((data) => {
+      setKeywords(data[0].split(", "));
+    });
+  }, []);
+
   const strings = {
     generate: {
       title: "What do you want to write about?",
@@ -154,6 +161,12 @@ const AIPromptDialogContent: React.SFC<any> = (props: AIPromptDialogProps) => {
         title={strings.title}
       ></DialogHeader>
       <DialogContent>
+        <span>
+          <Typography variant="caption">Optimize for SEO using:</Typography>
+          {keywords.map((keyword) => {
+            return <Chip label={keyword} />;
+          })}
+        </span>
         <TextField
           value={prompt}
           placeholder={strings.placeholder}
