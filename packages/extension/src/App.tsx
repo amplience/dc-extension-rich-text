@@ -47,8 +47,17 @@ export default class App extends React.Component<{}, AppState> {
         trackLongTasks: true,
         trackUserInteractions: true,
         defaultPrivacyLevel: "allow",
-        sampleRate: 100,
+        telemetrySampleRate: 100,
+        sessionSampleRate: 100,
+        traceSampleRate: 100,
+        sessionReplaySampleRate: 100,
+        trackSessionAcrossSubdomains: true,
+        storeContextsAcrossPages: true,
         useCrossSiteSessionCookie: true,
+        allowedTracingUrls: [
+          /https:\/\/.*\.amplience\.net/,
+          /https:\/\/.*\.amplience-qa\.net/,
+        ],
         proxy: "https://dd-proxy.amplience.net",
       });
 
@@ -73,6 +82,14 @@ export default class App extends React.Component<{}, AppState> {
       .request("context-get")
       .then(({ hub }) => hub)
       .catch(() => ({}));
+
+    if (hub) {
+      datadogRum.setGlobalContext({
+        "amp.hub_id": hub.id,
+        "amp.hub_name": hub.name,
+        "amp.org_id": hub.organizationId,
+      });
+    }
 
     const params = {
       ...sdk.field?.schema?.["ui:extension"]?.params,
