@@ -15,7 +15,7 @@ import {
   withStyles,
   WithStyles,
 } from "@material-ui/core";
-import { Close } from "@material-ui/icons";
+import { Close, Check } from "@material-ui/icons";
 import pointer from "json-pointer";
 import clsx from "clsx";
 import React, { useEffect, useState } from "react";
@@ -52,6 +52,11 @@ const styles = createStyles({
       backgroundColor: "#1ab0f9",
       color: "#fff",
     },
+  },
+  chip: {
+    backgroundColor: "#0374DD",
+    color: "#fff",
+    fontSize: 13,
   },
 });
 
@@ -117,6 +122,7 @@ const AIPromptDialogContent: React.SFC<any> = (props: AIPromptDialogProps) => {
   const { variant = "generate", onSubmit, classes, onClose } = props;
   const [prompt, setPrompt] = useState("");
   const [keywords, setKeywords] = useState([""]);
+  const [selectedKeywords, setSelectedKeywords] = useState<string[]>([]);
 
   useEffect(() => {
     getKeywords(sdk as SDK).then((data) => {
@@ -153,6 +159,16 @@ const AIPromptDialogContent: React.SFC<any> = (props: AIPromptDialogProps) => {
     }
   };
 
+  const handleKeywordClick = (keyword: string) => {
+    if (selectedKeywords.includes(keyword)) {
+      setSelectedKeywords(
+        selectedKeywords.splice(selectedKeywords.indexOf(keyword, 1))
+      );
+    } else {
+      setSelectedKeywords([...selectedKeywords, keyword]);
+    }
+  };
+
   return (
     <>
       <DialogHeader
@@ -164,7 +180,16 @@ const AIPromptDialogContent: React.SFC<any> = (props: AIPromptDialogProps) => {
         <span>
           <Typography variant="caption">Optimize for SEO using:</Typography>
           {keywords.map((keyword) => {
-            return <Chip label={keyword} />;
+            return (
+              <Chip
+                icon={
+                  selectedKeywords.includes(keyword) ? <Check /> : undefined
+                }
+                label={keyword}
+                className={classes.chip}
+                onClick={() => handleKeywordClick(keyword)}
+              />
+            );
           })}
         </span>
         <TextField
