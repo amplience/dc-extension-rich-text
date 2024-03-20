@@ -80,7 +80,6 @@ const RichTextEditor: React.SFC<RichTextEditorProps> = (
   >(undefined);
   const { dialogs } = React.useContext(RichTextDialogsContext);
   const [actions] = useState(new RichTextActionsImpl());
-  const [selectedKeywords, setSelectedKeywords] = useState<string[]>([]);
 
   const languages: RichTextLanguageMap = languagesProp || {
     markdown: MarkdownLanguage({}),
@@ -106,8 +105,6 @@ const RichTextEditor: React.SFC<RichTextEditorProps> = (
     sdk,
     hub,
     setShowCreditsError,
-    selectedKeywords,
-    setSelectedKeywords,
   };
 
   actions.setRichTextEditorContext(editorContext);

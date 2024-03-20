@@ -13,8 +13,6 @@ const context = React.createContext<RichTextEditorContextProps>({
   hub: {} as any,
   setIsLocked: (locked: boolean) => {},
   setShowCreditsError: (show: boolean) => {},
-  selectedKeywords: [] as any,
-  setSelectedKeywords: (value: SetStateAction<string[]>) => {},
 });
 export default context;
 

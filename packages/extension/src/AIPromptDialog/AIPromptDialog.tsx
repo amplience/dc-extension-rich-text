@@ -23,7 +23,6 @@ import { AIConfiguration } from "./AIConfiguration";
 import { SparklesIcon } from "../SparklesIcon/SparklesIcon";
 import { SdkContext } from "unofficial-dynamic-content-ui";
 import { SDK } from "dc-extensions-sdk";
-import { useRichTextEditorContext } from "../RichTextEditor/RichTextEditorContext";
 
 const styles = createStyles({
   root: {
@@ -66,7 +65,7 @@ interface AIPromptDialogProps
     WithStyles<typeof styles> {
   open: boolean;
   onClose: () => void;
-  onSubmit: (value: string) => void;
+  onSubmit: (value: { prompt: string; keywords: string[] }) => void;
   params: any;
 }
 
@@ -122,9 +121,10 @@ function SeoKeywords(props: any) {
   return (
     <span>
       <Typography variant="caption">Optimize for SEO using:</Typography>
-      {props.keywords.map((keyword: string) => {
+      {props.keywords.map((keyword: string, index: number) => {
         return (
           <Chip
+            key={index}
             icon={
               props.selectedKeywords.includes(keyword) ? <Check /> : undefined
             }
@@ -140,11 +140,10 @@ function SeoKeywords(props: any) {
 
 const AIPromptDialogContent: React.SFC<any> = (props: AIPromptDialogProps) => {
   const { sdk } = React.useContext(SdkContext);
-  const richTextEditorContext = useRichTextEditorContext();
   const { variant = "generate", onSubmit, classes, onClose } = props;
   const [prompt, setPrompt] = useState("");
   const [keywords, setKeywords] = useState<string[]>([]);
-  const { selectedKeywords, setSelectedKeywords } = richTextEditorContext;
+  const [selectedKeywords, setSelectedKeywords] = useState<string[]>([]);
 
   useEffect(() => {
     getKeywords(sdk as SDK).then((data) => {
@@ -172,7 +171,7 @@ const AIPromptDialogContent: React.SFC<any> = (props: AIPromptDialogProps) => {
   };
 
   const handleSubmit = async () => {
-    onSubmit(prompt);
+    onSubmit({ prompt, keywords });
   };
 
   const handleKeyUp = (event: any) => {

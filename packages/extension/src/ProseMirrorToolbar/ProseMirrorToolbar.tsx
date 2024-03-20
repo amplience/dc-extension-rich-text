@@ -7,7 +7,6 @@ import {
   createStyles,
   withStyles,
 } from "@material-ui/core";
-import { isToolEnabled } from "@dc-extension-rich-text/common";
 
 import { ProseMirrorToolbarContext } from ".";
 import { ProseMirrorToolbarIconButton } from "../ProseMirrorToolbarIconButton";
@@ -125,10 +124,13 @@ const ProseMirrorToolbar: React.SFC<ProseMirrorToolbarProps> = (
 
   const showAIGenerateDialog = async () => {
     try {
-      const prompt = await richTextEditorContext.dialogs.getAIPrompt({
+      const {
+        prompt,
+        keywords,
+      } = await richTextEditorContext.dialogs.getAIPrompt({
         variant: "generate",
       });
-      await richTextEditorContext.actions.insertAIContent(prompt);
+      await richTextEditorContext.actions.insertAIContent(prompt, keywords);
     } catch {}
   };
 

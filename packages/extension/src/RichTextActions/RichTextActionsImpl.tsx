@@ -226,7 +226,10 @@ This is the description of the change I want to make:
 ${prompt}`;
   }
 
-  public async rewriteSelectedContentUsingAI(prompt: string): Promise<void> {
+  public async rewriteSelectedContentUsingAI(
+    prompt: string,
+    keywords: string[]
+  ): Promise<void> {
     try {
       datadogRum.addAction("rewriteSelectedContentUsingAI", { prompt });
     } catch (err) {}
@@ -328,7 +331,10 @@ Do not converse with the user.
     });
   }
 
-  public async insertAIContent(prompt: string): Promise<void> {
+  public async insertAIContent(
+    prompt: string,
+    keywords: string[]
+  ): Promise<void> {
     try {
       datadogRum.addAction("insertAIContent", { prompt });
     } catch (err) {}
