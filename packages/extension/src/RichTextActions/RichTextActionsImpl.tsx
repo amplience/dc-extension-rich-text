@@ -305,15 +305,7 @@ If the user requests a change that you cannot produce a reasonable replacement f
 
 Do not converse with the user. 
   - Do not ask clarifying questions. 
-  - Do not add conversational preamble such as \`Sure, I can do that\`, or \`Ok, here's the change\`.
-  
-  ${
-    keywords.length
-      ? `Optimize the text for SEO following SEO best practices.
-   - Include the following keywords: ${keywords.join(", ")}
-   `
-      : ""
-  }`,
+  - Do not add conversational preamble such as \`Sure, I can do that\`, or \`Ok, here's the change\`.`,
         },
         {
           role: "user",
@@ -369,7 +361,15 @@ If the user provides a prompt that you cannot produce a document for, you should
 Do not converse with the user.
   - Do not ask clarifying questions.
   - Do not add conversational preamble such as \`Sure, I can do that\`, or \`Ok, here's the change\`.
-  - Do not include [DIALOG] if you've successfully produced a document.`,
+  - Do not include [DIALOG] if you've successfully produced a document.
+  
+  ${
+    keywords.length
+      ? `Optimize the text for SEO following SEO best practices.
+   - Include the following keywords: ${keywords.join(", ")}
+   `
+      : ""
+  }`,
         },
         {
           role: "user",
