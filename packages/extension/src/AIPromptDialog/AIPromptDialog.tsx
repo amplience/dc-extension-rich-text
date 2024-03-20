@@ -23,6 +23,7 @@ import { AIConfiguration } from "./AIConfiguration";
 import { SparklesIcon } from "../SparklesIcon/SparklesIcon";
 import { SdkContext } from "unofficial-dynamic-content-ui";
 import { SDK } from "dc-extensions-sdk";
+import { useRichTextEditorContext } from "../RichTextEditor/RichTextEditorContext";
 
 const styles = createStyles({
   root: {
@@ -117,16 +118,37 @@ async function getKeywords(sdk: SDK) {
   });
 }
 
+function SeoKeywords(props: any) {
+  return (
+    <span>
+      <Typography variant="caption">Optimize for SEO using:</Typography>
+      {props.keywords.map((keyword: string) => {
+        return (
+          <Chip
+            icon={
+              props.selectedKeywords.includes(keyword) ? <Check /> : undefined
+            }
+            label={keyword}
+            className={props.classes.chip}
+            onClick={() => props.handleKeywordClick(keyword)}
+          />
+        );
+      })}
+    </span>
+  );
+}
+
 const AIPromptDialogContent: React.SFC<any> = (props: AIPromptDialogProps) => {
   const { sdk } = React.useContext(SdkContext);
+  const richTextEditorContext = useRichTextEditorContext();
   const { variant = "generate", onSubmit, classes, onClose } = props;
   const [prompt, setPrompt] = useState("");
-  const [keywords, setKeywords] = useState([""]);
-  const [selectedKeywords, setSelectedKeywords] = useState<string[]>([]);
+  const [keywords, setKeywords] = useState<string[]>([]);
+  const { selectedKeywords, setSelectedKeywords } = richTextEditorContext;
 
   useEffect(() => {
     getKeywords(sdk as SDK).then((data) => {
-      setKeywords(data[0].split(", "));
+      setKeywords(data[0].split(",").map((keyword: string) => keyword.trim()));
     });
   }, []);
 
@@ -162,7 +184,7 @@ const AIPromptDialogContent: React.SFC<any> = (props: AIPromptDialogProps) => {
   const handleKeywordClick = (keyword: string) => {
     if (selectedKeywords.includes(keyword)) {
       setSelectedKeywords(
-        selectedKeywords.splice(selectedKeywords.indexOf(keyword, 1))
+        selectedKeywords.filter((selected) => selected !== keyword)
       );
     } else {
       setSelectedKeywords([...selectedKeywords, keyword]);
@@ -177,21 +199,16 @@ const AIPromptDialogContent: React.SFC<any> = (props: AIPromptDialogProps) => {
         title={strings.title}
       ></DialogHeader>
       <DialogContent>
-        <span>
-          <Typography variant="caption">Optimize for SEO using:</Typography>
-          {keywords.map((keyword) => {
-            return (
-              <Chip
-                icon={
-                  selectedKeywords.includes(keyword) ? <Check /> : undefined
-                }
-                label={keyword}
-                className={classes.chip}
-                onClick={() => handleKeywordClick(keyword)}
-              />
-            );
-          })}
-        </span>
+        {keywords ? (
+          <SeoKeywords
+            classes={classes}
+            keywords={keywords}
+            selectedKeywords={selectedKeywords}
+            handleKeywordClick={handleKeywordClick}
+          />
+        ) : (
+          undefined
+        )}
         <TextField
           value={prompt}
           placeholder={strings.placeholder}

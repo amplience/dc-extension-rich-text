@@ -1,5 +1,5 @@
 import { RichTextEditorContextProps } from "@dc-extension-rich-text/common";
-import React, { useContext } from "react";
+import React, { SetStateAction, useContext } from "react";
 
 const context = React.createContext<RichTextEditorContextProps>({
   params: {},
@@ -13,6 +13,8 @@ const context = React.createContext<RichTextEditorContextProps>({
   hub: {} as any,
   setIsLocked: (locked: boolean) => {},
   setShowCreditsError: (show: boolean) => {},
+  selectedKeywords: [] as any,
+  setSelectedKeywords: (value: SetStateAction<string[]>) => {},
 });
 export default context;
 
