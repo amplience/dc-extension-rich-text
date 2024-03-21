@@ -7,6 +7,7 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  Grid,
   IconButton,
   InputAdornment,
   Link,
@@ -53,10 +54,21 @@ const styles = createStyles({
       color: "#fff",
     },
   },
+  keywordsContainer: {
+    marginBottom: "12px",
+  },
+  keywordsCaption: {
+    fontSize: "11px",
+  },
   chip: {
     backgroundColor: "#0374DD",
     color: "#fff",
     fontSize: 13,
+    // margin: "0px 4px 0px 4px",
+    height: "24px",
+  },
+  keywordCheckIcon: {
+    color: "#fff",
   },
 });
 
@@ -119,22 +131,29 @@ async function getKeywords(sdk: SDK) {
 
 function SeoKeywords(props: any) {
   return (
-    <span>
-      <Typography variant="caption">Optimize for SEO using:</Typography>
-      {props.keywords.map((keyword: string, index: number) => {
-        return (
-          <Chip
-            key={index}
-            icon={
-              props.selectedKeywords.includes(keyword) ? <Check /> : undefined
-            }
-            label={keyword}
-            className={props.classes.chip}
-            onClick={() => props.handleKeywordClick(keyword)}
-          />
-        );
-      })}
-    </span>
+    <Grid container className={props.classes.keywordsContainer} spacing={1}>
+      <Grid item className={props.classes.keywordCaption}>
+        Optimize for SEO using:
+      </Grid>
+
+      <Grid item>
+        <Chip
+          icon={
+            props.useKeywords ? (
+              <Check
+                fontSize="small"
+                className={props.classes.keywordCheckIcon}
+              />
+            ) : (
+              undefined
+            )
+          }
+          label="SEO Keywords"
+          className={props.classes.chip}
+          onClick={() => props.handleKeywordClick()}
+        />
+      </Grid>
+    </Grid>
   );
 }
 
@@ -143,7 +162,7 @@ const AIPromptDialogContent: React.SFC<any> = (props: AIPromptDialogProps) => {
   const { variant = "generate", onSubmit, classes, onClose } = props;
   const [prompt, setPrompt] = useState("");
   const [keywords, setKeywords] = useState<string[]>([]);
-  const [selectedKeywords, setSelectedKeywords] = useState<string[]>([]);
+  const [useKeywords, setUseKeywords] = useState<boolean>(true);
 
   useEffect(() => {
     getKeywords(sdk as SDK).then((data) => {
@@ -171,7 +190,8 @@ const AIPromptDialogContent: React.SFC<any> = (props: AIPromptDialogProps) => {
   };
 
   const handleSubmit = async () => {
-    onSubmit({ prompt, keywords });
+    const submitPayload = { prompt, keywords: useKeywords ? keywords : [] };
+    onSubmit(submitPayload);
   };
 
   const handleKeyUp = (event: any) => {
@@ -180,14 +200,8 @@ const AIPromptDialogContent: React.SFC<any> = (props: AIPromptDialogProps) => {
     }
   };
 
-  const handleKeywordClick = (keyword: string) => {
-    if (selectedKeywords.includes(keyword)) {
-      setSelectedKeywords(
-        selectedKeywords.filter((selected) => selected !== keyword)
-      );
-    } else {
-      setSelectedKeywords([...selectedKeywords, keyword]);
-    }
+  const handleKeywordClick = () => {
+    setUseKeywords(!useKeywords);
   };
 
   return (
@@ -201,8 +215,7 @@ const AIPromptDialogContent: React.SFC<any> = (props: AIPromptDialogProps) => {
         {keywords ? (
           <SeoKeywords
             classes={classes}
-            keywords={keywords}
-            selectedKeywords={selectedKeywords}
+            useKeywords={useKeywords}
             handleKeywordClick={handleKeywordClick}
           />
         ) : (
