@@ -12,6 +12,7 @@ import {
   InputAdornment,
   Link,
   TextField,
+  Tooltip,
   Typography,
   withStyles,
   WithStyles,
@@ -57,18 +58,20 @@ const styles = createStyles({
   keywordsContainer: {
     marginBottom: "12px",
   },
-  keywordsCaption: {
-    fontSize: "11px",
-  },
   chip: {
-    backgroundColor: "#0374DD",
     color: "#fff",
     fontSize: 13,
-    // margin: "0px 4px 0px 4px",
     height: "24px",
   },
   keywordCheckIcon: {
     color: "#fff",
+  },
+  tooltip: {
+    fontSize: 12,
+    backgroundColor: "#1A222D",
+  },
+  arrow: {
+    color: "#1A222D",
   },
 });
 
@@ -131,27 +134,39 @@ async function getKeywords(sdk: SDK) {
 
 function SeoKeywords(props: any) {
   return (
-    <Grid container className={props.classes.keywordsContainer} spacing={1}>
-      <Grid item className={props.classes.keywordCaption}>
-        Optimize for SEO using:
+    <Grid
+      container
+      className={props.classes.keywordsContainer}
+      spacing={1}
+      alignItems="center"
+    >
+      <Grid item>
+        <Typography variant="caption">Optimize for SEO using:</Typography>
       </Grid>
 
       <Grid item>
-        <Chip
-          icon={
-            props.useKeywords ? (
-              <Check
-                fontSize="small"
-                className={props.classes.keywordCheckIcon}
-              />
-            ) : (
-              undefined
-            )
-          }
-          label="SEO Keywords"
-          className={props.classes.chip}
-          onClick={() => props.handleKeywordClick()}
-        />
+        <Tooltip
+          title={props.keywords.join(", ")}
+          arrow
+          classes={props.classes}
+        >
+          <Chip
+            icon={
+              props.useKeywords ? (
+                <Check
+                  fontSize="small"
+                  className={props.classes.keywordCheckIcon}
+                />
+              ) : (
+                undefined
+              )
+            }
+            label="SEO Keywords"
+            color="primary"
+            className={props.classes.chip}
+            onClick={() => props.handleKeywordClick()}
+          />
+        </Tooltip>
       </Grid>
     </Grid>
   );
@@ -216,6 +231,7 @@ const AIPromptDialogContent: React.SFC<any> = (props: AIPromptDialogProps) => {
           <SeoKeywords
             classes={classes}
             useKeywords={useKeywords}
+            keywords={keywords}
             handleKeywordClick={handleKeywordClick}
           />
         ) : (
