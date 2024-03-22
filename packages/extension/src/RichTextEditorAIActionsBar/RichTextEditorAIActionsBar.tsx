@@ -1,8 +1,6 @@
 import React from "react";
 
 import { Chip, Grid, Theme, WithStyles, withStyles } from "@material-ui/core";
-
-import { isToolEnabled } from "@dc-extension-rich-text/common";
 import { AIConfiguration } from "../AIPromptDialog";
 import { useRichTextEditorContext } from "../RichTextEditor/RichTextEditorContext";
 
@@ -54,12 +52,14 @@ const RichTextEditorAIActionsBar: React.SFC<RichTextEditorAIActionsBarProps> = (
   const editPrompts = configuration.getEditPrompts();
 
   const handleEditPrompt = async (prompt: any) => {
-    await actions.rewriteSelectedContentUsingAI(prompt.prompt);
+    await actions.rewriteSelectedContentUsingAI(prompt.prompt, []);
   };
 
   const handleCustomAiRewrite = async () => {
-    const prompt = await dialogs.getAIPrompt({ variant: "rewrite" });
-    await actions.rewriteSelectedContentUsingAI(prompt);
+    const { prompt, keywords } = await dialogs.getAIPrompt({
+      variant: "rewrite",
+    });
+    await actions.rewriteSelectedContentUsingAI(prompt, keywords);
   };
 
   return isAiToolEnabled ? (

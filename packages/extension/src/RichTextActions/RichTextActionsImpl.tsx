@@ -226,7 +226,10 @@ This is the description of the change I want to make:
 ${prompt}`;
   }
 
-  public async rewriteSelectedContentUsingAI(prompt: string): Promise<void> {
+  public async rewriteSelectedContentUsingAI(
+    prompt: string,
+    keywords: string[]
+  ): Promise<void> {
     try {
       datadogRum.addAction("rewriteSelectedContentUsingAI", { prompt });
     } catch (err) {}
@@ -302,7 +305,15 @@ If the user requests a change that you cannot produce a reasonable replacement f
 
 Do not converse with the user. 
   - Do not ask clarifying questions. 
-  - Do not add conversational preamble such as \`Sure, I can do that\`, or \`Ok, here's the change\`.`,
+  - Do not add conversational preamble such as \`Sure, I can do that\`, or \`Ok, here's the change\`.
+  
+  ${
+    keywords.length
+      ? `Optimize the text for SEO following SEO best practices.
+   - Include the following keywords: ${keywords.join(", ")}
+   `
+      : ""
+  }`,
         },
         {
           role: "user",
@@ -328,7 +339,10 @@ Do not converse with the user.
     });
   }
 
-  public async insertAIContent(prompt: string): Promise<void> {
+  public async insertAIContent(
+    prompt: string,
+    keywords: string[]
+  ): Promise<void> {
     try {
       datadogRum.addAction("insertAIContent", { prompt });
     } catch (err) {}
@@ -355,7 +369,15 @@ If the user provides a prompt that you cannot produce a document for, you should
 Do not converse with the user.
   - Do not ask clarifying questions.
   - Do not add conversational preamble such as \`Sure, I can do that\`, or \`Ok, here's the change\`.
-  - Do not include [DIALOG] if you've successfully produced a document.`,
+  - Do not include [DIALOG] if you've successfully produced a document.
+  
+  ${
+    keywords.length
+      ? `Optimize the text for SEO following SEO best practices.
+   - Include the following keywords: ${keywords.join(", ")}
+   `
+      : ""
+  }`,
         },
         {
           role: "user",

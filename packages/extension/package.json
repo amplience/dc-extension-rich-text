@@ -20,6 +20,7 @@
     "@types/react-dom": "16.8.5",
     "clsx": "^1.1.0",
     "dc-extensions-sdk": "^1.0.1",
+    "json-pointer": "^0.6.2",
     "prosemirror-commands": "^1.0.8",
     "prosemirror-example-setup": "^1.0.1",
     "prosemirror-model": "^1.7.4",
@@ -35,7 +36,8 @@
     "unofficial-dynamic-content-ui": "^0.2.3"
   },
   "devDependencies": {
-    "@storybook/react": "^5.1.11"
+    "@storybook/react": "^5.1.11",
+    "@types/json-pointer": "^1.0.34"
   },
   "scripts": {
     "start": "react-scripts start",

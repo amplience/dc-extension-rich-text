@@ -146,10 +146,13 @@ const RichTextDialogsContainer: React.SFC<EditorDialogsProps> = (
         return sdk.contentLink.get(contentTypeIds);
       }
     },
-    getAIPrompt(dialogProps: AIPromptDialogOptions): Promise<string> {
-      return handleOpenDialog("ai_prompt", undefined, dialogProps) as Promise<
-        string
-      >;
+    getAIPrompt(
+      dialogProps: AIPromptDialogOptions
+    ): Promise<{ prompt: string; keywords: string[] }> {
+      return handleOpenDialog("ai_prompt", undefined, dialogProps) as Promise<{
+        prompt: string;
+        keywords: string[];
+      }>;
     },
     alert(alertProps: AlertOptions): Alert {
       const alert: any = {

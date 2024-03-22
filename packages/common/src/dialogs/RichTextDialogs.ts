@@ -49,6 +49,8 @@ export interface RichTextDialogs {
     contentTypeIds: string[],
     value?: ContentItemLink
   ): Promise<ContentItemLink>;
-  getAIPrompt(options: AIPromptDialogOptions): Promise<string>;
+  getAIPrompt(
+    options: AIPromptDialogOptions
+  ): Promise<{ prompt: string; keywords: string[] }>;
   alert(options: AlertOptions): Alert;
 }
