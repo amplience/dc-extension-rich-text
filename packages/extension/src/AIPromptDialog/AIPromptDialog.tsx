@@ -155,7 +155,10 @@ function SeoKeywords(props: any) {
         <Tooltip
           title={infoTooltipString}
           arrow
-          classes={{ arrow: props.classes.arrow, tooltip: props.classes.arrow }}
+          classes={{
+            arrow: props.classes.arrow,
+            tooltip: props.classes.tooltip,
+          }}
         >
           <SvgIcon viewBox="0 0 15 15" className={props.classes.infoIcon}>
             <InfoIcon />
@@ -167,7 +170,10 @@ function SeoKeywords(props: any) {
         <Tooltip
           title={props.keywords.join(", ")}
           arrow
-          classes={{ arrow: props.classes.arrow, tooltip: props.classes.arrow }}
+          classes={{
+            arrow: props.classes.arrow,
+            tooltip: props.classes.tooltip,
+          }}
         >
           <Chip
             icon={
