@@ -11,13 +11,14 @@ import {
   IconButton,
   InputAdornment,
   Link,
+  SvgIcon,
   TextField,
   Tooltip,
   Typography,
   withStyles,
   WithStyles,
 } from "@material-ui/core";
-import { Close, Check } from "@material-ui/icons";
+import { Close, Check, Info } from "@material-ui/icons";
 import pointer from "json-pointer";
 import clsx from "clsx";
 import React, { useEffect, useState } from "react";
@@ -25,6 +26,7 @@ import { AIConfiguration } from "./AIConfiguration";
 import { SparklesIcon } from "../SparklesIcon/SparklesIcon";
 import { SdkContext } from "unofficial-dynamic-content-ui";
 import { SDK } from "dc-extensions-sdk";
+import { ReactComponent as InfoIcon } from "./info-icon.svg";
 
 const styles = createStyles({
   root: {
@@ -65,6 +67,12 @@ const styles = createStyles({
   },
   keywordCheckIcon: {
     color: "#fff",
+  },
+  infoIcon: {
+    height: "15px",
+    width: "15px",
+    transform: "translateY(25%)",
+    marginLeft: "5px",
   },
   tooltip: {
     fontSize: 12,
@@ -133,6 +141,8 @@ async function getKeywords(sdk: SDK) {
 }
 
 function SeoKeywords(props: any) {
+  const infoTooltipString =
+    "Optimize your AI prompt by importing data from other fields such as SEO keywords, titles, and descriptions.";
   return (
     <Grid
       container
@@ -142,7 +152,16 @@ function SeoKeywords(props: any) {
     >
       <Grid item>
         <Typography variant="caption">Optimize for SEO using:</Typography>
+        <Tooltip title={infoTooltipString} arrow classes={props.classes}>
+          <SvgIcon viewBox="0 0 15 15" className={props.classes.infoIcon}>
+            <InfoIcon />
+          </SvgIcon>
+        </Tooltip>
       </Grid>
+
+      {/* <Grid item>
+        
+      </Grid> */}
 
       <Grid item>
         <Tooltip
