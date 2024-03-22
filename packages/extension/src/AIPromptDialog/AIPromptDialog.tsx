@@ -152,22 +152,22 @@ function SeoKeywords(props: any) {
     >
       <Grid item>
         <Typography variant="caption">Optimize for SEO using:</Typography>
-        <Tooltip title={infoTooltipString} arrow classes={props.classes}>
+        <Tooltip
+          title={infoTooltipString}
+          arrow
+          classes={{ arrow: props.classes.arrow, tooltip: props.classes.arrow }}
+        >
           <SvgIcon viewBox="0 0 15 15" className={props.classes.infoIcon}>
             <InfoIcon />
           </SvgIcon>
         </Tooltip>
       </Grid>
 
-      {/* <Grid item>
-        
-      </Grid> */}
-
       <Grid item>
         <Tooltip
           title={props.keywords.join(", ")}
           arrow
-          classes={props.classes}
+          classes={{ arrow: props.classes.arrow, tooltip: props.classes.arrow }}
         >
           <Chip
             icon={
@@ -200,7 +200,11 @@ const AIPromptDialogContent: React.SFC<any> = (props: AIPromptDialogProps) => {
 
   useEffect(() => {
     getKeywords(sdk as SDK).then((data) => {
-      setKeywords(data[0].split(",").map((keyword: string) => keyword.trim()));
+      if (data[0]) {
+        setKeywords(
+          data[0].split(",").map((keyword: string) => keyword.trim())
+        );
+      }
     });
   }, []);
 
@@ -246,7 +250,7 @@ const AIPromptDialogContent: React.SFC<any> = (props: AIPromptDialogProps) => {
         title={strings.title}
       ></DialogHeader>
       <DialogContent>
-        {keywords ? (
+        {keywords.length ? (
           <SeoKeywords
             classes={classes}
             useKeywords={useKeywords}
