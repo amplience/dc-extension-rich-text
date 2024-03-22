@@ -124,20 +124,19 @@ function DialogHeader(props: any) {
 async function getKeywords(sdk: SDK) {
   type Params = {
     language: string;
-    sources: string[];
+    keywordSource: string;
   };
   const params = {
     ...sdk.params.installation,
     ...sdk.params.instance,
   } as Params;
   const form = await sdk.form.getValue().catch(() => ({}));
-  return params.sources?.map((source) => {
-    try {
-      return pointer.get(form, source);
-    } catch (e) {
-      return "";
-    }
-  });
+
+  try {
+    return pointer.get(form, params.keywordSource);
+  } catch (e) {
+    return "";
+  }
 }
 
 function SeoKeywords(props: any) {
