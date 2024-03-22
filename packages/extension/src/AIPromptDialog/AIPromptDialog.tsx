@@ -131,7 +131,7 @@ async function getKeywords(sdk: SDK) {
     ...sdk.params.instance,
   } as Params;
   const form = await sdk.form.getValue().catch(() => ({}));
-  return params.sources.map((source) => {
+  return params.sources?.map((source) => {
     try {
       return pointer.get(form, source);
     } catch (e) {
@@ -200,7 +200,7 @@ const AIPromptDialogContent: React.SFC<any> = (props: AIPromptDialogProps) => {
 
   useEffect(() => {
     getKeywords(sdk as SDK).then((data) => {
-      if (data[0]) {
+      if (data && data[0]) {
         setKeywords(
           data[0].split(",").map((keyword: string) => keyword.trim())
         );
