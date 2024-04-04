@@ -204,10 +204,10 @@ const AIPromptDialogContent: React.SFC<any> = (props: AIPromptDialogProps) => {
   const [useKeywords, setUseKeywords] = useState<boolean>(true);
 
   useEffect(() => {
-    getKeywords(sdk as SDK).then((data) => {
-      if (data && data[0]) {
+    getKeywords(sdk as SDK).then((keywords) => {
+      if (keywords) {
         setKeywords(
-          data[0].split(",").map((keyword: string) => keyword.trim())
+          keywords.split(",").map((keyword: string) => keyword.trim())
         );
       }
     });
