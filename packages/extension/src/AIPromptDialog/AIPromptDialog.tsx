@@ -142,6 +142,14 @@ async function getKeywords(sdk: SDK) {
 function SeoKeywords(props: any) {
   const infoTooltipString =
     "Optimize your AI prompt by importing data from other fields such as SEO keywords, titles, and descriptions.";
+
+  const chipStyles = props.useKeywords
+    ? {}
+    : {
+        backgroundColor: "#F7F9F9",
+        color: "#002C42",
+      };
+
   return (
     <Grid
       container
@@ -188,6 +196,7 @@ function SeoKeywords(props: any) {
             label="SEO Keywords"
             color="primary"
             className={props.classes.chip}
+            style={chipStyles}
             onClick={() => props.handleKeywordClick()}
           />
         </Tooltip>
@@ -204,10 +213,10 @@ const AIPromptDialogContent: React.SFC<any> = (props: AIPromptDialogProps) => {
   const [useKeywords, setUseKeywords] = useState<boolean>(true);
 
   useEffect(() => {
-    getKeywords(sdk as SDK).then((data) => {
-      if (data && data[0]) {
+    getKeywords(sdk as SDK).then((keywords) => {
+      if (keywords) {
         setKeywords(
-          data[0].split(",").map((keyword: string) => keyword.trim())
+          keywords.split(",").map((keyword: string) => keyword.trim())
         );
       }
     });
