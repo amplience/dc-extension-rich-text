@@ -1,24 +1,32 @@
 import { AIPromptDialogOptions } from "@dc-extension-rich-text/common";
 import {
   Button,
+  Chip,
   createStyles,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
+  Grid,
   IconButton,
   InputAdornment,
   Link,
+  SvgIcon,
   TextField,
+  Tooltip,
   Typography,
   withStyles,
   WithStyles,
 } from "@material-ui/core";
-import { Close } from "@material-ui/icons";
+import { Close, Check, Info } from "@material-ui/icons";
+import pointer from "json-pointer";
 import clsx from "clsx";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AIConfiguration } from "./AIConfiguration";
 import { SparklesIcon } from "../SparklesIcon/SparklesIcon";
+import { SdkContext } from "unofficial-dynamic-content-ui";
+import { SDK } from "dc-extensions-sdk";
+import { ReactComponent as InfoIcon } from "./info-icon.svg";
 
 const styles = createStyles({
   root: {
@@ -49,6 +57,30 @@ const styles = createStyles({
       color: "#fff",
     },
   },
+  keywordsContainer: {
+    marginBottom: "12px",
+  },
+  chip: {
+    color: "#fff",
+    fontSize: 13,
+    height: "24px",
+  },
+  keywordCheckIcon: {
+    color: "#fff",
+  },
+  infoIcon: {
+    height: "15px",
+    width: "15px",
+    transform: "translateY(25%)",
+    marginLeft: "5px",
+  },
+  tooltip: {
+    fontSize: 12,
+    backgroundColor: "#1A222D",
+  },
+  arrow: {
+    color: "#1A222D",
+  },
 });
 
 interface AIPromptDialogProps
@@ -56,7 +88,7 @@ interface AIPromptDialogProps
     WithStyles<typeof styles> {
   open: boolean;
   onClose: () => void;
-  onSubmit: (value: string) => void;
+  onSubmit: (value: { prompt: string; keywords: string[] }) => void;
   params: any;
 }
 
@@ -89,9 +121,106 @@ function DialogHeader(props: any) {
   );
 }
 
+async function getKeywords(sdk: SDK) {
+  type Params = {
+    language: string;
+    keywordSource: string;
+  };
+  const params = {
+    ...sdk.params.installation,
+    ...sdk.params.instance,
+  } as Params;
+  const form = await sdk.form.getValue().catch(() => ({}));
+
+  try {
+    return pointer.get(form, params.keywordSource);
+  } catch (e) {
+    return "";
+  }
+}
+
+function SeoKeywords(props: any) {
+  const infoTooltipString =
+    "Optimize your AI prompt by importing data from other fields such as SEO keywords, titles, and descriptions.";
+
+  const chipStyles = props.useKeywords
+    ? {}
+    : {
+        backgroundColor: "#F7F9F9",
+        color: "#002C42",
+      };
+
+  return (
+    <Grid
+      container
+      className={props.classes.keywordsContainer}
+      spacing={1}
+      alignItems="center"
+    >
+      <Grid item>
+        <Typography variant="caption">Optimize for SEO using:</Typography>
+        <Tooltip
+          title={infoTooltipString}
+          arrow
+          classes={{
+            arrow: props.classes.arrow,
+            tooltip: props.classes.tooltip,
+          }}
+        >
+          <SvgIcon viewBox="0 0 15 15" className={props.classes.infoIcon}>
+            <InfoIcon />
+          </SvgIcon>
+        </Tooltip>
+      </Grid>
+
+      <Grid item>
+        <Tooltip
+          title={props.keywords.join(", ")}
+          arrow
+          classes={{
+            arrow: props.classes.arrow,
+            tooltip: props.classes.tooltip,
+          }}
+        >
+          <Chip
+            icon={
+              props.useKeywords ? (
+                <Check
+                  fontSize="small"
+                  className={props.classes.keywordCheckIcon}
+                />
+              ) : (
+                undefined
+              )
+            }
+            label="SEO Keywords"
+            color="primary"
+            className={props.classes.chip}
+            style={chipStyles}
+            onClick={() => props.handleKeywordClick()}
+          />
+        </Tooltip>
+      </Grid>
+    </Grid>
+  );
+}
+
 const AIPromptDialogContent: React.SFC<any> = (props: AIPromptDialogProps) => {
+  const { sdk } = React.useContext(SdkContext);
   const { variant = "generate", onSubmit, classes, onClose } = props;
   const [prompt, setPrompt] = useState("");
+  const [keywords, setKeywords] = useState<string[]>([]);
+  const [useKeywords, setUseKeywords] = useState<boolean>(true);
+
+  useEffect(() => {
+    getKeywords(sdk as SDK).then((keywords) => {
+      if (keywords) {
+        setKeywords(
+          keywords.split(",").map((keyword: string) => keyword.trim())
+        );
+      }
+    });
+  }, []);
 
   const strings = {
     generate: {
@@ -113,13 +242,18 @@ const AIPromptDialogContent: React.SFC<any> = (props: AIPromptDialogProps) => {
   };
 
   const handleSubmit = async () => {
-    onSubmit(prompt);
+    const submitPayload = { prompt, keywords: useKeywords ? keywords : [] };
+    onSubmit(submitPayload);
   };
 
   const handleKeyUp = (event: any) => {
     if (event.key === "Enter" || event.keyCode === 13) {
       handleSubmit();
     }
+  };
+
+  const handleKeywordClick = () => {
+    setUseKeywords(!useKeywords);
   };
 
   return (
@@ -130,6 +264,16 @@ const AIPromptDialogContent: React.SFC<any> = (props: AIPromptDialogProps) => {
         title={strings.title}
       ></DialogHeader>
       <DialogContent>
+        {keywords.length ? (
+          <SeoKeywords
+            classes={classes}
+            useKeywords={useKeywords}
+            keywords={keywords}
+            handleKeywordClick={handleKeywordClick}
+          />
+        ) : (
+          undefined
+        )}
         <TextField
           value={prompt}
           placeholder={strings.placeholder}
