@@ -1,4 +1,7 @@
 export interface RichTextActions {
-  insertAIContent(prompt: string): Promise<void>;
-  rewriteSelectedContentUsingAI(prompt: string): Promise<void>;
+  insertAIContent(prompt: string, keywords: string[]): Promise<void>;
+  rewriteSelectedContentUsingAI(
+    prompt: string,
+    keywords: string[]
+  ): Promise<void>;
 }

@@ -276,6 +276,27 @@ When text is selected, preset edit prompts are displayed which save users needin
 }
 ```
 
+#### Using Keywords for SEO
+
+The generative AI assistant can be configured to include SEO keywords in the generated text. Keywords should be defined in a separate field in the schema and the field should be referenced in the installation parameters of the extension using a [JSON pointer](https://datatracker.ietf.org/doc/html/rfc6901) in the `keywordSource` property:
+
+```json
+{
+  "keywords": {
+    "type": "string"
+  },
+  "content": {
+    "type": "string",
+    "ui:extension": {
+      "name": "rich-text",
+      "params": {
+        "keywordSource": "/keywords"
+      }
+    }
+  }
+}
+```
+
 ### Disabling the Generative AI Assistant
 
 To Disable the Generative AI Assistant, add the following parameters:
