@@ -32,7 +32,6 @@ const styles = createStyles({
     height: 26,
     alignSelf: "center",
     textTransform: "none",
-    width: 104,
     fontSize: 13,
     textAlign: "center",
   },
@@ -77,6 +76,7 @@ const ProseMirrorToolbar: React.SFC<ProseMirrorToolbarProps> = (
   const group2 = layout.slice(3);
   const isAiToolEnabled =
     (params?.tools as { ai: { disabled: boolean } })?.ai?.disabled !== true;
+  const isContentStudioEnabled = (params?.tools as { content_studio: { disabled: boolean } })?.content_studio?.disabled !== true;
 
   const renderToolbarElement = (idx: number, element: ToolbarElement) => {
     switch (element.type) {
@@ -134,6 +134,10 @@ const ProseMirrorToolbar: React.SFC<ProseMirrorToolbarProps> = (
     } catch {}
   };
 
+  const launchContentStudio = async () => {
+    await richTextEditorContext.actions.insertContentStudioContent();
+  };
+
   return (
     <ProseMirrorToolbarContext.Provider
       value={{
@@ -182,6 +186,33 @@ const ProseMirrorToolbar: React.SFC<ProseMirrorToolbarProps> = (
     >
       <MaterialToolbar className={classes.root} disableGutters={true}>
         <div className={classes.group}>
+          {isContentStudioEnabled ? (
+            <>
+            <Button
+              disabled={richTextEditorContext.isLocked}
+              onClick={launchContentStudio}
+              className={classes.button}
+              size="small"
+              startIcon={
+                !richTextEditorContext.isLocked && (
+                  <SparklesIcon
+                    style={{ width: 15, height: 15 }}
+                    variant="content-studio"
+                  ></SparklesIcon>
+                )
+              }
+            >
+              {richTextEditorContext.isLocked ? (
+                <Loader></Loader>
+              ) : (
+                "Content Studio"
+              )}
+            </Button>
+            <div className={classes.divider}></div>
+          </>
+          ) : (
+            ""
+          )}
           {isAiToolEnabled ? (
             <>
               <Button
