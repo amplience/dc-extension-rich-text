@@ -10,7 +10,7 @@ import { fetchEventSource } from "@microsoft/fetch-event-source";
 import React from "react";
 import { AIConfiguration } from "../AIPromptDialog";
 import { track } from "../gainsight";
-import { AmplienceContentStudio } from "@amplience/content-studio-sdk";
+import { AmplienceContentStudio } from '@amplience/content-studio-sdk';
 
 interface ChatModel {
   name: string;
@@ -509,9 +509,8 @@ Do not converse with the user.
           "https://app.amplience.net/content-studio",
       });
 
-      const content = await studio.getContent();
-      const textFields = Object.keys(content.data)
-        .map((x) => content.data[x])
+      const { content } = await studio.getContent();
+      const textFields = Object.values(content)
         .filter((x) => typeof x === "string") as string[];
 
       if (textFields.length > 0) {

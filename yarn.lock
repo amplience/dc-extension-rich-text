@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@amplience/content-studio-sdk@^0.0.81":
-  version "0.0.81"
-  resolved "https://npm.pkg.github.com/download/@amplience/content-studio-sdk/0.0.81/a4fe6e0826154082c6d957a81f41caf073fcdb36#a4fe6e0826154082c6d957a81f41caf073fcdb36"
-  integrity sha512-6tPfBiJSVqWeKtVyX8k4+EF4dI/1CN+sJnthvBnS5pWfk3w+9yELG1z7U4fvBw823skwR18mVHdy8+yH3XmPsA==
+"@amplience/content-studio-sdk@^0.1.1":
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/@amplience/content-studio-sdk/-/content-studio-sdk-0.1.1.tgz#06a6a639351e94c82636775b1c1236d39136ddff"
+  integrity sha512-5I2fWK9sTm7ZhpBfMUZ3K3pRR7IdadR2DG9ZCWrZ7jM5QmVsj2lutlL4bLC1kZUCp7AUFxapBpoIE1bskJ3Nag==
   dependencies:
     message-event-channel "^1.1.0"
 
@@ -11164,7 +11164,7 @@ merge2@^1.2.3:
 
 message-event-channel@^1.1.0:
   version "1.1.0"
-  resolved "https://registry.npmjs.org/message-event-channel/-/message-event-channel-1.1.0.tgz"
+  resolved "https://registry.yarnpkg.com/message-event-channel/-/message-event-channel-1.1.0.tgz#8ff5798228432efd692f9f8fd3f749f35185c367"
   integrity sha512-/6tBIQr8xmGiTkQZbLwiIxdsG21VcykYryk08cEdJdphEPYYCwi9ur/jSDfbQ6fY1urqo8TDZQ7dr7xJOrCqqw==
   dependencies:
     url-polyfill "^1.1.7"
@@ -16749,9 +16749,9 @@ url-parse@^1.4.3:
     requires-port "^1.0.0"
 
 url-polyfill@^1.1.7:
-  version "1.1.10"
-  resolved "https://registry.npmjs.org/url-polyfill/-/url-polyfill-1.1.10.tgz"
-  integrity sha512-vSaPpaRgBrf41+Uky1myiSh6gpcbw8FpwHYnEy0abxndojOBnIs+yh/49gKYFLtUMP9qoNWjn6j9aUVy23Ie2A==
+  version "1.1.12"
+  resolved "https://registry.yarnpkg.com/url-polyfill/-/url-polyfill-1.1.12.tgz#6cdaa17f6b022841b3aec0bf8dbd87ac0cd33331"
+  integrity sha512-mYFmBHCapZjtcNHW0MDq9967t+z4Dmg5CJ0KqysK3+ZbyoNOWQHksGCTWwDhxGXllkWlOc10Xfko6v4a3ucM6A==
 
 url@^0.11.0:
   version "0.11.0"
