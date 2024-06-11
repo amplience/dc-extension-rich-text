@@ -179,7 +179,7 @@ If for any reason you wish to disable Content Studio from this extension you can
 {
   "tools": {
     "contentStudio": {
-      "disables": true
+      "disabled": true
     }
   }
 }
