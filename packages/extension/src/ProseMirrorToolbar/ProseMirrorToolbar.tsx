@@ -3,6 +3,7 @@ import React from "react";
 import {
   Button,
   Toolbar as MaterialToolbar,
+  Tooltip,
   WithStyles,
   createStyles,
   withStyles,
@@ -40,7 +41,23 @@ const styles = createStyles({
     height: 13,
     margin: "9px 4px",
   },
+  tooltip: {
+    fontSize: 12,
+    backgroundColor: "#1A222D",
+  },
+  arrow: {
+    color: "#1A222D",
+  },
 });
+
+const tooltips = {
+  ai: {
+    title: "Use ChatGPT to improve your copy"
+  },
+  contentStudio: {
+    title: "Generate personalized product content with Content Studio (launches new tab)"
+  }
+}
 
 export interface ToolbarButton {
   type: "button";
@@ -188,42 +205,24 @@ const ProseMirrorToolbar: React.SFC<ProseMirrorToolbarProps> = (
         <div className={classes.group}>
           {isContentStudioEnabled ? (
             <>
-            <Button
-              disabled={richTextEditorContext.isLocked}
-              onClick={launchContentStudio}
-              className={classes.button}
-              size="small"
-              startIcon={
-                !richTextEditorContext.isLocked && (
-                  <SparklesIcon
-                    style={{ width: 15, height: 15 }}
-                    variant="content-studio"
-                  ></SparklesIcon>
-                )
-              }
+            <Tooltip 
+              title={tooltips.contentStudio.title} 
+              arrow 
+              classes={{
+                arrow: props.classes.arrow,
+                tooltip: props.classes.tooltip,
+              }}
             >
-              {richTextEditorContext.isLocked ? (
-                <Loader></Loader>
-              ) : (
-                "Content Studio"
-              )}
-            </Button>
-            <div className={classes.divider}></div>
-          </>
-          ) : (
-            ""
-          )}
-          {isAiToolEnabled ? (
-            <>
               <Button
                 disabled={richTextEditorContext.isLocked}
-                onClick={showAIGenerateDialog}
+                onClick={launchContentStudio}
                 className={classes.button}
                 size="small"
                 startIcon={
                   !richTextEditorContext.isLocked && (
                     <SparklesIcon
                       style={{ width: 15, height: 15 }}
+                      variant="content-studio"
                     ></SparklesIcon>
                   )
                 }
@@ -231,9 +230,45 @@ const ProseMirrorToolbar: React.SFC<ProseMirrorToolbarProps> = (
                 {richTextEditorContext.isLocked ? (
                   <Loader></Loader>
                 ) : (
-                  "AI Assistant"
+                  "Content Studio"
                 )}
               </Button>
+            </Tooltip>
+            <div className={classes.divider}></div>
+          </>
+          ) : (
+            ""
+          )}
+          {isAiToolEnabled ? (
+            <>
+              <Tooltip 
+                title={tooltips.ai.title} 
+                arrow 
+                classes={{
+                  arrow: props.classes.arrow,
+                  tooltip: props.classes.tooltip,
+                }}
+              >
+                <Button
+                  disabled={richTextEditorContext.isLocked}
+                  onClick={showAIGenerateDialog}
+                  className={classes.button}
+                  size="small"
+                  startIcon={
+                    !richTextEditorContext.isLocked && (
+                      <SparklesIcon
+                        style={{ width: 15, height: 15 }}
+                      ></SparklesIcon>
+                    )
+                  }
+                >
+                  {richTextEditorContext.isLocked ? (
+                    <Loader></Loader>
+                  ) : (
+                    "AI Assistant"
+                  )}
+                </Button>
+              </Tooltip>
               <div className={classes.divider}></div>
             </>
           ) : (
