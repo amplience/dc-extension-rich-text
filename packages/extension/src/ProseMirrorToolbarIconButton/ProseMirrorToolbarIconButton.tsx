@@ -1,4 +1,4 @@
-import { IconButton, withStyles, WithStyles } from "@material-ui/core";
+import { IconButton, Tooltip, withStyles, WithStyles } from "@material-ui/core";
 import React, { PropsWithChildren } from "react";
 
 import { ProseMirrorToolbarContext } from "../ProseMirrorToolbar";
@@ -14,7 +14,15 @@ export interface ProseMirrorToolbarButtonProps
 const styles = {
   root: {
     margin: "1px"
-  }
+  },
+  tooltip: {
+    fontSize: 12,
+    backgroundColor: "#1A222D",
+    maxWidth: 240
+  },
+  arrow: {
+    color: "#1A222D",
+  },
 };
 
 const ProseMirrorToolbarIconButton: React.SFC<ProseMirrorToolbarButtonProps> = (
@@ -48,16 +56,25 @@ const ProseMirrorToolbarIconButton: React.SFC<ProseMirrorToolbarButtonProps> = (
   }
 
   return (
-    <IconButton
-      className={clsx(classes.root)}
-      onMouseDown={handleClick}
-      size="small"
-      disabled={!toolState.enabled || props.isLocked}
-      color={toolState.active ? "primary" : "default"}
-      title={toolState.label}
+    <Tooltip 
+      title={toolState.label} 
+      arrow 
+      classes={{
+        arrow: clsx(classes.arrow),
+        tooltip: clsx(classes.tooltip),
+      }}
     >
-      {toolState.displayIcon ? toolState.displayIcon : toolState.label}
-    </IconButton>
+      <IconButton
+        className={clsx(classes.root)}
+        onMouseDown={handleClick}
+        size="small"
+        disabled={!toolState.enabled || props.isLocked}
+        color={toolState.active ? "primary" : "default"}
+        title={toolState.label}
+      >
+        {toolState.displayIcon ? toolState.displayIcon : toolState.label}
+      </IconButton>
+    </Tooltip>
   );
 };
 

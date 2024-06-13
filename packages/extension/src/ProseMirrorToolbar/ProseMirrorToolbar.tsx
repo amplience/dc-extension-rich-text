@@ -44,6 +44,7 @@ const styles = createStyles({
   tooltip: {
     fontSize: 12,
     backgroundColor: "#1A222D",
+    maxWidth: 340
   },
   arrow: {
     color: "#1A222D",
@@ -55,7 +56,7 @@ const tooltips = {
     title: "Use ChatGPT to improve your copy"
   },
   contentStudio: {
-    title: "Generate personalized product content with Content Studio (launches new tab)"
+    title: "Generate on-brand content at scale with Content Studio"
   }
 }
 
