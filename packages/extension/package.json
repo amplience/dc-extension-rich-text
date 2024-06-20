@@ -4,6 +4,7 @@
   "private": true,
   "homepage": "./",
   "dependencies": {
+    "@amplience/content-studio-sdk": "^0.1.1",
     "@datadog/browser-rum": "^4.43.0",
     "@dc-extension-rich-text/common": "0.1.0",
     "@dc-extension-rich-text/language-json": "0.1.0",
@@ -53,16 +54,9 @@
   "eslintConfig": {
     "extends": "react-app"
   },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  }
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not op_mini all"
+  ]
 }

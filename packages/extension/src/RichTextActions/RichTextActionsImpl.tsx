@@ -10,6 +10,7 @@ import { fetchEventSource } from "@microsoft/fetch-event-source";
 import React from "react";
 import { AIConfiguration } from "../AIPromptDialog";
 import { track } from "../gainsight";
+import { AmplienceContentStudio } from '@amplience/content-studio-sdk';
 
 interface ChatModel {
   name: string;
@@ -494,5 +495,44 @@ Do not converse with the user.
     } catch {}
 
     this.context?.setIsLocked(false);
+  }
+
+  public async insertContentStudioContent(): Promise<void> {
+    try {
+      const { proseMirrorEditorView, params, language } = this.context!;
+      const { dispatch } = proseMirrorEditorView;
+      let { state } = proseMirrorEditorView;
+
+      const studio = new AmplienceContentStudio({
+        baseUrl:
+          params?.tools?.contentStudio?.baseUrl ||
+          "https://app.amplience.net/content-studio",
+      });
+
+      const { content } = await studio.getContent();
+      const textFields = Object.values(content)
+        .filter((x) => typeof x === "string") as string[];
+
+      if (textFields.length > 0) {
+        let fragment = (language as MarkdownLanguage).parseMarkdown(
+          textFields[0].trim()
+        ).content;
+
+        if (fragment.content.length === 1) {
+          fragment = fragment.content[0].content;
+        }
+
+        let startPosition = state.selection?.from ?? state.doc.content.size;
+        let endPosition = state.selection?.to || startPosition;
+
+        const transaction = state.tr.replaceWith(
+          startPosition,
+          endPosition,
+          fragment
+        );
+
+        dispatch(transaction);
+      }
+    } catch (err) {}
   }
 }
