@@ -4,4 +4,5 @@ export interface RichTextActions {
     prompt: string,
     keywords: string[]
   ): Promise<void>;
+  insertContentStudioContent(): Promise<void>;
 }

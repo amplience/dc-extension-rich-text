@@ -1,8 +1,31 @@
 import React from "react";
 
 export const SparklesIcon = (props: any) => {
-  const { readOnly, style } = props;
-  return (
+  const { readOnly, style, variant } = props;
+  return variant === "content-studio" ? (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="22"
+      height="22"
+      fill="none"
+      viewBox="0 0 26 26"
+    >
+      <g
+        stroke={readOnly ? "#D9D9D9" : "#F88B8B"}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="1.5"
+        clipPath="url(#clip0_2281_13381)"
+      >
+        <path d="M12.417 9.834h-11M1.417 4.5H17.5M7.417 15.166h-6M1.417 20.5h6M21.333 22.25a1.917 1.917 0 011.917 1.917 1.917 1.917 0 011.917-1.916 1.917 1.917 0 01-1.917-1.917 1.917 1.917 0 01-1.917 1.917zm0-11.5a1.917 1.917 0 011.917 1.917 1.917 1.917 0 011.917-1.916 1.917 1.917 0 01-1.917-1.917 1.917 1.917 0 01-1.917 1.917zm-5.708 11.5a5.75 5.75 0 015.75-5.75 5.75 5.75 0 01-5.75-5.75 5.75 5.75 0 01-5.75 5.75 5.75 5.75 0 015.75 5.75z"></path>
+      </g>
+      <defs>
+        <clipPath id="clip0_2281_13381">
+          <path fill="#fff" d="M0 0H26V26H0z"></path>
+        </clipPath>
+      </defs>
+    </svg>
+  ) : (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width="32"
