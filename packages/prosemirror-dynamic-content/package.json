@@ -15,7 +15,7 @@
     "clsx": "^1.1.0",
     "prosemirror-commands": "^1.0.8",
     "prosemirror-example-setup": "^1.0.1",
-    "prosemirror-model": "^1.7.4",
+    "prosemirror-model": "^1.22.1",
     "prosemirror-schema-basic": "^1.0.1",
     "prosemirror-state": "^1.2.4",
     "prosemirror-view": "^1.11.7",
