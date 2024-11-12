@@ -92,6 +92,7 @@ const RichTextEditor: React.SFC<RichTextEditorProps> = (
   const { language, conf: languageConfiguration } = languages[languageProp];
   const { sdk } = React.useContext(SdkContext);
   const { hub } = React.useContext(HubContext);
+  const contentRef = React.useRef<any[]>([]);
 
   const editorContext: RichTextEditorContextProps = {
     isLocked,
@@ -114,6 +115,9 @@ const RichTextEditor: React.SFC<RichTextEditorProps> = (
     if (!valueProp) {
       return undefined;
     }
+    if (valueProp[0] && valueProp[0].content) {
+      contentRef.current = valueProp[0].content;
+    }
 
     if (languageConfiguration.format === RichLanguageFormat.JSON) {
       return JSON.stringify(valueProp, null, 3);
@@ -131,6 +135,33 @@ const RichTextEditor: React.SFC<RichTextEditorProps> = (
       // tslint:disable-next-line
     } catch (err) {}
   });
+
+  function onlyUnique(value: {id: string}, index: number, self: {id: string}[]) {
+    return self.findIndex((item) => item.id === value.id) === index;
+  }
+
+  const cleanContent = (doc: any, content: any) => {
+    if (content && content.length === 0) return
+    const marks: string[] = [];
+    searchMarks(doc, marks);
+    const markContent = content.filter((item: any) => marks.includes('id:' + item.id)).filter(onlyUnique)
+    if (content.length !== markContent.length) {
+      return markContent;
+    }
+    return content;
+  }
+
+  const searchMarks = (doc: any, marks: string[]) => {
+    if (doc && doc.content && doc.content.content) {
+      doc.content.content.forEach((node: any) => {
+        const linkMark = node.marks.find((mark: any) => mark.type.name === 'link')
+        if (linkMark) {
+          marks.push(linkMark.attrs.href)
+        }
+        searchMarks(node, marks);
+      })
+    }
+  }
 
   const handleRawValueChange = React.useCallback(
     (value: any) => {
@@ -158,11 +189,22 @@ const RichTextEditor: React.SFC<RichTextEditorProps> = (
   );
 
   const handleEditorChange = React.useCallback(
-    (doc: any) => {
+    (doc: any, types: any) => {
       setProseMirrorDocument(doc);
       try {
-        const newRawValue = language.serialize(doc);
-
+        let currentContent = contentRef.current;
+        if (types['content-type']) {
+          currentContent = cleanContent(doc,[...(currentContent ? currentContent : []), JSON.parse(types['content-type'])]);
+          contentRef.current = currentContent
+        }
+        if (currentContent) {
+          currentContent = cleanContent(doc, currentContent);
+          contentRef.current = currentContent
+        }
+        const newRawValue = language.serialize(doc) as any[];
+        if (currentContent && currentContent.length > 0 && newRawValue.length > 0) {
+          newRawValue[0].content = currentContent;
+        }
         if (languageConfiguration.format === RichLanguageFormat.JSON) {
           setRawValue(JSON.stringify(newRawValue, null, 3));
         } else {

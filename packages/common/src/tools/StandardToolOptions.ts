@@ -1,8 +1,11 @@
+import { RichTextDialogs } from "../dialogs";
+
 export interface StandardToolOptions {
   useClasses?: boolean;
   classOverride?: { [originalName: string]: string };
 
-  tools?: {
+dialogs?: RichTextDialogs;
+tools?: {
     whitelist?: string[];
     blacklist?: string[];
 

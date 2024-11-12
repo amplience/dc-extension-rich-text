@@ -31,7 +31,7 @@ export interface ProseMirrorProps extends WithStyles<typeof styles> {
   doc?: any;
   editorViewOptions?: any;
   onUpdateState?: (state: any, editorView: any) => void;
-  onChange?: (doc: any) => void;
+  onChange?: (doc: any, types: any) => void;
   isLocked?: boolean;
 }
 
@@ -84,6 +84,17 @@ class ProseMirror extends React.Component<ProseMirrorProps, ProseMirrorState> {
       ...this.props.editorViewOptions,
       state: editorState,
       dispatchTransaction: (transaction: any) => {
+        // The 
+        if (transaction.meta['content-type']) {
+          if (onUpdateState && onChange) {
+            const contentData = {...transaction.meta}
+            view.updateState(view.state);
+            onUpdateState(view.state, view);
+            onChange(view.state.doc, contentData);
+            this.forceUpdate();
+            return;
+          }
+        }
         const { state, transactions } = view.state.applyTransaction(
           transaction
         );
@@ -102,7 +113,7 @@ class ProseMirror extends React.Component<ProseMirrorProps, ProseMirrorState> {
 
         if (transactions.some((tr: any) => tr.docChanged)) {
           if (onChange) {
-            onChange(state.doc);
+            onChange(state.doc, {});
             if (this.state.isLocked) {
               view.scrollToSelection();
             }
@@ -153,7 +164,7 @@ class ProseMirror extends React.Component<ProseMirrorProps, ProseMirrorState> {
 
   public render(): React.ReactElement {
     const { classes } = this.props;
-    return <div className={classes.root} ref={this.state.ref} />;
+    return <div id="this" className={classes.root} ref={this.state.ref} />;
   }
 }
 

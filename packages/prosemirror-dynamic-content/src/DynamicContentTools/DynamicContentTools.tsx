@@ -5,6 +5,7 @@ import {
   ProseMirrorTool,
   inBlock,
   RichTextEditorContextProps,
+  getSelectionMarks,
 } from "@dc-extension-rich-text/common";
 import { ContentItemLink, MediaImageLink } from "dc-extensions-sdk";
 import { DynamicContentToolOptions } from "./DynamicContentToolOptions";
@@ -13,6 +14,9 @@ import { DynamicContentToolOptions } from "./DynamicContentToolOptions";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
 // tslint:disable-next-line
 import ImageSearchIcon from "@material-ui/icons/ImageSearch";
+// tslint:disable-next-line
+import AddLocationIcon from '@material-ui/icons/AddLocation';
+const { toggleMark } = require("prosemirror-commands");
 
 export function dcImageLink(schema: any): ProseMirrorTool {
   const node = schema.nodes["dc-image-link"];
@@ -39,6 +43,40 @@ export function dcImageLink(schema: any): ProseMirrorTool {
         // tslint:disable-next-line
       } catch (err) {}
     },
+  };
+}
+
+export function dcContentLinkUrl(schema: any, contentTypes: string[], dialog?: (contentTypeIds: string[], value?: ContentItemLink) => Promise<ContentItemLink>): ProseMirrorTool {
+  const node = schema.nodes['dc-content-link-url'];
+
+  return {
+      name: 'dc-content-link-url',
+      label: 'Insert link url',
+      displayIcon: <AddLocationIcon />,
+      isEnabled: (state: any) => {
+          return !state.selection.empty || getSelectionMarks(state).filter(mark => mark.mark.type === schema.marks.link).length > 0;
+        },
+      apply: async (state: any, dispatch: any, view: any) => {
+          if (!dialog) {
+              return;
+          }
+          const value = await dialog(contentTypes);
+          const content = state.selection.content()
+          const newAttrs = {
+              href: 'id:' + value.id,
+              title: undefined
+          };
+          
+          if (content && content.content && content.content.content && content.content.content.length > 0) {
+              toggleMark(schema.marks.link, newAttrs)(state, dispatch, view);
+          }
+          dispatch({meta : {'content-type': JSON.stringify(value)}});
+          try {
+          // tslint:disable-next-line
+          } catch (err) {
+              console.log(err)
+          }
+      }
   };
 }
 
@@ -100,6 +138,12 @@ export function createDynamicContentTools(
     tools.push(
       dcContentLink(schema, options.tools["dc-content-link"].contentTypes)
     );
+  }
+
+  if (
+    options.tools && options.tools["dc-content-link-url"] && options.tools["dc-content-link-url"].contentTypes
+  ) {
+      tools.push(dcContentLinkUrl(schema, options.tools["dc-content-link-url"].contentTypes, options.dialogs ? options.dialogs.getDcContentLink : undefined))
   }
 
   return tools;
