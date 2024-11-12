@@ -60,19 +60,19 @@ export function dcContentLinkUrl(schema: any, contentTypes: string[], dialog?: (
           if (!dialog) {
               return;
           }
-          const value = await dialog(contentTypes);
-          const content = state.selection.content()
-          const newAttrs = {
-              href: 'id:' + value.id,
-              title: undefined
-          };
-          
-          if (content && content.content && content.content.content && content.content.content.length > 0) {
-              toggleMark(schema.marks.link, newAttrs)(state, dispatch, view);
-          }
-          dispatch({meta : {'content-type': JSON.stringify(value)}});
           try {
-          // tslint:disable-next-line
+            const value = await dialog(contentTypes);
+            const content = state.selection.content()
+            const newAttrs = {
+                href: 'id:' + value.id,
+                title: undefined
+            };
+            
+            if (content && content.content && content.content.content && content.content.content.length > 0) {
+                toggleMark(schema.marks.link, newAttrs)(state, dispatch, view);
+            }
+            dispatch({meta : {'content-type': JSON.stringify(value)}});
+            // tslint:disable-next-line
           } catch (err) {
               console.log(err)
           }
