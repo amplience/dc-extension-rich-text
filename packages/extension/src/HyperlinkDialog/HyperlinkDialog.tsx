@@ -1,10 +1,12 @@
 import {
   Button,
+  Checkbox,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
   FormControl,
+  FormControlLabel,
   FormHelperText,
   TextField,
 } from "@material-ui/core";
@@ -31,6 +33,7 @@ const HyperlinkDialog: React.SFC<HyperlinkDialogProps> = (
   const [value, setValue] = React.useState<Hyperlink>({
     href: "",
     title: "",
+    openInNewTab: false, // Initialize with default value
   });
 
   const [lastValue, setLastValue] = React.useState<Hyperlink>();
@@ -43,7 +46,7 @@ const HyperlinkDialog: React.SFC<HyperlinkDialogProps> = (
   const [isValid, setIsValid] = React.useState(false);
 
   const handleInputChanged = React.useCallback(
-    (name: string, fieldValue: string) => {
+    (name: string, fieldValue: any) => {
       const newValue = {
         ...value,
         [name]: fieldValue,
@@ -59,6 +62,7 @@ const HyperlinkDialog: React.SFC<HyperlinkDialogProps> = (
     setValue({
       href: "",
       title: "",
+      openInNewTab: false,
     });
     setLastValue(undefined);
   };
@@ -122,6 +126,21 @@ const HyperlinkDialog: React.SFC<HyperlinkDialogProps> = (
             }
           />
           <FormHelperText>Example: Black Friday Sale</FormHelperText>
+        </FormControl>
+
+        <FormControl fullWidth={true}>
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={!!value.openInNewTab}
+                onChange={(event) =>
+                  handleInputChanged("openInNewTab", event.target.checked)
+                }
+                color="primary"
+              />
+            }
+            label="Open in new tab"
+          />
         </FormControl>
       </DialogContent>
       <DialogActions>
