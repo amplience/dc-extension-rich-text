@@ -37,6 +37,7 @@
     "unofficial-dynamic-content-ui": "^0.2.3"
   },
   "devDependencies": {
+    "@babel/plugin-proposal-optional-chaining": "^7.21.0",
     "@storybook/react": "^5.1.11",
     "@types/json-pointer": "^1.0.34"
   },
