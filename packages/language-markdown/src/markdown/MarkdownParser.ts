@@ -1,6 +1,6 @@
 import {
   getDefaultClass,
-  StandardToolOptions
+  StandardToolOptions,
 } from "@dc-extension-rich-text/common";
 import { html_block } from "../alignment";
 import { soft_hyphen_from } from "../soft_hyphen";
@@ -29,29 +29,29 @@ export function createMarkdownParser(
     anchor: {
       node: "anchor",
       getAttrs: (tok: any) => ({
-        value: tok.attrGet("value")
-      })
+        value: tok.attrGet("value"),
+      }),
     },
     fence: {
       block: "code_block",
       getAttrs: (tok: any) => ({ params: tok.info || "" }),
-      noCloseToken: true
+      noCloseToken: true,
     },
     soft_hyphen: { node: "soft_hyphen" },
     table: { block: "table" },
     th: {
       block: "table_header",
       getAttrs: (tok: any) => ({
-        style: tok.attrGet("style")
-      })
+        style: tok.attrGet("style"),
+      }),
     },
     tr: { block: "table_row" },
     td: {
       block: "table_cell",
       getAttrs: (tok: any) => ({
-        style: tok.attrGet("style")
-      })
-    }
+        style: tok.attrGet("style"),
+      }),
+    },
   });
 
   parser.tokenHandlers.html_inline = (state: any, token: any) => {
@@ -73,7 +73,7 @@ export function createMarkdownParser(
         const className = (tag as Element).getAttribute("class");
         state.openMark(
           schema.marks.inline_styles.create({
-            class: className
+            class: className,
           })
         );
       }
@@ -92,12 +92,38 @@ export function createMarkdownParser(
 
         if (id != null) {
           state.addNode(schema.nodes.anchor, {
-            value: id
+            value: id,
           });
         }
       }
     } else if (content === "<br>") {
       state.addNode(schema.nodes.hard_break);
+    } else {
+      const html = token.content;
+      const linkMatch = html.match(/<a\s+([^>]*)>(.*?)<\/a>/);
+
+      if (linkMatch) {
+        const attrs = linkMatch[1];
+        const content = linkMatch[2];
+
+        const hrefMatch = attrs.match(/href="([^"]*)"/);
+        const titleMatch = attrs.match(/title="([^"]*)"/);
+        const targetMatch = attrs.match(/target="([^"]*)"/);
+        const relMatch = attrs.match(/rel="([^"]*)"/);
+
+        if (hrefMatch) {
+          const mark = schema.marks.link.create({
+            href: hrefMatch[1],
+            title: titleMatch ? titleMatch[1] : null,
+            target: targetMatch ? targetMatch[1] : null,
+            rel: relMatch ? relMatch[1] : null,
+          });
+
+          state.openMark(mark);
+          state.addText(content);
+          state.closeMark(mark);
+        }
+      }
     }
   };
 
@@ -108,14 +134,14 @@ export function createMarkdownParser(
     ["H3", "heading"],
     ["H4", "heading"],
     ["H5", "heading"],
-    ["H6", "heading"]
+    ["H6", "heading"],
   ]);
 
   const alignmentClasses = new Map<string, string>([
     ["amp-align-left", "left"],
     ["amp-align-center", "center"],
     ["amp-align-right", "right"],
-    ["amp-align-justify", "justify"]
+    ["amp-align-justify", "justify"],
   ]);
 
   // tslint:disable-next-line
@@ -138,7 +164,7 @@ export function createMarkdownParser(
     ) as Attr;
     if (classAttr) {
       // Styles may be present in classes instead
-      (classAttr.ownerElement as HTMLElement).classList.forEach(value => {
+      (classAttr.ownerElement as HTMLElement).classList.forEach((value) => {
         const asDefault = getDefaultClass(value, options);
 
         alignAttr = alignmentClasses.get(asDefault) || "left";
@@ -151,7 +177,7 @@ export function createMarkdownParser(
       nodeType === "heading" ? Number(token.meta.tag[1]) : undefined;
     state.openNode(schema.nodes[nodeType], {
       align: alignAttr ? alignAttr : "left",
-      level
+      level,
     });
   };
 
