@@ -5,25 +5,25 @@ module.exports = ({ config }) => {
       {
         loader: require.resolve("awesome-typescript-loader"),
       },
+      // Optional
       {
         loader: require.resolve("react-docgen-typescript-loader"),
       },
     ],
   });
 
-  // Add a new rule specifically for the Amplience module
+  // transpile JS files from @amplience/content-studio-sdk
   config.module.rules.push({
     test: /\.js$/,
-    include: /node_modules\/@amplience/,
+    include: /node_modules[\\/]@amplience[\\/]content-studio-sdk/,
     use: {
       loader: require.resolve("babel-loader"),
       options: {
-        presets: ["@babel/preset-env"],
-        plugins: ["@babel/plugin-proposal-optional-chaining"],
+        presets: [require.resolve("@babel/preset-env")],
       },
     },
   });
+  config.resolve.extensions.push(".ts", ".tsx", ".js");
 
-  config.resolve.extensions.push(".ts", ".tsx");
   return config;
 };
