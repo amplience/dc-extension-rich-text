@@ -10,6 +10,7 @@ export interface Image {
 export interface Hyperlink {
   href: string;
   title: string;
+  openInNewTab?: boolean;
   cancel?: boolean;
 }
 

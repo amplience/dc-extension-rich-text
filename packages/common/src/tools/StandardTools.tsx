@@ -110,8 +110,18 @@ export function editLink(
     const marks = getSelectionMarks(state).filter(
       (mark) => mark.mark.type === type
     );
-    const attrs: Hyperlink | undefined =
-      marks.length === 1 ? marks[0].mark.attrs : undefined;
+
+    // Convert mark attributes to the dialog format, adding openInNewTab
+    let attrs: Hyperlink | undefined;
+    if (marks.length === 1) {
+      const markAttrs = marks[0].mark.attrs;
+      attrs = {
+        href: markAttrs.href || "",
+        title: markAttrs.title || "",
+        // Add openInNewTab based on target attribute
+        openInNewTab: markAttrs.target === "_blank",
+      };
+    }
 
     try {
       const linkValue = await richTextEditorContext.dialogs.getHyperlink(attrs);
@@ -123,6 +133,8 @@ export function editLink(
       const newAttrs = {
         href: linkValue.href,
         title: linkValue.title === "" ? undefined : linkValue.title,
+        target: linkValue.openInNewTab ? "_blank" : undefined,
+        rel: linkValue.openInNewTab ? "noopener noreferrer" : undefined,
       };
 
       if (marks.length > 0) {

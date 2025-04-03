@@ -19,7 +19,33 @@ export function createSchema(
   const schema = require("prosemirror-markdown").schema;
 
   // TODO: don't register nodes and marks that are disabled in the options
-  let marks = schema.spec.marks;
+  let marks = schema.spec.marks.update("link", {
+    attrs: {
+      href: {},
+      title: { default: null },
+      target: { default: null },
+      rel: { default: null },
+    },
+    inclusive: false,
+    parseDOM: [
+      {
+        tag: "a[href]",
+        getAttrs(dom: HTMLElement) {
+          return {
+            href: dom.getAttribute("href"),
+            title: dom.getAttribute("title"),
+            target: dom.getAttribute("target"),
+            rel: dom.getAttribute("rel"),
+          };
+        },
+      },
+    ],
+    toDOM(node: any) {
+      const { href, title, target, rel } = node.attrs;
+      return ["a", { href, title, target, rel }, 0];
+    },
+  });
+
   if (isInlineStylesEnabled) {
     marks = marks.addToEnd("inline_styles", inline_styles);
   }
@@ -42,9 +68,9 @@ export function createSchema(
                 attrs.style =
                   (attrs.style || "") + `background-color: ${value};`;
               }
-            }
-          }
-        }
+            },
+          },
+        },
       })
     )
     .addToEnd("soft_hyphen", soft_hyphen)
@@ -54,7 +80,7 @@ export function createSchema(
 
   return new Schema({
     nodes,
-    marks
+    marks,
   });
 }
 
