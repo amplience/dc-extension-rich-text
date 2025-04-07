@@ -64,7 +64,6 @@ export function createMarkdownSerializer(
       if (title) result += ` "${title}"`;
       result += ")";
 
-      // If target or rel exists, use HTML format instead of Markdown format
       if (target || rel) {
         const relAttr = rel ? ` rel="${rel}"` : "";
         result = `<a href="${href}"${title ? ` title="${title}"` : ""}${
