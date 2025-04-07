@@ -16,7 +16,10 @@ export function createMarkdownParser(
   schema: any,
   options: StandardToolOptions
 ): any {
-  const md = markdownit("commonmark", { html: true });
+  const md = markdownit("commonmark", {
+    html: true,
+    linkify: false,
+  });
   md.use(markdownItTable);
 
   md.inline.ruler.before("text", "soft_hyphen", soft_hyphen_from);
@@ -26,6 +29,15 @@ export function createMarkdownParser(
   // Warning... this might be a little brittle
   const parser = new markdown.MarkdownParser(schema, md, {
     ...markdown.defaultMarkdownParser.tokens,
+    link: {
+      mark: "link",
+      getAttrs: (tok: any) => ({
+        href: tok.attrGet("href"),
+        title: tok.attrGet("title") || null,
+        target: tok.attrGet("target") || null,
+        rel: tok.attrGet("rel") || null,
+      }),
+    },
     anchor: {
       node: "anchor",
       getAttrs: (tok: any) => ({
@@ -53,6 +65,20 @@ export function createMarkdownParser(
       }),
     },
   });
+
+  const originalParagraph = parser.tokenHandlers.paragraph;
+  parser.tokenHandlers.paragraph = (
+    state: any,
+    token: any,
+    tokens: any,
+    i: number
+  ) => {
+    if (token.content && /\n\d+\n\d+/.test(token.content)) {
+      token.content = token.content.replace(/\n\d+\n\d+/g, "\n\n");
+    }
+
+    originalParagraph(state, token, tokens, i);
+  };
 
   parser.tokenHandlers.html_inline = (state: any, token: any) => {
     if (!token || !token.content) {
@@ -89,13 +115,28 @@ export function createMarkdownParser(
 
       if (tag.nodeName.toLowerCase() === "a") {
         const id = (tag as Element).getAttribute("id");
+        const href = (tag as Element).getAttribute("href");
+        const title = (tag as Element).getAttribute("title");
+        const target = (tag as Element).getAttribute("target");
+        const rel = (tag as Element).getAttribute("rel");
 
         if (id != null) {
           state.addNode(schema.nodes.anchor, {
             value: id,
           });
+        } else if (href) {
+          state.openMark(
+            schema.marks.link.create({
+              href,
+              title: title || null,
+              target: target || null,
+              rel: rel || null,
+            })
+          );
         }
       }
+    } else if (content === "</a>") {
+      state.closeMark(schema.marks.link);
     } else if (content === "<br>") {
       state.addNode(schema.nodes.hard_break);
     } else {
