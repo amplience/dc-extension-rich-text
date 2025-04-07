@@ -48,22 +48,24 @@ export function createMarkdownSerializer(
   defaultMarkdownSerializer.marks.link = {
     open(state: any, mark: any) {
       state.write("[");
+      state.delim = state.out.length;
       return "";
     },
     close(state: any, mark: any) {
-      // Add type annotations
       const { href, title, target } = mark.attrs;
+      const linkText = state.out.slice(state.delim);
       let result = `](${href}`;
+
       if (title) result += ` "${title}"`;
       result += ")";
 
-      // Convert to HTML if target is set
       if (target) {
         const rel = mark.attrs.rel ? ` rel="${mark.attrs.rel}"` : "";
         result = `<a href="${href}"${title ? ` title="${title}"` : ""}${
           target ? ` target="${target}"` : ""
-        }${rel}>${state.out.slice(state.delim)}</a>`;
-        state.out = state.out.slice(0, state.delim);
+        }${rel}>${linkText}</a>`;
+
+        state.out = state.out.slice(0, state.delim - 1);
       }
 
       return result;
