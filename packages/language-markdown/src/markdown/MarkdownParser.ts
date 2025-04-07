@@ -100,7 +100,7 @@ export function createMarkdownParser(
       state.addNode(schema.nodes.hard_break);
     } else {
       const html = token.content;
-      const linkMatch = html.match(/<a\s+([^>]*)>(.*?)<\/a>/);
+      const linkMatch = html.match(/<a\s+([^>]*)>\s*([\s\S]*?)\s*<\/a>/i);
 
       if (linkMatch) {
         const attrs = linkMatch[1];
