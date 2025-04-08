@@ -18,9 +18,14 @@ function escape(text: string): string {
     .replace(/>/g, "&gt;");
 }
 
+function cleanPositionMarkers(text: string): string {
+  return text.replace(/\n\d+\n\d+/g, "\n\n");
+}
+
 const TextToMarkdown = {
   text(state: any, node: any): void {
-    state.text(escape(node.text));
+    const cleanedText = node.text ? cleanPositionMarkers(node.text) : node.text;
+    state.text(escape(cleanedText));
   },
 };
 
@@ -52,24 +57,30 @@ export function createMarkdownSerializer(
       return "";
     },
     close(state: any, mark: any) {
-      const { href, title, target } = mark.attrs;
+      const { href, title, target, rel } = mark.attrs;
       const linkText = state.out.slice(state.delim);
       let result = `](${href}`;
 
       if (title) result += ` "${title}"`;
       result += ")";
 
-      if (target) {
-        const rel = mark.attrs.rel ? ` rel="${mark.attrs.rel}"` : "";
+      if (target || rel) {
+        const relAttr = rel ? ` rel="${rel}"` : "";
         result = `<a href="${href}"${title ? ` title="${title}"` : ""}${
           target ? ` target="${target}"` : ""
-        }${rel}>${linkText}</a>`;
+        }${relAttr}>${linkText}</a>`;
 
         state.out = state.out.slice(0, state.delim - 1);
       }
 
       return result;
     },
+  };
+
+  const originalSerialize = defaultMarkdownSerializer.serialize;
+  defaultMarkdownSerializer.serialize = function(doc: any): string {
+    const output = originalSerialize.call(this, doc);
+    return cleanPositionMarkers(output);
   };
 
   return defaultMarkdownSerializer;
