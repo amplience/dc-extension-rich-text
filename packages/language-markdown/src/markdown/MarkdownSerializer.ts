@@ -19,7 +19,9 @@ function escape(text: string): string {
 }
 
 function cleanPositionMarkers(text: string): string {
-  return text.replace(/\n\d+\n\d+/g, "\n\n");
+  return text.replace(/\\\\\\n|((\\n|\n)\d+)+/g, (match) =>
+    match === "\\\\\\n" ? "\\\\n" : match.startsWith("\\n") ? "\\n" : "\n\n"
+  );
 }
 
 const TextToMarkdown = {
