@@ -8,8 +8,8 @@
   "typings": "dist/index.d.ts",
   "dependencies": {
     "@dc-extension-rich-text/common": "0.1.0",
-    "@material-ui/core": "^4.5.1",
-    "@material-ui/icons": "^4.5.1",
+    "@material-ui/core": "^4.12.4",
+    "@material-ui/icons": "^4.11.3",
     "@material/react-material-icon": "^0.15.0",
     "@types/node": "12.7.2",
     "clsx": "^1.1.0",
