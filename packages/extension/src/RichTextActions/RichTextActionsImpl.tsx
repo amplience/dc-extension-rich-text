@@ -503,11 +503,11 @@ Do not converse with the user.
       const { dispatch } = proseMirrorEditorView;
       let { state } = proseMirrorEditorView;
 
-      const studio = new AmplienceContentStudio({
-        baseUrl:
-          params?.tools?.contentStudio?.baseUrl ||
-          "https://app.amplience.net/content-studio",
-      });
+      const baseUrl = params?.tools?.workforceStudio?.baseUrl
+        || params?.tools?.contentStudio?.baseUrl
+        || "https://app.amplience.net/workforce-studio";
+
+      const studio = new AmplienceContentStudio({ baseUrl });
 
       const { content } = await studio.getContent();
       const textFields = Object.values(content)

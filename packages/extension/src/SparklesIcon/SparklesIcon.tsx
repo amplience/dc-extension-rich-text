@@ -1,8 +1,14 @@
 import React from "react";
 
-export const SparklesIcon = (props: any) => {
+type SparklesIconProps = {
+  readOnly?: boolean;
+  style?: React.CSSProperties;
+  variant?: "workforce-studio";
+};
+
+export const SparklesIcon = (props: SparklesIconProps) => {
   const { readOnly, style, variant } = props;
-  return variant === "content-studio" ? (
+  return variant === "workforce-studio" ? (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width="22"

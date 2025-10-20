@@ -55,8 +55,8 @@ const tooltips = {
   ai: {
     title: "Use ChatGPT to improve your copy"
   },
-  contentStudio: {
-    title: "Generate on-brand content at scale with Content Studio"
+  workforceStudio: {
+    title: "Generate on-brand content at scale with Workforce Studio"
   }
 }
 
@@ -94,7 +94,8 @@ const ProseMirrorToolbar: React.SFC<ProseMirrorToolbarProps> = (
   const group2 = layout.slice(3);
   const isAiToolEnabled =
     (params?.tools as { ai: { disabled: boolean } })?.ai?.disabled !== true;
-  const isContentStudioEnabled = (params?.tools as { contentStudio: { disabled: boolean } })?.contentStudio?.disabled !== true;
+  const isContentStudioEnabled = (params?.tools as { contentStudio: { disabled: boolean } })?.contentStudio?.disabled !== true
+    || (params?.tools as { workforceStudio: { disabled: boolean } })?.workforceStudio?.disabled !== true;
 
   const renderToolbarElement = (idx: number, element: ToolbarElement) => {
     switch (element.type) {
@@ -207,7 +208,7 @@ const ProseMirrorToolbar: React.SFC<ProseMirrorToolbarProps> = (
           {isContentStudioEnabled ? (
             <>
             <Tooltip 
-              title={tooltips.contentStudio.title} 
+              title={tooltips.workforceStudio.title} 
               arrow 
               classes={{
                 arrow: props.classes.arrow,
@@ -223,7 +224,7 @@ const ProseMirrorToolbar: React.SFC<ProseMirrorToolbarProps> = (
                   !richTextEditorContext.isLocked && (
                     <SparklesIcon
                       style={{ width: 15, height: 15 }}
-                      variant="content-studio"
+                      variant="workforce-studio"
                     ></SparklesIcon>
                   )
                 }
@@ -231,7 +232,7 @@ const ProseMirrorToolbar: React.SFC<ProseMirrorToolbarProps> = (
                 {richTextEditorContext.isLocked ? (
                   <Loader></Loader>
                 ) : (
-                  "Content Studio"
+                  "Workforce Studio"
                 )}
               </Button>
             </Tooltip>
