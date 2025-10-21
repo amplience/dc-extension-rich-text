@@ -166,7 +166,7 @@ You can customize the rich text editor by providing "params" in your content typ
 
 ### Workforce Studio
 
-[Workforce Studio](https://amplience.com/ai/studios/workforce-studio/) gives marketers and merchants the power to generate personalized product content that’s on-brand, every time.
+[Workforce Studio](https://amplience.com/ai/studios/content-studio/) gives marketers and merchants the power to generate personalized product content that’s on-brand, every time.
 
 Use of Workforce Studio required you to have access to Workforce Studio and also Amplience Credits to generate content
 Amplience credits provide an easy way to start using our AI features. See [Amplience credits](https://amplience.com/developers/docs/ai-services/credits/)
