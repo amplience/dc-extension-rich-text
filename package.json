@@ -5,7 +5,7 @@
     "packages/*"
   ],
   "scripts": {
-    "build": "lerna run build"
+    "build": "NODE_OPTIONS=--openssl-legacy-provider lerna run build"
   },
   "devDependencies": {
     "@babel/core": "^7.5.5",
