@@ -665,6 +665,7 @@ An example of configured parameters for inline styles combining each the previou
 
 ## How to run locally
 
+- `nvm use`
 - `yarn install`
 - `yarn build`
 - `cd packages/extension`
