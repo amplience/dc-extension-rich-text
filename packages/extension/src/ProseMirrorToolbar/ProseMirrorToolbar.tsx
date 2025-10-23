@@ -223,7 +223,7 @@ const ProseMirrorToolbar: React.SFC<ProseMirrorToolbarProps> = (
                 startIcon={
                   !richTextEditorContext.isLocked && (
                     <SparklesIcon
-                      style={{ width: 15, height: 15 }}
+                      style={{ width: 20, height: 20 }}
                       variant="workforce"
                     ></SparklesIcon>
                   )
