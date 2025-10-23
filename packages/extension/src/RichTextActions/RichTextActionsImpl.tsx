@@ -503,9 +503,9 @@ Do not converse with the user.
       const { dispatch } = proseMirrorEditorView;
       let { state } = proseMirrorEditorView;
 
-      const baseUrl = params?.tools?.workforceStudio?.baseUrl
+      const baseUrl = params?.tools?.workforce?.baseUrl
         || params?.tools?.contentStudio?.baseUrl
-        || "https://app.amplience.net/workforce-studio";
+        || "https://app.amplience.net/workforce";
 
       const studio = new AmplienceContentStudio({ baseUrl });
 

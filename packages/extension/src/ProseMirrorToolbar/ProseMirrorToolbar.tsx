@@ -55,8 +55,8 @@ const tooltips = {
   ai: {
     title: "Use ChatGPT to improve your copy"
   },
-  workforceStudio: {
-    title: "Generate on-brand content at scale with Workforce Studio"
+  workforce: {
+    title: "Generate on-brand content at scale with Workforce"
   }
 }
 
@@ -95,7 +95,7 @@ const ProseMirrorToolbar: React.SFC<ProseMirrorToolbarProps> = (
   const isAiToolEnabled =
     (params?.tools as { ai: { disabled: boolean } })?.ai?.disabled !== true;
   const isContentStudioEnabled = (params?.tools as { contentStudio: { disabled: boolean } })?.contentStudio?.disabled !== true
-    && (params?.tools as { workforceStudio: { disabled: boolean } })?.workforceStudio?.disabled !== true;
+    && (params?.tools as { workforce: { disabled: boolean } })?.workforce?.disabled !== true;
 
   const renderToolbarElement = (idx: number, element: ToolbarElement) => {
     switch (element.type) {
@@ -208,7 +208,7 @@ const ProseMirrorToolbar: React.SFC<ProseMirrorToolbarProps> = (
           {isContentStudioEnabled ? (
             <>
             <Tooltip 
-              title={tooltips.workforceStudio.title} 
+              title={tooltips.workforce.title} 
               arrow 
               classes={{
                 arrow: props.classes.arrow,
@@ -224,7 +224,7 @@ const ProseMirrorToolbar: React.SFC<ProseMirrorToolbarProps> = (
                   !richTextEditorContext.isLocked && (
                     <SparklesIcon
                       style={{ width: 15, height: 15 }}
-                      variant="workforce-studio"
+                      variant="workforce"
                     ></SparklesIcon>
                   )
                 }
@@ -232,7 +232,7 @@ const ProseMirrorToolbar: React.SFC<ProseMirrorToolbarProps> = (
                 {richTextEditorContext.isLocked ? (
                   <Loader></Loader>
                 ) : (
-                  "Workforce Studio"
+                  "Workforce"
                 )}
               </Button>
             </Tooltip>

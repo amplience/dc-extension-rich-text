@@ -3,12 +3,12 @@ import React from "react";
 type SparklesIconProps = {
   readOnly?: boolean;
   style?: React.CSSProperties;
-  variant?: "workforce-studio";
+  variant?: "workforce";
 };
 
 export const SparklesIcon = (props: SparklesIconProps) => {
   const { readOnly, style, variant } = props;
-  return variant === "workforce-studio" ? (
+  return variant === "workforce" ? (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width="22"
