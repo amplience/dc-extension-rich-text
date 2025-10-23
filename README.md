@@ -666,7 +666,7 @@ An example of configured parameters for inline styles combining each the previou
 ## How to run locally
 
 - `nvm use`
-- `yarn install`
+- `yarn install --frozen-lockfile --ignore-scripts`
 - `yarn build`
 - `cd packages/extension`
 - `yarn start`
