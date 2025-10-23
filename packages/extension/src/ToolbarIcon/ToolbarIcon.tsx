@@ -1,12 +1,12 @@
 import React from "react";
 
-type SparklesIconProps = {
+type ToolbarIconProps = {
   readOnly?: boolean;
   style?: React.CSSProperties;
   variant?: "workforce" | "ai-assistant";
 };
 
-export const SparklesIcon = (props: SparklesIconProps) => {
+export const ToolbarIcon = (props: ToolbarIconProps) => {
   const { readOnly, style, variant = "ai-assistant" } = props;
   return variant === "workforce" ? (
     <svg

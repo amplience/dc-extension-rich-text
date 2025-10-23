@@ -16,7 +16,7 @@ import ProseMirrorToolbarDropdown from "../ProseMirrorToolbarDropdown/ProseMirro
 import { ProseMirrorToolbarGroup } from "../ProseMirrorToolbarGroup";
 import { useRichTextEditorContext } from "../RichTextEditor/RichTextEditorContext";
 import { ProseMirrorToolbarState } from "./ProseMirrorToolbarState";
-import { SparklesIcon } from "../SparklesIcon/SparklesIcon";
+import { ToolbarIcon } from "../ToolbarIcon/ToolbarIcon";
 import { Loader } from "../Loader/Loader";
 
 const styles = createStyles({
@@ -222,10 +222,10 @@ const ProseMirrorToolbar: React.SFC<ProseMirrorToolbarProps> = (
                 size="small"
                 startIcon={
                   !richTextEditorContext.isLocked && (
-                    <SparklesIcon
+                    <ToolbarIcon
                       style={{ width: 20, height: 20 }}
                       variant="workforce"
-                    ></SparklesIcon>
+                    ></ToolbarIcon>
                   )
                 }
               >
@@ -258,9 +258,9 @@ const ProseMirrorToolbar: React.SFC<ProseMirrorToolbarProps> = (
                   size="small"
                   startIcon={
                     !richTextEditorContext.isLocked && (
-                      <SparklesIcon
+                      <ToolbarIcon
                         style={{ width: 15, height: 15 }}
-                      ></SparklesIcon>
+                      ></ToolbarIcon>
                     )
                   }
                 >
