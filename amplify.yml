@@ -5,11 +5,11 @@ frontend:
       commands:
         - nvm install 22
         - nvm use 22
-        - yarn install --frozen-lockfile --ignore-scripts
-        # - yarn test
+        - npm install --frozen-lockfile --ignore-scripts
+        # - npm run test
     build:
       commands:
-        - CI=false yarn build
+        - CI=false npm run build
   artifacts:
     baseDirectory: packages/extension/build
     files:
