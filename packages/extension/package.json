@@ -3,6 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "homepage": "./",
+  "scripts": {
+    "start": "vite",
+    "build": "vite build",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook",
+    "fix": "npm run fix:*",
+    "fix:prettier": "prettier \"src/**/*.{ts,tsx}\" --write"
+  },
   "dependencies": {
     "@amplience/content-studio-sdk": "^0.1.1",
     "@datadog/browser-rum": "^4.43.0",
@@ -16,9 +24,6 @@
     "@material/react-material-icon": "^0.15.0",
     "@microsoft/fetch-event-source": "^2.0.1",
     "@rehooks/local-storage": "^2.4.4",
-    "@types/node": "12.7.2",
-    "@types/react": "16.9.2",
-    "@types/react-dom": "16.8.5",
     "clsx": "^1.1.0",
     "dc-extensions-sdk": "^1.0.1",
     "json-pointer": "^0.6.2",
@@ -32,31 +37,19 @@
     "prosemirror-view": "^1.11.7",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
-    "react-scripts": "^3.3.0",
-    "typescript": "3.8",
     "unofficial-dynamic-content-ui": "^0.2.3"
   },
   "devDependencies": {
     "@storybook/react": "^5.1.11",
-    "@types/json-pointer": "^1.0.34"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook",
-    "fix": "run-s fix:*",
-    "fix:prettier": "prettier \"src/**/*.{ts,tsx}\" --write",
-    "fix:tslint": "tslint --fix --project ."
-  },
-  "eslintConfig": {
-    "extends": "react-app"
-  },
-  "browserslist": [
-    ">0.2%",
-    "not dead",
-    "not op_mini all"
-  ]
+    "@types/json-pointer": "^1.0.34",
+    "@types/node": "^24.9.1",
+    "@types/react": "16.9.2",
+    "@types/react-dom": "16.8.5",
+    "@vitejs/plugin-react": "^5.1.0",
+    "sass-embedded": "^1.93.2",
+    "typescript": "^5.9.3",
+    "vite": "^7.1.12",
+    "vite-plugin-commonjs": "^0.10.4",
+    "vite-plugin-svgr": "^4.5.0"
+  }
 }
