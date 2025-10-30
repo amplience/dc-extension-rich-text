@@ -5,7 +5,7 @@ frontend:
       commands:
         - nvm install 22
         - nvm use 22
-        - npm install --frozen-lockfile --ignore-scripts
+        - npm ci --ignore-scripts
         # - npm run test
     build:
       commands:
