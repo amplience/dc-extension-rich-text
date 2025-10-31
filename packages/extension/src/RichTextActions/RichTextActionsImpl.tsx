@@ -505,7 +505,7 @@ Do not converse with the user.
 
       const baseUrl = params?.tools?.workforce?.baseUrl
         || params?.tools?.contentStudio?.baseUrl
-        || "https://app.amplience.net/workforce";
+        || "https://app.amplience.net/content-studio";
 
       const studio = new AmplienceContentStudio({ baseUrl });
 
