@@ -1,4 +1,4 @@
-![Amplience Dynamic Content Generative Rich Text Editor Extension](media/rte-extension-screenshot.jpg)
+![Amplience Dynamic Content Generative Rich Text Editor Extension](media/rte-extension-screenshot-2025-11-03.jpg)
 
 # Generative Rich Text Editor
 
