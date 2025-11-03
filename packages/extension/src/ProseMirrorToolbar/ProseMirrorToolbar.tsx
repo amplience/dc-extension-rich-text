@@ -16,7 +16,7 @@ import ProseMirrorToolbarDropdown from "../ProseMirrorToolbarDropdown/ProseMirro
 import { ProseMirrorToolbarGroup } from "../ProseMirrorToolbarGroup";
 import { useRichTextEditorContext } from "../RichTextEditor/RichTextEditorContext";
 import { ProseMirrorToolbarState } from "./ProseMirrorToolbarState";
-import { SparklesIcon } from "../SparklesIcon/SparklesIcon";
+import { ToolbarIcon } from "../ToolbarIcon/ToolbarIcon";
 import { Loader } from "../Loader/Loader";
 
 const styles = createStyles({
@@ -55,8 +55,8 @@ const tooltips = {
   ai: {
     title: "Use ChatGPT to improve your copy"
   },
-  contentStudio: {
-    title: "Generate on-brand content at scale with Content Studio"
+  workforce: {
+    title: "Generate on-brand content at scale with Workforce"
   }
 }
 
@@ -94,7 +94,8 @@ const ProseMirrorToolbar: React.SFC<ProseMirrorToolbarProps> = (
   const group2 = layout.slice(3);
   const isAiToolEnabled =
     (params?.tools as { ai: { disabled: boolean } })?.ai?.disabled !== true;
-  const isContentStudioEnabled = (params?.tools as { contentStudio: { disabled: boolean } })?.contentStudio?.disabled !== true;
+  const isContentStudioEnabled = (params?.tools as { contentStudio: { disabled: boolean } })?.contentStudio?.disabled !== true
+    && (params?.tools as { workforce: { disabled: boolean } })?.workforce?.disabled !== true;
 
   const renderToolbarElement = (idx: number, element: ToolbarElement) => {
     switch (element.type) {
@@ -207,7 +208,7 @@ const ProseMirrorToolbar: React.SFC<ProseMirrorToolbarProps> = (
           {isContentStudioEnabled ? (
             <>
             <Tooltip 
-              title={tooltips.contentStudio.title} 
+              title={tooltips.workforce.title} 
               arrow 
               classes={{
                 arrow: props.classes.arrow,
@@ -221,17 +222,17 @@ const ProseMirrorToolbar: React.SFC<ProseMirrorToolbarProps> = (
                 size="small"
                 startIcon={
                   !richTextEditorContext.isLocked && (
-                    <SparklesIcon
-                      style={{ width: 15, height: 15 }}
-                      variant="content-studio"
-                    ></SparklesIcon>
+                    <ToolbarIcon
+                      style={{ width: 20, height: 20 }}
+                      variant="workforce"
+                    ></ToolbarIcon>
                   )
                 }
               >
                 {richTextEditorContext.isLocked ? (
                   <Loader></Loader>
                 ) : (
-                  "Content Studio"
+                  "Workforce"
                 )}
               </Button>
             </Tooltip>
@@ -257,9 +258,9 @@ const ProseMirrorToolbar: React.SFC<ProseMirrorToolbarProps> = (
                   size="small"
                   startIcon={
                     !richTextEditorContext.isLocked && (
-                      <SparklesIcon
+                      <ToolbarIcon
                         style={{ width: 15, height: 15 }}
-                      ></SparklesIcon>
+                      ></ToolbarIcon>
                     )
                   }
                 >

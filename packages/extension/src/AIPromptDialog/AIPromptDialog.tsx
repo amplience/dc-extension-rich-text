@@ -23,7 +23,7 @@ import pointer from "json-pointer";
 import clsx from "clsx";
 import React, { useEffect, useState } from "react";
 import { AIConfiguration } from "./AIConfiguration";
-import { SparklesIcon } from "../SparklesIcon/SparklesIcon";
+import { ToolbarIcon } from "../ToolbarIcon/ToolbarIcon";
 import { SdkContext } from "unofficial-dynamic-content-ui";
 import { SDK } from "dc-extensions-sdk";
 import { ReactComponent as InfoIcon } from "./info-icon.svg";
@@ -111,7 +111,7 @@ function DialogHeader(props: any) {
   return (
     <DialogTitle style={{ paddingBottom: 0 }}>
       <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-        <SparklesIcon></SparklesIcon>
+        <ToolbarIcon></ToolbarIcon>
         <span style={{ fontSize: "16px", fontWeight: 500, color: "#333" }}>
           {title}
         </span>

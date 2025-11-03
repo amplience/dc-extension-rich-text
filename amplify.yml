@@ -5,7 +5,7 @@ frontend:
       commands:
         - nvm install 16
         - nvm use 16
-        - yarn install
+        - yarn install --frozen-lockfile --ignore-scripts
         # - yarn test
     build:
       commands:
