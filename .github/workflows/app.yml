@@ -32,7 +32,7 @@ jobs:
 
       - name: yarn install, build, and test
         run: |
-          yarn install
+          yarn install --frozen-lockfile --ignore-scripts
           yarn build
           # npm test
         if: |

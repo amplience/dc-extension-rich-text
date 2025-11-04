@@ -1,15 +1,15 @@
-![Amplience Dynamic Content Generative Rich Text Editor Extension](media/rte-extension-screenshot.jpg)
+![Amplience Dynamic Content Generative Rich Text Editor Extension](media/rte-extension-screenshot-2025-11-03.jpg)
 
 # Generative Rich Text Editor
 
 > Generative Rich text field for use in [Amplience Dynamic Content](https://amplience.com/dynamic-content)
 
-This extension is designed to replace the built in rich text editor with additional features and customization options including generative content from [Amplience Content Studio](#content-studio) and [ChatGPT](https://openai.com/chatgpt) 
+This extension is designed to replace the built in rich text editor with additional features and customization options including generative content from [Amplience Workforce](#workforce) and [ChatGPT](https://openai.com/chatgpt) 
 
 ## Features
 
 - AI
-  - [Content Studio](#content-studio)
+  - [Workforce](#workforce)
   - [Generative AI assistant](#generative-ai-assistant)
 - Markdown output
   - Paragraphs
@@ -164,21 +164,21 @@ This will output an array of "blocks". Each block has a type and associated data
 
 You can customize the rich text editor by providing "params" in your content type schema. The examples below should be added to the "params" object in your "ui:extension".
 
-### Content Studio
+### Workforce
 
-[Content Studio](https://amplience.com/ai/studios/content-studio/) gives marketers and merchants the power to generate personalized product content that’s on-brand, every time.
+[Workforce](https://amplience.com/ai/studios/content-studio/) gives marketers and merchants the power to generate personalized product content that’s on-brand, every time.
 
-Use of Content Studio required you to have access to Content Studio and also Amplience Credits to generate content
+Use of Workforce required you to have access to Workforce and also Amplience Credits to generate content
 Amplience credits provide an easy way to start using our AI features. See [Amplience credits](https://amplience.com/developers/docs/ai-services/credits/)
 
-#### Disabling Content Studio
+#### Disabling Workforce
 
-If for any reason you wish to disable Content Studio from this extension you can do so by adding the following in your installation parameters:
+If for any reason you wish to disable Workforce from this extension you can do so by adding the following in your installation parameters:
 
 ```json
 {
   "tools": {
-    "contentStudio": {
+    "workforce": {
       "disabled": true
     }
   }
@@ -665,7 +665,8 @@ An example of configured parameters for inline styles combining each the previou
 
 ## How to run locally
 
-- `yarn install`
+- `nvm use`
+- `yarn install --frozen-lockfile --ignore-scripts`
 - `yarn build`
 - `cd packages/extension`
 - `yarn start`
