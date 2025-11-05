@@ -1,8 +1,5 @@
 import { StandardToolOptions } from "@dc-extension-rich-text/common";
-import {
-  AlignedHeaderToMarkdown,
-  AlignedParagraphToMarkdown
-} from "../alignment/AlignmentPlugin";
+import { AlignedToMarkdown } from "../alignment/AlignmentPlugin";
 import { AnchorToMarkdown } from "../anchor";
 import { InlineStylesToMarkdown } from "../inline_styles";
 import { SoftHyphenToMarkdown } from "../soft_hyphen";
@@ -34,8 +31,7 @@ export function createMarkdownSerializer(
       ...SoftHyphenToMarkdown,
       ...AnchorToMarkdown,
       ...TableToMarkdown,
-      ...AlignedParagraphToMarkdown(options),
-      ...AlignedHeaderToMarkdown(options),
+      ...AlignedToMarkdown(options),
       ...TextToMarkdown,
       ...serializers
     },
