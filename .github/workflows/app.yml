@@ -20,7 +20,7 @@ jobs:
 
       - name: Install, build, and test
         run: |
-          npm run ci --ignore-scripts
+          npm ci --ignore-scripts
           npm run build
           # npm test
         if: |
