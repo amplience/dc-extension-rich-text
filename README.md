@@ -666,8 +666,7 @@ An example of configured parameters for inline styles combining each the previou
 ## How to run locally
 
 - `nvm use`
-- `yarn install --frozen-lockfile --ignore-scripts`
-- `yarn build`
-- `cd packages/extension`
-- `yarn start`
-- Head to `http://localhost:3000` for the locally running extension
+- `npm install --frozen-lockfile --ignore-scripts`
+- `npm run build`
+- `npm run start`
+- Head to `http://localhost:5173` for the locally running extension
