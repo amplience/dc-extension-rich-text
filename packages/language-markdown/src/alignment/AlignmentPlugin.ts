@@ -56,7 +56,7 @@ export const heading_align = {
 };
 
 export const AlignedParagraphToMarkdown = (options: StandardToolOptions) => {
-  if (options.commonMdAlign) {
+  if (options.useDivTextAlign) {
     return {
       paragraph(state: any, node: any): void {
         if (
@@ -115,7 +115,7 @@ export const AlignedParagraphToMarkdown = (options: StandardToolOptions) => {
 };
 
 export const AlignedHeaderToMarkdown = (options: StandardToolOptions) => {
-  if (options.commonMdAlign) {
+  if (options.useDivTextAlign) {
     return {
       heading(state: any, node: any): void {
         if (

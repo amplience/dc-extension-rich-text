@@ -1,6 +1,6 @@
 export interface StandardToolOptions {
   useClasses?: boolean;
-  commonMdAlign?: boolean;
+  useDivTextAlign?: boolean;
   classOverride?: { [originalName: string]: string };
 
   tools?: {
