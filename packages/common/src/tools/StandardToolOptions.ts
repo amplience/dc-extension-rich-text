@@ -1,5 +1,6 @@
 export interface StandardToolOptions {
   useClasses?: boolean;
+  commonMdAlign?: boolean;
   classOverride?: { [originalName: string]: string };
 
   tools?: {

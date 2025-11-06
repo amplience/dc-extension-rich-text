@@ -53,6 +53,7 @@ export interface EditorRichTextFieldParams {
   stylesheet?: string;
 
   useClasses?: boolean;
+  commonMdAlign?: boolean;
   classOverride?: { [originalName: string]: string };
 
   codeView?: {
@@ -100,6 +101,7 @@ const EditorRichTextField: React.SFC<EditorRichTextFieldProps> = (
   const toolOptions = React.useMemo<DynamicContentToolOptions>(() => {
     const settings = {
       useClasses: params.useClasses,
+      commonMdAlign: params.commonMdAlign,
       classOverride: params.classOverride,
       dialogs,
       actions: new RichTextActionsImpl(),
