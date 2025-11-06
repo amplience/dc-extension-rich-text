@@ -461,14 +461,14 @@ To enable text alignment controls:
 By default, text aligned elements will be transformed to HTML with `text-align` styles:
 
 ```html
-<h2 style="text-algin: center;">Heading</h2>
-<p style="text-algin: center;">Paragraph content.</p>
+<h2 style="text-align: center;">Heading</h2>
+<p style="text-align: center;">Paragraph content.</p>
 ```
 
 You can change this behaviour to wrap text aligned elements with a `<div>` instead, leaving the containing markdown untouched.
 
 ```md
-<div style="text-algin: center;">
+<div style="text-align: center;">
 ## Heading
 Paragraph content.
 </div>
