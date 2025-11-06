@@ -55,96 +55,128 @@ export const heading_align = {
   }
 };
 
-export const AlignedToMarkdown = (options: StandardToolOptions) => {
+export const AlignedParagraphToMarkdown = (options: StandardToolOptions) => {
   if (options.commonMdAlign) {
-    const alignedToMd = (state: any, node: any): void => {
+    return {
+      paragraph(state: any, node: any): void {
+        if (
+          node.attrs.align &&
+          node.attrs.align !== "left" &&
+          node.attrs.align !== "start"
+        ) {
+          if (options.useClasses) {
+            state.write(
+              `<div class="${getCustomClass(
+                `amp-align-${node.attrs.align}`,
+                options
+              )}">\n\n`
+            );
+          } else {
+            state.write(`<div style="text-align: ${node.attrs.align}">\n\n`);
+          }
+          // state.ensureNewLine();
+          state.renderInline(node);
+          state.write("</div>");
+          state.closeBlock(node);
+        } else {
+          state.renderInline(node);
+          state.closeBlock(node);
+        }
+      }
+    }
+  }
+  return {
+    paragraph(state: any, node: any): void {
       if (
         node.attrs.align &&
         node.attrs.align !== "left" &&
         node.attrs.align !== "start"
       ) {
+        // Aligned paragraph
+        // Emit paragraph as HTML with the align attribute.
         if (options.useClasses) {
           state.write(
-            `<div class="${getCustomClass(
+            `<p class="${getCustomClass(
               `amp-align-${node.attrs.align}`,
               options
             )}">`
           );
         } else {
-          state.write(`<div style="text-align: ${node.attrs.align}">`);
+          state.write(`<p style="text-align: ${node.attrs.align}">`);
         }
-        state.ensureNewLine();
         state.renderInline(node);
-        state.ensureNewLine();
-        state.write("</div>");
+        state.write("</p>");
         state.closeBlock(node);
       } else {
         state.renderInline(node);
         state.closeBlock(node);
       }
     }
-    return {
-      paragraph: alignedToMd,
-      heading: alignedToMd
-    }
   }
-  const heading = (state: any, node: any): void => {
-    if (
-      node.attrs.align &&
-      node.attrs.align !== "left" &&
-      node.attrs.align !== "start"
-    ) {
-      // Aligned header
-      // Emit header as HTML with the align attribute.
-      if (options.useClasses) {
-        state.write(
-          `<h${node.attrs.level} class="${getCustomClass(
-            `amp-align-${node.attrs.align}`,
-            options
-          )}">`
-        );
-      } else {
-        state.write(
-          `<h${node.attrs.level} style="text-align: ${node.attrs.align}">`
-        );
-      }
-      state.renderInline(node);
-      state.write(`</h${node.attrs.level}>`);
-      state.closeBlock(node);
-    } else {
-      state.write(state.repeat("#", node.attrs.level) + " ");
-      state.renderInline(node);
-      state.closeBlock(node);
-    }
-  }
-  const paragraph = (state: any, node: any): void => {
-    if (
-      node.attrs.align &&
-      node.attrs.align !== "left" &&
-      node.attrs.align !== "start"
-    ) {
-      // Aligned paragraph
-      // Emit paragraph as HTML with the align attribute.
-      if (options.useClasses) {
-        state.write(
-          `<p class="${getCustomClass(
-            `amp-align-${node.attrs.align}`,
-            options
-          )}">`
-        );
-      } else {
-        state.write(`<p style="text-align: ${node.attrs.align}">`);
-      }
-
-      state.renderInline(node);
-      state.write("</p>");
-
-      state.closeBlock(node);
-    } else {
-      state.renderInline(node);
-      state.closeBlock(node);
-    }
-  }
-  return { heading, paragraph }
 };
 
+export const AlignedHeaderToMarkdown = (options: StandardToolOptions) => {
+  if (options.commonMdAlign) {
+    return {
+      heading(state: any, node: any): void {
+        if (
+          node.attrs.align &&
+          node.attrs.align !== "left" &&
+          node.attrs.align !== "start"
+        ) {
+          if (options.useClasses) {
+            state.write(
+              `<div class="${getCustomClass(
+                `amp-align-${node.attrs.align}`,
+                options
+              )}">\n\n`
+            );
+          } else {
+            state.write(`<div style="text-align: ${node.attrs.align}">\n\n`);
+          }
+          // state.ensureNewLine();
+          state.write(state.repeat("#", node.attrs.level) + " ");
+          state.renderInline(node);
+          state.write("</div>");
+          state.closeBlock(node);
+        } else {
+          state.write(state.repeat("#", node.attrs.level) + " ");
+          state.renderInline(node);
+          state.closeBlock(node);
+        }
+      }
+    }
+  }
+  return {
+    heading(state: any, node: any): void {
+      if (
+        node.attrs.align &&
+        node.attrs.align !== "left" &&
+        node.attrs.align !== "start"
+      ) {
+        // Aligned header
+        // Emit header as HTML with the align attribute.
+
+        if (options.useClasses) {
+          state.write(
+            `<h${node.attrs.level} class="${getCustomClass(
+              `amp-align-${node.attrs.align}`,
+              options
+            )}">`
+          );
+        } else {
+          state.write(
+            `<h${node.attrs.level} style="text-align: ${node.attrs.align}">`
+          );
+        }
+        state.renderInline(node);
+        state.write(`</h${node.attrs.level}>`);
+        state.closeBlock(node);
+      } else {
+        state.write(state.repeat("#", node.attrs.level) + " ");
+        state.renderInline(node);
+        state.closeBlock(node);
+      }
+    }
+  }
+};
