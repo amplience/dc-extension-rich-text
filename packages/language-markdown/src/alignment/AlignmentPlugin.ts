@@ -74,7 +74,6 @@ export const AlignedParagraphToMarkdown = (options: StandardToolOptions) => {
           } else {
             state.write(`<div style="text-align: ${node.attrs.align}">\n\n`);
           }
-          // state.ensureNewLine();
           state.renderInline(node);
           state.write("</div>");
           state.closeBlock(node);
@@ -134,7 +133,6 @@ export const AlignedHeaderToMarkdown = (options: StandardToolOptions) => {
           } else {
             state.write(`<div style="text-align: ${node.attrs.align}">\n\n`);
           }
-          // state.ensureNewLine();
           state.write(state.repeat("#", node.attrs.level) + " ");
           state.renderInline(node);
           state.write("</div>");
