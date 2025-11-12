@@ -176,17 +176,36 @@ export function html_block(
 
   state.line = nextLine;
 
-  token = state.push("html_block_open", "div", 1);
-  token.meta = { tag: tag.tagName, attrs: Array.from(tag.attributes) };
-  token.map = [startLine, state.line];
+  if (tag.tagName.toLowerCase() === "div") {
+    // For divs, we want to parse the inner content as markdown
+    // ignoring the containing div tag
+    // but passing the div's attributes to the HTML elements inside
+    const attrs = tag.attributes;
+    const tempTokens: any[] = [];
+    state.md.block.parse(innerContent, state.md, state.env, tempTokens);
 
-  state.md.block.parse(innerContent, state.md, state.env, state.tokens);
-  token.map = [startLine, nextLine];
-  token.content = innerContent;
-  token.children = [];
-
-  token = state.push("html_block_close", "div", -1);
-  token.meta = { tag: tag.tagName };
-
+    tempTokens.forEach(t => {
+      if (t.type !== 'inline' && t.type.endsWith('_open')) {
+        if (attrs[0].value.includes('text-align')) {
+          const textAlign = attrs[0].value
+            .replace('text-align:', '')
+            .replace(';', '')
+            .trim();
+          t.attrJoin("align", textAlign);
+        }
+      }
+      state.tokens.push(t);
+    });
+  } else {
+    token = state.push("html_block_open", "", 1);
+    token.meta = { tag: tag.tagName, attrs: Array.from(tag.attributes) };
+    token.map = [startLine, state.line];
+    token = state.push("inline", "", 0);
+    token.map = [startLine, nextLine];
+    token.content = innerContent;
+    token.children = [];
+    token = state.push("html_block_close", "", -1);
+    token.meta = { tag: tag.tagName };
+  }
   return true;
 }

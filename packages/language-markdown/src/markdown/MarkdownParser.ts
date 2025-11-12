@@ -26,6 +26,19 @@ export function createMarkdownParser(
   // Warning... this might be a little brittle
   const parser = new markdown.MarkdownParser(schema, md, {
     ...markdown.defaultMarkdownParser.tokens,
+    heading: {
+      block: "heading",
+      getAttrs: (tok: any) => ({
+        level: +tok.tag.slice(1),
+        align: tok.attrGet("align")
+      })
+    },
+    paragraph: {
+      block: "paragraph",
+      getAttrs: (tok: any) => ({
+        align: tok.attrGet("align")
+      })
+    },
     anchor: {
       node: "anchor",
       getAttrs: (tok: any) => ({
