@@ -1,5 +1,5 @@
 import { StandardToolOptions } from "@dc-extension-rich-text/common";
-import { heading_align, paragraph_align } from "../alignment/AlignmentPlugin";
+import { heading_align, paragraph_align, div_align } from "../alignment/AlignmentPlugin";
 import { anchor } from "../anchor";
 import { inline_styles } from "../inline_styles";
 import { createMarkdownParser } from "../markdown/MarkdownParser";
@@ -47,6 +47,7 @@ export function createSchema(
         }
       })
     )
+    .addToEnd("div", div_align)
     .addToEnd("soft_hyphen", soft_hyphen)
     .addToEnd("anchor", anchor)
     .update("paragraph", paragraph_align)

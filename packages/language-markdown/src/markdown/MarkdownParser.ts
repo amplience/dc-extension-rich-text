@@ -103,6 +103,7 @@ export function createMarkdownParser(
 
   const alignedParagraphTypes = new Map<string, string>([
     ["P", "paragraph"],
+    ["DIV", "div"],
     ["H1", "heading"],
     ["H2", "heading"],
     ["H3", "heading"],

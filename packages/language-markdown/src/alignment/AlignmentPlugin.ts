@@ -4,6 +4,27 @@ import {
 } from "@dc-extension-rich-text/common";
 
 // tslint:disable-next-line
+export const div_align = {
+  content: "block+",
+  attrs: {
+    align: { default: undefined }
+  },
+  group: "block",
+  parseDOM: [
+    {
+      tag: "div",
+      getAttrs(dom: any): object {
+        return { align: dom.style.textAlign || undefined };
+      }
+    }
+  ],
+  toDOM(node: any): object {
+    const style = node.attrs.align ? `text-align: ${node.attrs.align}` : undefined;
+    return ["div", { style }, 0];
+  }
+};
+
+// tslint:disable-next-line
 export const paragraph_align = {
   content: "inline*",
   attrs: {
@@ -69,10 +90,10 @@ export const AlignedParagraphToMarkdown = (options: StandardToolOptions) => {
               `<div class="${getCustomClass(
                 `amp-align-${node.attrs.align}`,
                 options
-              )}">\n\n`
+              )}">`
             );
           } else {
-            state.write(`<div style="text-align: ${node.attrs.align}">\n\n`);
+            state.write(`<div style="text-align: ${node.attrs.align}">`);
           }
           state.renderInline(node);
           state.write("</div>");
@@ -128,10 +149,10 @@ export const AlignedHeaderToMarkdown = (options: StandardToolOptions) => {
               `<div class="${getCustomClass(
                 `amp-align-${node.attrs.align}`,
                 options
-              )}">\n\n`
+              )}">`
             );
           } else {
-            state.write(`<div style="text-align: ${node.attrs.align}">\n\n`);
+            state.write(`<div style="text-align: ${node.attrs.align}">`);
           }
           state.write(state.repeat("#", node.attrs.level) + " ");
           state.renderInline(node);

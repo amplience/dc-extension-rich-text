@@ -176,16 +176,16 @@ export function html_block(
 
   state.line = nextLine;
 
-  token = state.push("html_block_open", "", 1);
+  token = state.push("html_block_open", "div", 1);
   token.meta = { tag: tag.tagName, attrs: Array.from(tag.attributes) };
   token.map = [startLine, state.line];
 
-  token = state.push("inline", "", 0);
+  state.md.block.parse(innerContent, state.md, state.env, state.tokens);
   token.map = [startLine, nextLine];
   token.content = innerContent;
   token.children = [];
 
-  token = state.push("html_block_close", "", -1);
+  token = state.push("html_block_close", "div", -1);
   token.meta = { tag: tag.tagName };
 
   return true;
