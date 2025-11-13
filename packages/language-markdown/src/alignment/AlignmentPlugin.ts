@@ -4,27 +4,6 @@ import {
 } from "@dc-extension-rich-text/common";
 
 // tslint:disable-next-line
-export const div_align = {
-  content: "block+",
-  attrs: {
-    align: { default: undefined }
-  },
-  group: "block",
-  parseDOM: [
-    {
-      tag: "div",
-      getAttrs(dom: any): object {
-        return { align: dom.style.textAlign || undefined };
-      }
-    }
-  ],
-  toDOM(node: any): object {
-    const style = node.attrs.align ? `text-align: ${node.attrs.align}` : undefined;
-    return ["div", { style }, 0];
-  }
-};
-
-// tslint:disable-next-line
 export const paragraph_align = {
   content: "inline*",
   attrs: {
