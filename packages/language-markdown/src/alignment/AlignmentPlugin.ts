@@ -85,7 +85,6 @@ export const AlignedParagraphToMarkdown = (options: StandardToolOptions) => {
   if (options.useDivTextAlign) {
     return {
       paragraph(state: any, node: any): void {
-        debugger;
         if (state.delim === '> ') {
           // use default behavior inside blockquotes
           paragraph(state, node);
@@ -155,7 +154,6 @@ export const AlignedHeaderToMarkdown = (options: StandardToolOptions) => {
   if (options.useDivTextAlign) {
     return {
       heading(state: any, node: any): void {
-        debugger;
         if (state.delim === '> ') {
           // use default behavior inside blockquotes
           heading(state, node);

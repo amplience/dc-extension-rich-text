@@ -153,9 +153,6 @@ export function html_block(
   if (!HTML_SEQUENCES[i][1].test(lineText)) {
     const openingTag = /<([A-Za-z][A-Za-z0-9-]*)(\s[^>]*)?>/g.exec(lineText)?.[1];
     for (; endLine < endOfStringLine; endLine++) {
-      if (state.sCount[endLine] < state.blkIndent) {
-        break;
-      }
       const closingTagOnLine = (new RegExp(`<\\/${openingTag}\\s*>`, "g")).test(lineText);
 
       if (closingTagOnLine) {
@@ -167,8 +164,6 @@ export function html_block(
       }
     }
   }
-
-  debugger;
 
   const content = state.getLines(startLine, endLine, state.blkIndent, true);
   const dom = new DOMParser().parseFromString(content, "text/html");
