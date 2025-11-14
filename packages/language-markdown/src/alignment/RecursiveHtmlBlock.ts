@@ -151,11 +151,12 @@ export function html_block(
   // If we are here - we detected HTML block.
   // Let's roll down till block end.
   if (!HTML_SEQUENCES[i][1].test(lineText)) {
+    const openingTag = /<([A-Za-z][A-Za-z0-9-]*)(\s[^>]*)?>/g.exec(lineText)?.[1];
     for (; endLine < endOfStringLine; endLine++) {
       if (state.sCount[endLine] < state.blkIndent) {
         break;
       }
-      const closingTagOnLine = /<\/\s*[A-Za-z][A-Za-z0-9-]*\s*>/.test(lineText);
+      const closingTagOnLine = (new RegExp(`<\\/${openingTag}\\s*>`, "g")).test(lineText);
 
       if (closingTagOnLine) {
         break;
