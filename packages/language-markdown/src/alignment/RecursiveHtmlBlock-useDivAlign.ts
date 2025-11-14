@@ -102,14 +102,14 @@ const HTML_SEQUENCES: Array<[RegExp, RegExp, boolean]> = [
   [new RegExp(HTML_OPEN_CLOSE_TAG_RE.source + "\\s*$"), /^$/, false]
 ];
 
-export function html_block(
+export function html_block_useDivAlign(
   state: any,
   startLine: number,
-  endLine: number,
+  endOfStringLine: number,
   silent: boolean
 ): boolean {
   let i;
-  let nextLine;
+  let endLine;
   let token;
   let lineText;
   let pos = state.bMarks[startLine] + state.tShift[startLine];
@@ -130,6 +130,7 @@ export function html_block(
 
   lineText = state.src.slice(pos, max);
 
+  // find the matching regex
   for (i = 0; i < HTML_SEQUENCES.length; i++) {
     if (HTML_SEQUENCES[i][0].test(lineText)) {
       break;
@@ -145,48 +146,63 @@ export function html_block(
     return HTML_SEQUENCES[i][2];
   }
 
-  nextLine = startLine + 1;
+  endLine = startLine + 1;
 
   // If we are here - we detected HTML block.
   // Let's roll down till block end.
   if (!HTML_SEQUENCES[i][1].test(lineText)) {
-    for (; nextLine < endLine; nextLine++) {
-      if (state.sCount[nextLine] < state.blkIndent) {
-        break;
-      }
+    const openingTag = /<([A-Za-z][A-Za-z0-9-]*)(\s[^>]*)?>/g.exec(lineText)?.[1];
+    for (; endLine < endOfStringLine; endLine++) {
+      const closingTagOnLine = (new RegExp(`<\\/${openingTag}\\s*>`, "g")).test(lineText);
 
-      pos = state.bMarks[nextLine] + state.tShift[nextLine];
-      max = state.eMarks[nextLine];
-      lineText = state.src.slice(pos, max);
-
-      if (HTML_SEQUENCES[i][1].test(lineText)) {
-        if (lineText.length !== 0) {
-          nextLine++;
-        }
+      if (closingTagOnLine) {
         break;
+      } else {
+        pos = state.bMarks[endLine] + state.tShift[endLine];
+        max = state.eMarks[endLine];
+        lineText = state.src.slice(pos, max);
       }
     }
   }
 
-  const content = state.getLines(startLine, nextLine, state.blkIndent, true);
+  const content = state.getLines(startLine, endLine, state.blkIndent, true);
   const dom = new DOMParser().parseFromString(content, "text/html");
   const tag = dom.body.firstChild as Element;
 
-  const innerContent = tag == null ? "" : tag.innerHTML;
+  const innerContent = tag == null ? "" : tag.innerHTML.trim();
 
-  state.line = nextLine;
+  state.line = endLine;
 
-  token = state.push("html_block_open", "", 1);
-  token.meta = { tag: tag.tagName, attrs: Array.from(tag.attributes) };
-  token.map = [startLine, state.line];
+  if (tag.tagName.toLowerCase() === "div") {
+    // For divs, we want to parse the inner content as markdown
+    // ignoring the containing div tag
+    // but passing the div's attributes to the HTML elements inside
+    const attrs = tag.attributes;
+    const tempTokens: any[] = [];
+    state.md.block.parse(innerContent, state.md, state.env, tempTokens);
 
-  token = state.push("inline", "", 0);
-  token.map = [startLine, nextLine];
-  token.content = innerContent;
-  token.children = [];
-
-  token = state.push("html_block_close", "", -1);
-  token.meta = { tag: tag.tagName };
-
+    tempTokens.forEach(t => {
+      if (t.type !== 'inline' && t.type.endsWith('_open')) {
+        if (attrs[0].value.includes('text-align')) {
+          const textAlign = attrs[0].value
+            .replace('text-align:', '')
+            .replace(';', '')
+            .trim();
+          t.attrJoin("align", textAlign);
+        }
+      }
+      state.tokens.push(t);
+    });
+  } else {
+    token = state.push("html_block_open", "", 1);
+    token.meta = { tag: tag.tagName, attrs: Array.from(tag.attributes) };
+    token.map = [startLine, state.line];
+    token = state.push("inline", "", 0);
+    token.map = [startLine, endLine];
+    token.content = innerContent;
+    token.children = [];
+    token = state.push("html_block_close", "", -1);
+    token.meta = { tag: tag.tagName };
+  }
   return true;
 }
