@@ -69,13 +69,13 @@ export const AlignedParagraphToMarkdown = (options: StandardToolOptions) => {
               `<div class="${getCustomClass(
                 `amp-align-${node.attrs.align}`,
                 options
-              )}">`
+              )}">\n\n`
             );
           } else {
-            state.write(`<div style="text-align: ${node.attrs.align}">`);
+            state.write(`<div style="text-align: ${node.attrs.align}">\n\n`);
           }
           state.renderInline(node);
-          state.write("</div>");
+          state.write("\n\n</div>");
           state.closeBlock(node);
         } else {
           state.renderInline(node);
@@ -128,14 +128,14 @@ export const AlignedHeaderToMarkdown = (options: StandardToolOptions) => {
               `<div class="${getCustomClass(
                 `amp-align-${node.attrs.align}`,
                 options
-              )}">`
+              )}">\n\n`
             );
           } else {
-            state.write(`<div style="text-align: ${node.attrs.align}">`);
+            state.write(`<div style="text-align: ${node.attrs.align}">\n\n`);
           }
           state.write(state.repeat("#", node.attrs.level) + " ");
           state.renderInline(node);
-          state.write("</div>");
+          state.write("\n\n</div>");
           state.closeBlock(node);
         } else {
           state.write(state.repeat("#", node.attrs.level) + " ");

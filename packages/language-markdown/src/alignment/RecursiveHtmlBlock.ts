@@ -105,11 +105,11 @@ const HTML_SEQUENCES: Array<[RegExp, RegExp, boolean]> = [
 export function html_block(
   state: any,
   startLine: number,
-  endLine: number,
+  endOfStringLine: number,
   silent: boolean
 ): boolean {
   let i;
-  let nextLine;
+  let endLine;
   let token;
   let lineText;
   let pos = state.bMarks[startLine] + state.tShift[startLine];
@@ -130,6 +130,7 @@ export function html_block(
 
   lineText = state.src.slice(pos, max);
 
+  // find the matching regex
   for (i = 0; i < HTML_SEQUENCES.length; i++) {
     if (HTML_SEQUENCES[i][0].test(lineText)) {
       break;
@@ -145,36 +146,36 @@ export function html_block(
     return HTML_SEQUENCES[i][2];
   }
 
-  nextLine = startLine + 1;
+  endLine = startLine + 1;
 
   // If we are here - we detected HTML block.
   // Let's roll down till block end.
   if (!HTML_SEQUENCES[i][1].test(lineText)) {
-    for (; nextLine < endLine; nextLine++) {
-      if (state.sCount[nextLine] < state.blkIndent) {
+    for (; endLine < endOfStringLine; endLine++) {
+      if (state.sCount[endLine] < state.blkIndent) {
         break;
       }
+      const closingTagOnLine = /<\/\s*[A-Za-z][A-Za-z0-9-]*\s*>/.test(lineText);
 
-      pos = state.bMarks[nextLine] + state.tShift[nextLine];
-      max = state.eMarks[nextLine];
-      lineText = state.src.slice(pos, max);
-
-      if (HTML_SEQUENCES[i][1].test(lineText)) {
-        if (lineText.length !== 0) {
-          nextLine++;
-        }
+      if (closingTagOnLine) {
         break;
+      } else {
+        pos = state.bMarks[endLine] + state.tShift[endLine];
+        max = state.eMarks[endLine];
+        lineText = state.src.slice(pos, max);
       }
     }
   }
 
-  const content = state.getLines(startLine, nextLine, state.blkIndent, true);
+  debugger;
+
+  const content = state.getLines(startLine, endLine, state.blkIndent, true);
   const dom = new DOMParser().parseFromString(content, "text/html");
   const tag = dom.body.firstChild as Element;
 
-  const innerContent = tag == null ? "" : tag.innerHTML;
+  const innerContent = tag == null ? "" : tag.innerHTML.trim();
 
-  state.line = nextLine;
+  state.line = endLine;
 
   if (tag.tagName.toLowerCase() === "div") {
     // For divs, we want to parse the inner content as markdown
@@ -201,7 +202,7 @@ export function html_block(
     token.meta = { tag: tag.tagName, attrs: Array.from(tag.attributes) };
     token.map = [startLine, state.line];
     token = state.push("inline", "", 0);
-    token.map = [startLine, nextLine];
+    token.map = [startLine, endLine];
     token.content = innerContent;
     token.children = [];
     token = state.push("html_block_close", "", -1);
