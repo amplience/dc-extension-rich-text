@@ -2,7 +2,7 @@ import {
   getDefaultClass,
   StandardToolOptions
 } from "@dc-extension-rich-text/common";
-import { html_block, html_block_useDivAlign } from "../alignment";
+import { html_block, html_block_div_align } from "../alignment";
 import { soft_hyphen_from } from "../soft_hyphen";
 
 // tslint:disable-next-line
@@ -21,7 +21,7 @@ export function createMarkdownParser(
 
   md.inline.ruler.before("text", "soft_hyphen", soft_hyphen_from);
   
-  const html_parser = options.useDivTextAlign ? html_block_useDivAlign : html_block;
+  const html_parser = options.useDivTextAlign ? html_block_div_align : html_block;
   md.block.ruler.before("html_block", "html_block", html_parser);
 
   // Patch parser to detect <span></span> tags and convert into inline_styles marks

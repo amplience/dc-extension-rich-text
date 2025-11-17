@@ -1,2 +1,2 @@
 export * from "./RecursiveHtmlBlock";
-export * from "./RecursiveHtmlBlock-useDivAlign";
+export * from "./RecursiveHtmlBlockDivAlign";

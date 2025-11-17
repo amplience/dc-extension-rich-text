@@ -102,7 +102,7 @@ const HTML_SEQUENCES: Array<[RegExp, RegExp, boolean]> = [
   [new RegExp(HTML_OPEN_CLOSE_TAG_RE.source + "\\s*$"), /^$/, false]
 ];
 
-export function html_block_useDivAlign(
+export function html_block_div_align(
   state: any,
   startLine: number,
   endOfStringLine: number,
