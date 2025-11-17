@@ -19,28 +19,32 @@ export function createMarkdownParser(
   const md = markdownit("commonmark", { html: true });
   md.use(markdownItTable);
 
+  const html_parser = options.useDivTextAlign
+    ? html_block_div_align
+    : html_block;
+
   md.inline.ruler.before("text", "soft_hyphen", soft_hyphen_from);
-  
-  const html_parser = options.useDivTextAlign ? html_block_div_align : html_block;
   md.block.ruler.before("html_block", "html_block", html_parser);
 
   // Patch parser to detect <span></span> tags and convert into inline_styles marks
   // Warning... this might be a little brittle
   const parser = new markdown.MarkdownParser(schema, md, {
     ...markdown.defaultMarkdownParser.tokens,
-    heading: {
-      block: "heading",
-      getAttrs: (tok: any) => ({
-        level: +tok.tag.slice(1),
-        align: tok.attrGet("align")
-      })
-    },
-    paragraph: {
-      block: "paragraph",
-      getAttrs: (tok: any) => ({
-        align: tok.attrGet("align")
-      })
-    },
+    ...(!options.useDivTextAlign ? {} : {
+      heading: {
+        block: "heading",
+        getAttrs: (tok: any) => ({
+          level: +tok.tag.slice(1),
+          align: tok.attrGet("align")
+        })
+      },
+      paragraph: {
+        block: "paragraph",
+        getAttrs: (tok: any) => ({
+          align: tok.attrGet("align")
+        })
+      }
+    }),
     anchor: {
       node: "anchor",
       getAttrs: (tok: any) => ({
