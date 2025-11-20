@@ -483,6 +483,8 @@ To use the wrapping `<div>` text alignment method, add the `params.useDivTextAli
   }
 }
 ```
+| WARNING: Using the 'useDivAlign' parameter may not be backwards compatible with existing content. We would recommend using this option from the start  |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------ |
 
 ### Custom CSS
 
