@@ -85,6 +85,38 @@ export const AlignedParagraphToMarkdown = (options: StandardToolOptions) => ({
   }
 });
 
+export const AlignedParagraphToMarkdownWithDiv = (options: StandardToolOptions) => ({
+  paragraph(state: any, node: any): void {
+    if (state.delim === '> ') {
+      // use default behavior inside blockquotes
+      AlignedParagraphToMarkdown(options).paragraph(state, node);
+      return;
+    }
+    if (
+      node.attrs.align &&
+      node.attrs.align !== "left" &&
+      node.attrs.align !== "start"
+    ) {
+      if (options.useClasses) {
+        state.write(
+          `<div class="${getCustomClass(
+            `amp-align-${node.attrs.align}`,
+            options
+          )}">\n\n`
+        );
+      } else {
+        state.write(`<div style="text-align: ${node.attrs.align}">\n\n`);
+      }
+      state.renderInline(node);
+      state.write("\n\n</div>");
+      state.closeBlock(node);
+    } else {
+      state.renderInline(node);
+      state.closeBlock(node);
+    }
+  }
+})
+
 export const AlignedHeaderToMarkdown = (options: StandardToolOptions) => ({
   heading(state: any, node: any): void {
     if (
@@ -117,3 +149,37 @@ export const AlignedHeaderToMarkdown = (options: StandardToolOptions) => ({
     }
   }
 });
+
+export const AlignedHeaderToMarkdownWithDiv = (options: StandardToolOptions) => ({
+  heading(state: any, node: any): void {
+    if (state.delim === '> ') {
+      // use default behavior inside blockquotes
+      AlignedHeaderToMarkdown(options).heading(state, node);
+      return;
+    }
+    if (
+      node.attrs.align &&
+      node.attrs.align !== "left" &&
+      node.attrs.align !== "start"
+    ) {
+      if (options.useClasses) {
+        state.write(
+          `<div class="${getCustomClass(
+            `amp-align-${node.attrs.align}`,
+            options
+          )}">\n\n`
+        );
+      } else {
+        state.write(`<div style="text-align: ${node.attrs.align}">\n\n`);
+      }
+      state.write(state.repeat("#", node.attrs.level) + " ");
+      state.renderInline(node);
+      state.write("\n\n</div>");
+      state.closeBlock(node);
+    } else {
+      state.write(state.repeat("#", node.attrs.level) + " ");
+      state.renderInline(node);
+      state.closeBlock(node);
+    }
+  }
+})
