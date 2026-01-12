@@ -1,5 +1,6 @@
 export interface StandardToolOptions {
   useClasses?: boolean;
+  useDivTextAlign?: boolean;
   classOverride?: { [originalName: string]: string };
 
   tools?: {

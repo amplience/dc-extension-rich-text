@@ -436,6 +436,56 @@ The default toolbar layout can be overridden as follows:
 
 You can choose from "button", "dropdown" or "group" when creating your menu.
 
+### Text Alignment
+
+To enable text alignment controls:
+
+```json
+{
+  "toolbar": {
+    "layout": [
+      {
+          "type": "group",
+          "children": [
+              { "type": "button", "toolName": "align_left" },
+              { "type": "button", "toolName": "align_center" },
+              { "type": "button", "toolName": "align_justify" },
+              { "type": "button", "toolName": "align_right" }
+          ]
+      }
+    ]
+  }
+}
+```
+
+By default, text aligned elements will be transformed to HTML with `text-align` styles:
+
+```html
+<h2 style="text-align: center;">Heading</h2>
+<p style="text-align: center;">Paragraph content.</p>
+```
+
+You can change this behaviour to wrap text aligned elements with a `<div>` instead, leaving the containing markdown untouched.
+
+```md
+<div style="text-align: center;">
+## Heading
+Paragraph content.
+</div>
+```
+
+To use the wrapping `<div>` text alignment method, add the `params.useDivTextAlign` property to the extension schema:
+
+```json
+{
+  "params": {
+    "useDivTextAlign": true
+  }
+}
+```
+| WARNING: Using the 'useDivAlign' parameter may not be backwards compatible with existing content. We would recommend using this option from the start  |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+
 ### Custom CSS
 
 You can modify the default text styles to match your brand styles.
