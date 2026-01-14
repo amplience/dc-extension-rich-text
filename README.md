@@ -4,7 +4,7 @@
 
 > Generative Rich text field for use in [Amplience Dynamic Content](https://amplience.com/dynamic-content)
 
-This extension is designed to replace the built in rich text editor with additional features and customization options including generative content from [Amplience Workforce](#workforce) and [ChatGPT](https://openai.com/chatgpt) 
+This extension is designed to replace the built in rich text editor with additional features and customization options including generative content from [Amplience Workforce](#workforce) and [ChatGPT](https://openai.com/chatgpt)
 
 ## Features
 
@@ -243,9 +243,9 @@ For example:
 }
 ```
 
-#### Using ChatGPT 4
+#### Using a different OpenAI model
 
-If you have access to ChatGPT 4 or wish to use a different OpenAI model, you can choose the specific model the system should use as follows:
+In this extension gpt-5.2 is used as the default model. If you wish to use a different OpenAI model, you can choose the specific model the system should use as follows:
 
 ```json
 {
@@ -445,13 +445,13 @@ To enable text alignment controls:
   "toolbar": {
     "layout": [
       {
-          "type": "group",
-          "children": [
-              { "type": "button", "toolName": "align_left" },
-              { "type": "button", "toolName": "align_center" },
-              { "type": "button", "toolName": "align_justify" },
-              { "type": "button", "toolName": "align_right" }
-          ]
+        "type": "group",
+        "children": [
+          { "type": "button", "toolName": "align_left" },
+          { "type": "button", "toolName": "align_center" },
+          { "type": "button", "toolName": "align_justify" },
+          { "type": "button", "toolName": "align_right" }
+        ]
       }
     ]
   }
@@ -483,8 +483,10 @@ To use the wrapping `<div>` text alignment method, add the `params.useDivTextAli
   }
 }
 ```
-| WARNING: Using the 'useDivAlign' parameter may not be backwards compatible with existing content. We would recommend using this option from the start  |
-| ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+
+| WARNING: Using the 'useDivAlign' parameter may not be backwards compatible with existing content. We would recommend using this option from the start |
+| ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+
 
 ### Custom CSS
 
