@@ -252,7 +252,7 @@ In this extension gpt-5.2 is used as the default model. If you wish to use a dif
   "tools": {
     "ai": {
       "key": "<OpenAI key>",
-      "model": "gpt-4"
+      "model": "gpt-XX"
     }
   }
 }
