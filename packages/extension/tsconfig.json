@@ -1,12 +1,13 @@
 {
   "extends": "../../tsconfig.settings.json",
   "compilerOptions": {
-    "rootDir": "./src",
     "outDir": "./dist",
+    "rootDir": "./src",
+    "declaration": false,
+    "noEmitOnError": true,
     "noEmit": true,
     "allowJs": true,
-    "isolatedModules": true,
-    "declaration": false
+    "isolatedModules": true
   },
   "include": [
     "src"

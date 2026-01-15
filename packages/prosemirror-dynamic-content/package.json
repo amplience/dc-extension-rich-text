@@ -5,46 +5,40 @@
   "license": "Apache-2.0",
   "main": "dist/index.js",
   "module": "dist/index.js",
-  "typings": "dist/index.d.ts",
+  "type": "module",
+  "scripts": {
+    "build": "npm run clean && npm run build:ts && npm run build:copy-css",
+    "build:ts": "tsc -p tsconfig.json",
+    "build:copy-css": "copyfiles -u 1 src/**/*.scss dist",
+    "fix": "npm run fix:*",
+    "fix:prettier": "prettier \"src/**/*.ts\" --write",
+    "clean": "rm -rf dist",
+    "storybook": "start-storybook -p 6007",
+    "build-storybook": "build-storybook",
+    "watch": "npm run clean && npm run build && npm run test -- --watch"
+  },
+  "peerDependencies": {
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0"
+  },
   "dependencies": {
     "@dc-extension-rich-text/common": "0.1.0",
     "@material-ui/core": "^4.5.1",
     "@material-ui/icons": "^4.5.1",
     "@material/react-material-icon": "^0.15.0",
-    "@types/node": "12.7.2",
     "clsx": "^1.1.0",
-    "prosemirror-commands": "^1.0.8",
+    "dc-extensions-sdk": "^1.0.1",
     "prosemirror-example-setup": "^1.0.1",
     "prosemirror-model": "^1.7.4",
     "prosemirror-schema-basic": "^1.0.1",
     "prosemirror-state": "^1.2.4",
     "prosemirror-view": "^1.11.7",
-    "react": "^16.9.0",
-    "react-dom": "^16.9.0",
-    "typescript": "3.8",
-    "unofficial-dynamic-content-ui": "^0.2.3",
-    "dc-extensions-sdk": "^1.0.1"
-  },
-  "scripts": {
-    "build": "run-s clean build-ts build-copy-css",
-    "build-ts": "tsc -p tsconfig.json",
-    "build-copy-css": "copyfiles -u 1 src/**/*.scss dist",
-    "fix": "run-s fix:*",
-    "fix:prettier": "prettier \"src/**/*.ts\" --write",
-    "fix:tslint": "tslint --fix --project .",
-    "clean": "trash build test dist",
-    "storybook": "start-storybook -p 6007",
-    "build-storybook": "build-storybook",
-    "test": "jest",
-    "watch": "run-s clean build \"test -- --watch\""
+    "unofficial-dynamic-content-ui": "^0.2.3"
   },
   "devDependencies": {
-    "@types/deepmerge": "^2.2.0",
-    "@types/jest": "^24.0.18",
+    "@types/node": "^24.9.1",
     "copyfiles": "^2.1.1",
-    "jest": "^24.9.0",
-    "ts-jest": "^24.0.2",
-    "typescript": "^3.8",
+    "typescript": "^5.9.3",
     "@storybook/html": "^5.1.11"
   }
 }

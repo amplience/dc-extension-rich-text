@@ -3,13 +3,13 @@ frontend:
   phases:
     preBuild:
       commands:
-        - nvm install 16
-        - nvm use 16
-        - yarn install --frozen-lockfile --ignore-scripts
-        # - yarn test
+        - nvm install 22
+        - nvm use 22
+        - npm ci --ignore-scripts
+        # - npm run test
     build:
       commands:
-        - CI=false yarn build
+        - CI=false npm run build
   artifacts:
     baseDirectory: packages/extension/build
     files:

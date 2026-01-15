@@ -1,4 +1,4 @@
-const aptrinsicId = process.env.REACT_APP_APTRINSIC_ID;
+const aptrinsicId = import.meta.env.VITE_APTRINSIC_ID;
 
 export function initGainsight() {
   if (!aptrinsicId) {
