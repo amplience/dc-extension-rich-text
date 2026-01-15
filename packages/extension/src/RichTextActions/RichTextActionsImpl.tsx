@@ -26,11 +26,6 @@ const CHAT_MODELS: ChatModel[] = [
     version: "gpt-5.2",
     maxTokens: 128000,
   },
-  {
-    name: "gpt-5.2-400k",
-    version: "gpt-5.2",
-    maxTokens: 400000,
-  },
 ];
 const DIALOG_PREFIX = "[DIALOG]";
 
