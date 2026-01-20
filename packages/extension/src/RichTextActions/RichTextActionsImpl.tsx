@@ -10,7 +10,7 @@ import { fetchEventSource } from "@microsoft/fetch-event-source";
 import React from "react";
 import { AIConfiguration } from "../AIPromptDialog";
 import { track } from "../gainsight";
-import { AmplienceContentStudio } from '@amplience/content-studio-sdk';
+import { AmplienceContentStudio } from "@amplience/content-studio-sdk";
 
 interface ChatModel {
   name: string;
@@ -22,24 +22,9 @@ const CHAT_COMPLETIONS_URL = "https://api.openai.com/v1/chat/completions";
 const CHAT_ESTIMATED_CHARS_PER_TOKEN = 4;
 const CHAT_MODELS: ChatModel[] = [
   {
-    name: "gpt-3.5-turbo",
-    version: "gpt-3.5",
-    maxTokens: 4096,
-  },
-  {
-    name: "gpt-3.5-turbo-16k",
-    version: "gpt-3.5",
-    maxTokens: 16384,
-  },
-  {
-    name: "gpt-4",
-    version: "gpt-4",
-    maxTokens: 8192,
-  },
-  {
-    name: "gpt-4-32k",
-    version: "gpt-4",
-    maxTokens: 32768,
+    name: "gpt-5.2",
+    version: "gpt-5.2",
+    maxTokens: 128000,
   },
 ];
 const DIALOG_PREFIX = "[DIALOG]";
@@ -148,7 +133,7 @@ async function invokeChatCompletions(
                 configuration.getModel(),
                 estimatedConsumedTokens
               ),
-              max_tokens: maxOutputTokens,
+              max_completion_tokens: maxOutputTokens,
               stream: true,
               ...body,
             }),
@@ -503,15 +488,17 @@ Do not converse with the user.
       const { dispatch } = proseMirrorEditorView;
       let { state } = proseMirrorEditorView;
 
-      const baseUrl = params?.tools?.workforce?.baseUrl
-        || params?.tools?.contentStudio?.baseUrl
-        || "https://app.amplience.net/content-studio";
+      const baseUrl =
+        params?.tools?.workforce?.baseUrl ||
+        params?.tools?.contentStudio?.baseUrl ||
+        "https://app.amplience.net/content-studio";
 
       const studio = new AmplienceContentStudio({ baseUrl });
 
       const { content } = await studio.getContent();
-      const textFields = Object.values(content)
-        .filter((x) => typeof x === "string") as string[];
+      const textFields = Object.values(content).filter(
+        (x) => typeof x === "string"
+      ) as string[];
 
       if (textFields.length > 0) {
         let fragment = (language as MarkdownLanguage).parseMarkdown(

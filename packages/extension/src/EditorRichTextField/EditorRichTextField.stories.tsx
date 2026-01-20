@@ -120,29 +120,14 @@ async function initStories() {
       })
     )
     .add(
-      "GPT-3.5",
+      "GPT-5.2",
       editorWithSchema({
         "ui:extension": {
           params: {
             tools: {
               ai: {
                 key: process.env.OPENAI_KEY,
-                model: "gpt-3.5-turbo",
-              },
-            },
-          },
-        },
-      })
-    )
-    .add(
-      "GPT-4",
-      editorWithSchema({
-        "ui:extension": {
-          params: {
-            tools: {
-              ai: {
-                key: process.env.OPENAI_KEY,
-                model: "gpt-4",
+                model: "gpt-5.2",
               },
             },
           },
