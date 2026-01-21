@@ -1,4 +1,4 @@
-const OPENAI_CHATGPT_DEFAULT_MODEL = "gpt-3.5-turbo";
+const OPENAI_CHATGPT_DEFAULT_MODEL = "gpt-5.2";
 
 const DEFAULT_EDIT_PROMPTS = [
   {
