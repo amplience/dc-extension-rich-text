@@ -31,9 +31,9 @@ export default class App extends React.Component<{}, AppState> {
   }
 
   public handleInitRum(): void {
-    const ddToken = process.env.REACT_APP_DATADOG_TOKEN;
-    const ddAppId = process.env.REACT_APP_DATADOG_APP_ID;
-    const ddEnv = process.env.REACT_APP_DATADOG_ENV_ID;
+    const ddToken = import.meta.env.VITE_DATADOG_TOKEN;
+    const ddAppId = import.meta.env.VITE_DATADOG_APP_ID;
+    const ddEnv = import.meta.env.VITE_DATADOG_ENV_ID;
 
     if (ddToken && ddAppId && ddEnv) {
       datadogRum.init({

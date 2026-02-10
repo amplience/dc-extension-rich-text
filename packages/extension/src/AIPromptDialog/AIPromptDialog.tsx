@@ -1,3 +1,4 @@
+/// <reference types="vite-plugin-svgr/client" />
 import { AIPromptDialogOptions } from "@dc-extension-rich-text/common";
 import {
   Button,
@@ -26,7 +27,7 @@ import { AIConfiguration } from "./AIConfiguration";
 import { ToolbarIcon } from "../ToolbarIcon/ToolbarIcon";
 import { SdkContext } from "unofficial-dynamic-content-ui";
 import { SDK } from "dc-extensions-sdk";
-import { ReactComponent as InfoIcon } from "./info-icon.svg";
+import InfoIcon from "./info-icon.svg?react";
 
 const styles = createStyles({
   root: {
