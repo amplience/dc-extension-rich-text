@@ -627,7 +627,7 @@ To enable this feature:
 
 ```json
 {
-  "styles": ".was-price { color: red; }"
+  "styles": ".was-price { color: red; } .promotion { color: green; }"
 }
 ```
 
